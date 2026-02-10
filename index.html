@@ -24,7 +24,6 @@ body{
   color:var(--text);
 }
 
-/* LOGIN */
 #login{
   position:fixed;
   inset:0;
@@ -44,7 +43,6 @@ body{
   text-align:center;
 }
 
-/* APP */
 .app{
   max-width:1250px;
   margin:auto;
@@ -59,12 +57,6 @@ header{
   margin-bottom:16px;
 }
 
-h1{
-  font-size:22px;
-  font-weight:700;
-}
-
-/* DASHBOARD */
 .stats{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -80,7 +72,6 @@ h1{
   font-weight:600;
 }
 
-/* PANEL */
 .panel{
   background:var(--glass);
   padding:20px;
@@ -90,10 +81,7 @@ h1{
   box-shadow:0 10px 40px rgba(0,0,0,.35);
 }
 
-form{
-  display:grid;
-  gap:12px;
-}
+form{display:grid;gap:12px;}
 
 input,select,textarea{
   padding:14px;
@@ -104,7 +92,6 @@ input,select,textarea{
   outline:none;
 }
 
-/* LIST */
 .card{
   margin-top:12px;
   padding:16px 18px;
@@ -124,15 +111,8 @@ input,select,textarea{
   gap:12px;
 }
 
-.name{
-  font-weight:700;
-  font-size:16px;
-}
-
-.wa{
-  color:var(--muted);
-  font-size:14px;
-}
+.name{font-weight:700;font-size:16px;}
+.wa{color:var(--muted);font-size:14px;}
 
 button{
   padding:8px 14px;
@@ -144,13 +124,8 @@ button{
   font-size:13px;
 }
 
-.btn-danger{
-  background:linear-gradient(135deg,#ff5c5c,#ff2c2c);
-}
-
-.btn-soft{
-  background:rgba(255,255,255,.12);
-}
+.btn-danger{background:linear-gradient(135deg,#ff5c5c,#ff2c2c);}
+.btn-soft{background:rgba(255,255,255,.12);}
 
 .details{
   display:none;
@@ -171,7 +146,6 @@ button{
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login">
   <div class="login-box">
     <h2>🔒 CRM Dhito Property</h2>
@@ -180,7 +154,6 @@ button{
   </div>
 </div>
 
-<!-- APP -->
 <div class="app" id="app">
 
 <header>
@@ -251,10 +224,11 @@ const cold = document.getElementById("cold");
 const warm = document.getElementById("warm");
 const hot = document.getElementById("hot");
 
-// SAFE LOAD STORAGE
+// LOAD SAFE STORAGE
 let leads = [];
 try {
   leads = JSON.parse(localStorage.getItem("leads")) || [];
+  if(!Array.isArray(leads)) leads = [];
 } catch {
   leads = [];
 }
@@ -278,23 +252,26 @@ loginBtn.addEventListener("click", ()=>{
 // STATS
 function updateStats(){
   total.textContent = leads.length;
-  cold.textContent = leads.filter(l=>l.statusLead=="Cold").length;
-  warm.textContent = leads.filter(l=>l.statusLead=="Warm").length;
-  hot.textContent = leads.filter(l=>l.statusLead=="Hot").length;
+  cold.textContent = leads.filter(l=>l.statusLead === "Cold").length;
+  warm.textContent = leads.filter(l=>l.statusLead === "Warm").length;
+  hot.textContent = leads.filter(l=>l.statusLead === "Hot").length;
 }
 
 // RENDER
 function render(){
   list.innerHTML = "";
 
-  const s = search.value.toLowerCase();
+  const keyword = (search.value || "").toLowerCase();
 
-  leads
+  const safeLeads = leads.filter(l => l && l.nama && l.wa);
+
+  safeLeads
     .filter(l => 
-      l.nama.toLowerCase().includes(s) || 
-      l.wa.toLowerCase().includes(s)
+      l.nama.toLowerCase().includes(keyword) || 
+      l.wa.toLowerCase().includes(keyword)
     )
-    .forEach((l, index)=>{
+    .forEach((l)=>{
+      const realIndex = leads.indexOf(l);
       const div = document.createElement("div");
       div.className = "card";
 
@@ -307,8 +284,8 @@ function render(){
 
           <div class="row">
             <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-            <button onclick="editLead(${index})">Edit</button>
-            <button class="btn-danger" onclick="deleteLead(${index})">Hapus</button>
+            <button onclick="editLead(${realIndex})">Edit</button>
+            <button class="btn-danger" onclick="deleteLead(${realIndex})">Hapus</button>
           </div>
         </div>
 
@@ -326,7 +303,7 @@ function render(){
   updateStats();
 }
 
-// SUBMIT LEAD
+// SUBMIT
 leadForm.addEventListener("submit", e=>{
   e.preventDefault();
 
@@ -352,7 +329,7 @@ leadForm.addEventListener("submit", e=>{
   render();
 });
 
-// INFO
+// TOGGLE INFO
 function toggleInfo(btn){
   const details = btn.closest(".card").querySelector(".details");
   details.style.display = details.style.display === "block" ? "none" : "block";
@@ -363,11 +340,11 @@ function editLead(i){
   const l = leads[i];
   if(!l) return;
 
-  const newNama = prompt("Nama", l.nama) ?? l.nama;
-  const newWa = prompt("WhatsApp", l.wa) ?? l.wa;
-  const newLead = prompt("Cold / Warm / Hot", l.statusLead) ?? l.statusLead;
-  const newProgress = prompt("Progress", l.statusProgress) ?? l.statusProgress;
-  const newNotes = prompt("Catatan", l.notes || "") ?? l.notes;
+  const newNama = prompt("Nama", l.nama) || l.nama;
+  const newWa = prompt("WhatsApp", l.wa) || l.wa;
+  const newLead = prompt("Cold / Warm / Hot", l.statusLead) || l.statusLead;
+  const newProgress = prompt("Progress", l.statusProgress) || l.statusProgress;
+  const newNotes = prompt("Catatan", l.notes || "") || l.notes;
 
   leads[i] = {
     nama: newNama,
@@ -398,6 +375,7 @@ search.addEventListener("input", render);
 function exportCSV(){
   let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
   leads.forEach(l=>{
+    if(!l) return;
     csv += `"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes || ""}","${l.date}"\n`;
   });
 
