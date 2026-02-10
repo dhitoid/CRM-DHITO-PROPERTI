@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM Dhito Property — Apple 2026</title>
+<title>CRM Dhito Property</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -19,6 +19,9 @@
   --green:#25D366;
   --danger:#ff5c5c;
   --radius:18px;
+
+  --ios-glow: 0 12px 40px rgba(77,163,255,.18);
+  --ios-soft: 0 4px 18px rgba(0,0,0,.35);
 }
 
 *{
@@ -49,8 +52,9 @@ body{
   border-radius:22px;
   background:var(--glass);
   backdrop-filter:blur(28px);
-  box-shadow:0 40px 120px rgba(0,0,0,.6);
+  box-shadow:0 40px 120px rgba(0,0,0,.6), var(--ios-glow);
   text-align:center;
+  border:1px solid rgba(255,255,255,.12);
 }
 
 .login-box input{
@@ -68,6 +72,7 @@ body{
 .layout{
   display:none;
   min-height:100vh;
+  display:flex;
 }
 
 /* SIDEBAR */
@@ -87,6 +92,7 @@ body{
   letter-spacing:.3px;
 }
 
+/* NAV */
 .nav button{
   width:100%;
   padding:12px 14px;
@@ -145,6 +151,8 @@ header h1{
   backdrop-filter:blur(18px);
   font-weight:700;
   transition:.15s;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: var(--ios-soft), var(--ios-glow);
 }
 
 .stat:hover{
@@ -158,7 +166,8 @@ header h1{
   border-radius:20px;
   margin-bottom:18px;
   backdrop-filter:blur(22px);
-  box-shadow:0 10px 40px rgba(0,0,0,.35);
+  box-shadow:0 10px 40px rgba(0,0,0,.35), var(--ios-soft);
+  border:1px solid rgba(255,255,255,.12);
 }
 
 /* FORM */
@@ -186,10 +195,15 @@ button{
   font-weight:700;
   background:linear-gradient(135deg,#4da3ff,#7cf1ff);
   transition:.15s;
+  backdrop-filter: blur(18px);
 }
 
 button:hover{
   transform:scale(1.04);
+}
+
+button:active{
+  transform:scale(.96);
 }
 
 .btn-danger{
@@ -210,8 +224,9 @@ button:hover{
   display:flex;
   flex-direction:column;
   gap:10px;
-  box-shadow:0 8px 30px rgba(0,0,0,.35);
+  box-shadow:0 8px 30px rgba(0,0,0,.35), var(--ios-soft);
   transition:.18s;
+  border:1px solid rgba(255,255,255,.12);
 }
 
 .card:hover{
@@ -251,6 +266,7 @@ button:hover{
   color:var(--muted);
 }
 
+/* BADGES */
 .badge{
   display:inline-block;
   padding:6px 12px;
@@ -258,6 +274,34 @@ button:hover{
   font-size:12px;
   background:var(--glass2);
   font-weight:600;
+}
+
+.badge.cold{ background:#3b82f6; }
+.badge.warm{ background:#f59e0b; }
+.badge.hot{ background:#ef4444; }
+
+/* FILTER BAR */
+.filter-bar{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.filter-btn{
+  padding:8px 18px;
+  border-radius:999px;
+  border:none;
+  background:rgba(255,255,255,.12);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.filter-btn.active{
+  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
+  color:black;
 }
 
 /* FOOTER */
@@ -295,9 +339,8 @@ footer{
 <!-- APP -->
 <div class="layout" id="app">
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="brand">🍏 Dhito CRM</div>
+  <div class="brand">Dhito CRM</div>
   <div class="nav">
     <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
     <button onclick="showPage('leads',this)">👥 Leads</button>
@@ -305,12 +348,10 @@ footer{
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="main">
 
 <!-- DASHBOARD -->
 <section id="dashboard">
-
 <header>
   <h1>Dashboard Overview</h1>
 </header>
@@ -321,12 +362,10 @@ footer{
   <div class="stat">Warm<br><b id="warm">0</b></div>
   <div class="stat">Hot<br><b id="hot">0</b></div>
 </div>
-
 </section>
 
 <!-- LEADS -->
 <section id="leads">
-
 <header>
   <h1>Leads Management</h1>
 </header>
@@ -359,15 +398,20 @@ footer{
 
 <div class="panel">
   <input id="search" placeholder="Cari Nama / WhatsApp">
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Cold',this)">❄ Cold</button>
+    <button class="filter-btn" onclick="setFilter('Warm',this)">🔥 Warm</button>
+    <button class="filter-btn" onclick="setFilter('Hot',this)">🚨 Hot</button>
+  </div>
 </div>
 
 <div id="list"></div>
-
 </section>
 
 <!-- EXPORT -->
 <section id="export" style="display:none">
-
 <header>
   <h1>Export Data</h1>
 </header>
@@ -375,7 +419,6 @@ footer{
 <div class="panel">
   <button onclick="exportCSV()">📥 Export Excel</button>
 </div>
-
 </section>
 
 <footer>
@@ -423,7 +466,6 @@ try {
   if(!Array.isArray(leads)) leads = [];
 } catch { leads = []; }
 
-/* CLEAN NULL */
 leads = leads.filter(l=>l && l.nama?.trim() && l.wa?.trim())
 .map(l=>({ ...l, wa: formatWA(l.wa) }));
 
@@ -451,6 +493,17 @@ function showPage(page,btn){
   btn.classList.add("active");
 }
 
+/* FILTER */
+let activeFilter = "all";
+
+function setFilter(status,btn){
+  activeFilter = status;
+  document.querySelectorAll(".filter-btn")
+    .forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
+
 /* STATS */
 function updateStats(){
   total.textContent = leads.length;
@@ -464,10 +517,17 @@ function render(){
   list.innerHTML = "";
   const keyword = (search.value||"").toLowerCase();
 
-  leads.filter(l =>
-    l.nama.toLowerCase().includes(keyword) ||
-    l.wa.toLowerCase().includes(keyword)
-  ).forEach((l,i)=>{
+  leads.filter(l => {
+    const matchSearch =
+      l.nama.toLowerCase().includes(keyword) ||
+      l.wa.toLowerCase().includes(keyword);
+
+    const matchStatus =
+      activeFilter === "all" ||
+      l.statusLead === activeFilter;
+
+    return matchSearch && matchStatus;
+  }).forEach((l,i)=>{
     const div = document.createElement("div");
     div.className = "card";
 
@@ -489,7 +549,7 @@ function render(){
       </div>
 
       <div class="details">
-        <div>Lead: <span class="badge">${l.statusLead}</span></div>
+        <div>Lead: <span class="badge ${l.statusLead.toLowerCase()}">${l.statusLead}</span></div>
         <div>Progress: <span class="badge">${l.statusProgress}</span></div>
         <div>Catatan: ${l.notes || "-"}</div>
         <div>Update: ${l.date}</div>
