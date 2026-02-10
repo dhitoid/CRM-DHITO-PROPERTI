@@ -233,6 +233,17 @@ try {
   leads = [];
 }
 
+// CLEAN NULL / BAD DATA
+leads = leads.filter(l => 
+  l && 
+  typeof l === "object" &&
+  l.nama && 
+  l.wa
+);
+
+save();
+
+
 function save(){
   localStorage.setItem("leads", JSON.stringify(leads));
 }
