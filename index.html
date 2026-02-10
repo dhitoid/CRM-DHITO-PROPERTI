@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM Dhito Property — Apple UI 2026</title>
+<title>CRM Dhito Property — Elite 2026</title>
 
 <style>
 :root{
-  --glass:rgba(255,255,255,.10);
-  --glass2:rgba(255,255,255,.16);
-  --text:#ffffff;
-  --muted:rgba(255,255,255,.55);
+  --glass:rgba(255,255,255,.12);
+  --glass2:rgba(255,255,255,.18);
+  --text:#fff;
+  --muted:rgba(255,255,255,.6);
   --accent:#4da3ff;
-  --danger:#ff5c5c;
+  --danger:#ff4d4d;
 }
 
 *{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,Inter,system-ui;}
 
 body{
   margin:0;
-  background:radial-gradient(circle at top,#1c2230,#090b12);
+  background:radial-gradient(circle at top,#1c2230,#070a12);
   color:var(--text);
 }
 
@@ -30,7 +30,7 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:radial-gradient(circle,#1a2233,#05080d);
+  background:radial-gradient(circle,#1a2233,#04060a);
 }
 
 .login-box{
@@ -38,19 +38,20 @@ body{
   padding:34px;
   border-radius:26px;
   background:var(--glass);
-  backdrop-filter:blur(30px);
-  box-shadow:0 25px 90px rgba(0,0,0,.5);
+  backdrop-filter:blur(28px);
+  box-shadow:0 25px 90px rgba(0,0,0,.55);
   text-align:center;
 }
 
 /* APP */
 .app{
-  max-width:1250px;
+  max-width:1200px;
   margin:auto;
-  padding:26px;
+  padding:22px;
   display:none;
 }
 
+/* HEADER */
 header{
   display:flex;
   justify-content:space-between;
@@ -60,16 +61,16 @@ header{
 
 h1{font-size:22px;font-weight:700;}
 
-/* DASHBOARD */
+/* STATS */
 .stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
   gap:14px;
   margin-bottom:18px;
 }
 
 .stat{
-  padding:18px;
+  padding:16px;
   border-radius:20px;
   background:var(--glass);
   backdrop-filter:blur(22px);
@@ -79,7 +80,7 @@ h1{font-size:22px;font-weight:700;}
 /* PANEL */
 .panel{
   background:var(--glass);
-  padding:20px;
+  padding:18px;
   border-radius:22px;
   margin-bottom:18px;
   backdrop-filter:blur(24px);
@@ -92,14 +93,13 @@ input,textarea{
   padding:14px;
   border-radius:14px;
   border:none;
-  background:rgba(255,255,255,.15);
+  background:rgba(255,255,255,.16);
   color:white;
   outline:none;
 }
 
-.dropdown{
-  position:relative;
-}
+/* DROPDOWN PREMIUM */
+.dropdown{position:relative;}
 
 .dropdown-btn{
   padding:14px;
@@ -117,42 +117,37 @@ input,textarea{
   background:var(--glass);
   backdrop-filter:blur(26px);
   border-radius:16px;
-  max-height:220px;   /* ✅ LIMIT HEIGHT */
-  overflow-y:auto;    /* ✅ SCROLL ENABLE */
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  max-height:200px;
+  overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,.55);
   display:none;
-  z-index:30;
+  z-index:50;
 }
 
-.dropdown-menu::-webkit-scrollbar{
-  width:6px;
-}
-.dropdown-menu::-webkit-scrollbar-thumb{
-  background:rgba(255,255,255,.25);
-  border-radius:8px;
-}
-
-.dropdown.active .dropdown-menu{
-  display:block;
-}
+.dropdown.active .dropdown-menu{display:block;}
 
 .dropdown-item{
   padding:14px 16px;
   cursor:pointer;
-  transition:.2s;
 }
 
 .dropdown-item:hover{
   background:rgba(255,255,255,.18);
 }
 
+.dropdown-menu::-webkit-scrollbar{width:6px;}
+.dropdown-menu::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.25);
+  border-radius:8px;
+}
+
 /* LIST */
 .card{
   margin-top:12px;
-  padding:16px 18px;
+  padding:16px;
   border-radius:18px;
   background:var(--glass);
-  backdrop-filter:blur(20px);
+  backdrop-filter:blur(22px);
   display:flex;
   flex-direction:column;
   gap:10px;
@@ -166,8 +161,21 @@ input,textarea{
   gap:12px;
 }
 
-.name{font-weight:700;font-size:16px;}
+.name{font-weight:700;}
 .wa{color:var(--muted);font-size:14px;}
+
+.details{
+  display:none;
+  font-size:14px;
+  color:var(--muted);
+}
+
+.badge{
+  padding:5px 12px;
+  border-radius:999px;
+  background:var(--glass2);
+  font-size:12px;
+}
 
 /* BUTTON */
 button{
@@ -180,22 +188,28 @@ button{
   font-size:13px;
 }
 
+.btn-soft{background:rgba(255,255,255,.14);}
 .btn-danger{background:linear-gradient(135deg,#ff5c5c,#ff2c2c);}
-.btn-soft{background:rgba(255,255,255,.12);}
 
-/* DETAILS */
-.details{
+/* MODAL EDIT */
+#editModal{
   display:none;
-  padding-top:6px;
-  font-size:14px;
-  color:var(--muted);
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(8px);
+  align-items:center;
+  justify-content:center;
+  z-index:99;
 }
-
-.badge{
-  padding:6px 12px;
-  border-radius:999px;
-  background:var(--glass2);
-  font-size:12px;
+.modal-box{
+  width:360px;
+  background:var(--glass);
+  padding:22px;
+  border-radius:22px;
+  box-shadow:0 25px 90px rgba(0,0,0,.6);
+  display:grid;
+  gap:10px;
 }
 </style>
 </head>
@@ -228,32 +242,31 @@ button{
 <!-- FORM -->
 <div class="panel">
 <form id="leadForm">
-
   <input id="nama" placeholder="Nama Konsumen" required>
   <input id="wa" placeholder="Nomor WhatsApp" required>
 
-<div class="dropdown" data-target="statusLead">
-  <input id="statusLead" hidden value="Cold">
-  <div class="dropdown-btn">Cold</div>
-  <div class="dropdown-menu">
-    <div class="dropdown-item">Cold</div>
-    <div class="dropdown-item">Warm</div>
-    <div class="dropdown-item">Hot</div>
+  <div class="dropdown" data-target="statusLead">
+    <input id="statusLead" hidden value="Cold">
+    <div class="dropdown-btn">Cold</div>
+    <div class="dropdown-menu">
+      <div class="dropdown-item">Cold</div>
+      <div class="dropdown-item">Warm</div>
+      <div class="dropdown-item">Hot</div>
+    </div>
   </div>
-</div>
 
-<div class="dropdown" data-target="statusProgress">
-  <input id="statusProgress" hidden value="New">
-  <div class="dropdown-btn">New</div>
-  <div class="dropdown-menu">
-    <div class="dropdown-item">New</div>
-    <div class="dropdown-item">Contacted</div>
-    <div class="dropdown-item">Survey</div>
-    <div class="dropdown-item">Visit</div>
-    <div class="dropdown-item">Booking</div>
-    <div class="dropdown-item">Deal</div>
+  <div class="dropdown" data-target="statusProgress">
+    <input id="statusProgress" hidden value="New">
+    <div class="dropdown-btn">New</div>
+    <div class="dropdown-menu">
+      <div class="dropdown-item">New</div>
+      <div class="dropdown-item">Contacted</div>
+      <div class="dropdown-item">Survey</div>
+      <div class="dropdown-item">Visit</div>
+      <div class="dropdown-item">Booking</div>
+      <div class="dropdown-item">Deal</div>
+    </div>
   </div>
-</div>
 
   <textarea id="notes" placeholder="Catatan Lead"></textarea>
 
@@ -268,15 +281,67 @@ button{
 <div id="list"></div>
 </div>
 
+<!-- EDIT MODAL -->
+<div id="editModal">
+  <div class="modal-box">
+    <h3>Edit Lead</h3>
+    <input id="editNama">
+    <input id="editWa">
+
+    <div class="dropdown" data-target="editStatusLead">
+      <input id="editStatusLead" hidden>
+      <div class="dropdown-btn">Cold</div>
+      <div class="dropdown-menu">
+        <div class="dropdown-item">Cold</div>
+        <div class="dropdown-item">Warm</div>
+        <div class="dropdown-item">Hot</div>
+      </div>
+    </div>
+
+    <div class="dropdown" data-target="editStatusProgress">
+      <input id="editStatusProgress" hidden>
+      <div class="dropdown-btn">New</div>
+      <div class="dropdown-menu">
+        <div class="dropdown-item">New</div>
+        <div class="dropdown-item">Contacted</div>
+        <div class="dropdown-item">Survey</div>
+        <div class="dropdown-item">Visit</div>
+        <div class="dropdown-item">Booking</div>
+        <div class="dropdown-item">Deal</div>
+      </div>
+    </div>
+
+    <textarea id="editNotes"></textarea>
+
+    <button onclick="saveEdit()">Simpan</button>
+    <button class="btn-danger" onclick="closeEdit()">Batal</button>
+  </div>
+</div>
+
 <script>
-const ADMIN_PASS = "dhito123";
+const ADMIN_PASS="dhito123";
 
-const loginBox = document.getElementById("login");
-const app = document.getElementById("app");
+const loginBox=document.getElementById("login");
+const app=document.getElementById("app");
+const password=document.getElementById("password");
 
+const leadForm=document.getElementById("leadForm");
+const list=document.getElementById("list");
+const search=document.getElementById("search");
+
+const total=document.getElementById("total");
+const cold=document.getElementById("cold");
+const warm=document.getElementById("warm");
+const hot=document.getElementById("hot");
+
+let leads=JSON.parse(localStorage.getItem("leads"))||[];
+let editIndex=null;
+
+/* LOGIN */
 if(localStorage.getItem("loggedIn")==="true"){
   loginBox.style.display="none";
   app.style.display="block";
+  render();
 }
 
 function login(){
@@ -284,59 +349,52 @@ function login(){
     localStorage.setItem("loggedIn","true");
     loginBox.style.display="none";
     app.style.display="block";
+    render();
   } else alert("Password salah!");
 }
 
-let leads = JSON.parse(localStorage.getItem("leads")) || [];
+/* DROPDOWN ENGINE */
+document.querySelectorAll(".dropdown").forEach(drop=>{
+  const btn=drop.querySelector(".dropdown-btn");
+  const menu=drop.querySelector(".dropdown-menu");
+  const hidden=drop.querySelector("input");
 
-/* DROPDOWN */
-function toggleDropdown(id){
-  document.querySelectorAll(".dropdown-menu").forEach(m=>m.style.display="none");
-  document.getElementById(id).style.display="block";
-}
-
-document.querySelectorAll(".dropdown").forEach(drop => {
-  const btn = drop.querySelector(".dropdown-btn");
-  const menu = drop.querySelector(".dropdown-menu");
-  const hidden = drop.querySelector("input");
-
-  btn.onclick = () => {
+  btn.onclick=()=>{
     document.querySelectorAll(".dropdown").forEach(d=>d.classList.remove("active"));
     drop.classList.toggle("active");
   };
 
   menu.querySelectorAll(".dropdown-item").forEach(item=>{
-    item.onclick = () => {
-      hidden.value = item.textContent;
-      btn.textContent = item.textContent;
-      drop.classList.remove("active"); // ✅ AUTO CLOSE FIX
+    item.onclick=()=>{
+      hidden.value=item.textContent.trim();
+      btn.textContent=item.textContent.trim();
+      drop.classList.remove("active");
     };
   });
 });
 
-document.addEventListener("click", e=>{
+document.addEventListener("click",e=>{
   if(!e.target.closest(".dropdown")){
     document.querySelectorAll(".dropdown").forEach(d=>d.classList.remove("active"));
   }
 });
 
-
 /* SAVE */
-function save(){ localStorage.setItem("leads", JSON.stringify(leads)); }
+function save(){localStorage.setItem("leads",JSON.stringify(leads));}
 
 /* STATS */
 function updateStats(){
-  total.textContent = leads.length;
-  cold.textContent = leads.filter(l=>l.statusLead=="Cold").length;
-  warm.textContent = leads.filter(l=>l.statusLead=="Warm").length;
-  hot.textContent = leads.filter(l=>l.statusLead=="Hot").length;
+  total.textContent=leads.length;
+  cold.textContent=leads.filter(l=>l.statusLead=="Cold").length;
+  warm.textContent=leads.filter(l=>l.statusLead=="Warm").length;
+  hot.textContent=leads.filter(l=>l.statusLead=="Hot").length;
 }
 
 /* RENDER */
 function render(){
   list.innerHTML="";
+  let s=search.value.toLowerCase();
 
-  let s = search.value.toLowerCase();
   leads.filter(l=>l.nama.toLowerCase().includes(s)||l.wa.includes(s))
   .forEach((l,i)=>{
     const div=document.createElement("div");
@@ -350,6 +408,7 @@ function render(){
         </div>
         <div class="row">
           <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
+          <button onclick="openEdit(${i})">Edit</button>
           <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
         </div>
       </div>
@@ -357,7 +416,7 @@ function render(){
       <div class="details">
         Lead: <span class="badge">${l.statusLead}</span><br>
         Progress: <span class="badge">${l.statusProgress}</span><br>
-        Catatan: ${l.notes || "-"}<br>
+        Catatan: ${l.notes||"-"}<br>
         Update: ${l.date}
       </div>
     `;
@@ -367,48 +426,46 @@ function render(){
   updateStats();
 }
 
-/* SUBMIT — FIXED */
-leadForm.addEventListener("submit", e=>{
+/* SUBMIT */
+leadForm.addEventListener("submit",e=>{
   e.preventDefault();
 
-  const nama = document.getElementById("nama").value.trim();
-  const wa = document.getElementById("wa").value.trim();
-  const notes = document.getElementById("notes").value.trim();
+  const nama=document.getElementById("nama").value.trim();
+  const wa=document.getElementById("wa").value.trim();
+  const notes=document.getElementById("notes").value.trim();
 
-  const statusLeadVal = document.getElementById("statusLead").value || "Cold";
-  const statusProgressVal = document.getElementById("statusProgress").value || "New";
+  const statusLead=document.getElementById("statusLead").value||"Cold";
+  const statusProgress=document.getElementById("statusProgress").value||"New";
 
-  if(!nama || !wa){
+  if(!nama||!wa){
     alert("Nama & WhatsApp wajib diisi");
     return;
   }
 
   leads.unshift({
-    nama,
-    wa,
-    statusLead: statusLeadVal,
-    statusProgress: statusProgressVal,
+    nama,wa,
+    statusLead,
+    statusProgress,
     notes,
-    date: new Date().toLocaleString()
+    date:new Date().toLocaleString()
   });
 
   save();
   leadForm.reset();
 
-  // reset dropdown UI text
-  document.querySelector('[data-target="statusLead"] .dropdown-btn').textContent = "Cold";
-  document.querySelector('[data-target="statusProgress"] .dropdown-btn').textContent = "New";
+  document.querySelector('[data-target="statusLead"] .dropdown-btn').textContent="Cold";
+  document.querySelector('[data-target="statusProgress"] .dropdown-btn').textContent="New";
 
-  document.getElementById("statusLead").value = "Cold";
-  document.getElementById("statusProgress").value = "New";
+  document.getElementById("statusLead").value="Cold";
+  document.getElementById("statusProgress").value="New";
 
   render();
 });
 
 /* UI */
 function toggleInfo(btn){
-  const details = btn.closest(".card").querySelector(".details");
-  details.style.display = details.style.display==="block"?"none":"block";
+  const details=btn.closest(".card").querySelector(".details");
+  details.style.display=details.style.display==="block"?"none":"block";
 }
 
 function deleteLead(i){
@@ -419,8 +476,43 @@ function deleteLead(i){
   }
 }
 
-search.addEventListener("input", render);
+/* EDIT */
+function openEdit(i){
+  editIndex=i;
+  const l=leads[i];
 
+  editNama.value=l.nama;
+  editWa.value=l.wa;
+  editNotes.value=l.notes||"";
+
+  editStatusLead.value=l.statusLead;
+  editStatusProgress.value=l.statusProgress;
+
+  document.querySelector('[data-target="editStatusLead"] .dropdown-btn').textContent=l.statusLead;
+  document.querySelector('[data-target="editStatusProgress"] .dropdown-btn').textContent=l.statusProgress;
+
+  editModal.style.display="flex";
+}
+
+function closeEdit(){editModal.style.display="none";}
+
+function saveEdit(){
+  leads[editIndex]={
+    nama:editNama.value.trim(),
+    wa:editWa.value.trim(),
+    statusLead:editStatusLead.value,
+    statusProgress:editStatusProgress.value,
+    notes:editNotes.value.trim(),
+    date:new Date().toLocaleString()
+  };
+  save();
+  render();
+  closeEdit();
+}
+
+search.addEventListener("input",render);
+
+/* EXPORT */
 function exportCSV(){
   let csv="Nama,WA,Lead,Progress,Notes,Update\n";
   leads.forEach(l=>{
@@ -437,6 +529,5 @@ function exportCSV(){
 
 render();
 </script>
-
 </body>
 </html>
