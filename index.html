@@ -6,11 +6,11 @@
 <title>CRM Dhito Property — Apple 2026</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root{
   --bg:#0a0d14;
+  --panel:#121826;
   --glass:rgba(255,255,255,.08);
   --glass2:rgba(255,255,255,.14);
   --text:#ffffff;
@@ -18,6 +18,7 @@
   --accent:#4da3ff;
   --green:#25D366;
   --danger:#ff5c5c;
+  --radius:18px;
 
   --ios-glow: 0 12px 40px rgba(77,163,255,.18);
   --ios-soft: 0 4px 18px rgba(0,0,0,.35);
@@ -56,6 +57,17 @@ body{
   border:1px solid rgba(255,255,255,.12);
 }
 
+.login-box input{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  background:rgba(255,255,255,.14);
+  color:white;
+  outline:none;
+  margin-bottom:12px;
+}
+
 /* LAYOUT */
 .layout{
   display:none;
@@ -77,6 +89,7 @@ body{
 .brand{
   font-weight:800;
   font-size:18px;
+  letter-spacing:.3px;
 }
 
 /* NAV */
@@ -90,6 +103,11 @@ body{
   text-align:left;
   cursor:pointer;
   font-weight:600;
+  transition:.15s;
+}
+
+.nav button:hover{
+  background:rgba(255,255,255,.08);
 }
 
 .nav button.active{
@@ -105,15 +123,17 @@ body{
   margin:auto;
 }
 
-/* PANEL */
-.panel{
-  background:var(--glass);
-  padding:20px;
-  border-radius:20px;
-  margin-bottom:18px;
-  backdrop-filter:blur(22px);
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow: var(--ios-soft), var(--ios-glow);
+/* HEADER */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+}
+
+header h1{
+  font-size:22px;
+  font-weight:800;
 }
 
 /* STATS */
@@ -121,14 +141,35 @@ body{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:16px;
+  margin-bottom:20px;
 }
 
 .stat{
   padding:18px;
   border-radius:18px;
   background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+  backdrop-filter:blur(18px);
   font-weight:700;
-  box-shadow: var(--ios-soft);
+  transition:.15s;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: var(--ios-soft), var(--ios-glow);
+}
+
+/* PANEL */
+.panel{
+  background:var(--glass);
+  padding:20px;
+  border-radius:20px;
+  margin-bottom:18px;
+  backdrop-filter:blur(22px);
+  box-shadow:0 10px 40px rgba(0,0,0,.35), var(--ios-soft);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+/* CHART */
+canvas{
+  width:100%;
+  max-height:300px;
 }
 
 /* FORM */
@@ -144,6 +185,7 @@ input,select,textarea{
   border:none;
   background:rgba(255,255,255,.14);
   color:white;
+  outline:none;
 }
 
 /* BUTTON */
@@ -154,7 +196,15 @@ button{
   cursor:pointer;
   font-weight:700;
   background:linear-gradient(135deg,#4da3ff,#7cf1ff);
+  transition:.15s;
+  backdrop-filter: blur(18px);
 }
+
+button:hover{ transform:scale(1.04); }
+button:active{ transform:scale(.96); }
+
+.btn-danger{ background:linear-gradient(135deg,#ff5c5c,#ff2c2c); }
+.btn-soft{ background:rgba(255,255,255,.14); }
 
 /* CARD */
 .card{
@@ -162,18 +212,67 @@ button{
   padding:16px 18px;
   border-radius:18px;
   background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04));
-  box-shadow: var(--ios-soft);
+  backdrop-filter:blur(20px);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  box-shadow:0 8px 30px rgba(0,0,0,.35), var(--ios-soft);
+  transition:.18s;
+  border:1px solid rgba(255,255,255,.12);
 }
 
-/* BADGES */
-.badge.cold{ background:#3b82f6; padding:6px 12px; border-radius:999px;}
-.badge.warm{ background:#f59e0b; padding:6px 12px; border-radius:999px;}
-.badge.hot{ background:#ef4444; padding:6px 12px; border-radius:999px;}
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
 
-/* FILTER */
-.filter-bar{display:flex;gap:10px;margin-top:10px;}
-.filter-btn{padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.12);color:white;}
-.filter-btn.active{background:#4da3ff;color:black;}
+.name{ font-weight:700; }
+
+/* BADGES */
+.badge{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  background:var(--glass2);
+  font-weight:600;
+}
+
+.badge.cold{ background:#3b82f6; }
+.badge.warm{ background:#f59e0b; }
+.badge.hot{ background:#ef4444; }
+
+/* FILTER BAR */
+.filter-bar{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.filter-btn{
+  padding:8px 18px;
+  border-radius:999px;
+  border:none;
+  background:rgba(255,255,255,.12);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.filter-btn.active{
+  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
+  color:black;
+}
+
+footer{
+  text-align:center;
+  margin-top:22px;
+  color:var(--muted);
+  font-size:13px;
+}
 </style>
 </head>
 <body>
@@ -187,13 +286,14 @@ button{
   </div>
 </div>
 
+<!-- APP -->
 <div class="layout" id="app">
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="brand">🍏 Dhito CRM</div>
   <div class="nav">
     <button class="active" onclick="showPage('home',this)">🏠 Home</button>
+    <button onclick="showPage('dashboard',this)">📊 Dashboard</button>
     <button onclick="showPage('leads',this)">👥 Leads</button>
     <button onclick="showPage('export',this)">📥 Export</button>
   </div>
@@ -201,25 +301,36 @@ button{
 
 <main class="main">
 
-<!-- HOME DASHBOARD -->
+<!-- HOME CHART -->
 <section id="home">
-  <h1>📊 Insight Dashboard</h1>
+<header>
+  <h1>Overview Analytics</h1>
+</header>
 
-  <div class="stats">
-    <div class="stat">Total Lead<br><b id="total">0</b></div>
-    <div class="stat">Cold<br><b id="cold">0</b></div>
-    <div class="stat">Warm<br><b id="warm">0</b></div>
-    <div class="stat">Hot<br><b id="hot">0</b></div>
-  </div>
+<div class="panel">
+  <canvas id="chart"></canvas>
+</div>
+</section>
 
-  <div class="panel">
-    <canvas id="leadChart" height="120"></canvas>
-  </div>
+<!-- DASHBOARD -->
+<section id="dashboard" style="display:none">
+<header>
+  <h1>Dashboard Overview</h1>
+</header>
+
+<div class="stats">
+  <div class="stat">Total Lead<br><b id="total">0</b></div>
+  <div class="stat">Cold<br><b id="cold">0</b></div>
+  <div class="stat">Warm<br><b id="warm">0</b></div>
+  <div class="stat">Hot<br><b id="hot">0</b></div>
+</div>
 </section>
 
 <!-- LEADS -->
 <section id="leads" style="display:none">
-<h1>Leads Management</h1>
+<header>
+  <h1>Leads Management</h1>
+</header>
 
 <div class="panel">
 <form id="leadForm">
@@ -241,7 +352,7 @@ button{
     <option>Deal</option>
   </select>
 
-  <textarea id="notes" placeholder="Catatan"></textarea>
+  <textarea id="notes" placeholder="Catatan Lead"></textarea>
 
   <button type="submit">➕ Tambah Lead</button>
 </form>
@@ -263,36 +374,67 @@ button{
 
 <!-- EXPORT -->
 <section id="export" style="display:none">
-<h1>Export Data</h1>
+<header>
+  <h1>Export Data</h1>
+</header>
+
 <div class="panel">
   <button onclick="exportCSV()">📥 Export Excel</button>
 </div>
 </section>
+
+<footer>CRM Dhito Property — Apple UI 2026</footer>
 
 </main>
 </div>
 
 <script>
 const ADMIN_PASS = "dhito123";
-
 const loginBox = document.getElementById("login");
 const app = document.getElementById("app");
+const loginBtn = document.getElementById("loginBtn");
 
-document.getElementById("loginBtn").onclick = () => {
-  const pass = document.getElementById("password").value;
-  if(pass === ADMIN_PASS){
+const leadForm = document.getElementById("leadForm");
+const nama = document.getElementById("nama");
+const wa = document.getElementById("wa");
+const statusLead = document.getElementById("statusLead");
+const statusProgress = document.getElementById("statusProgress");
+const notes = document.getElementById("notes");
+
+const list = document.getElementById("list");
+const search = document.getElementById("search");
+
+const total = document.getElementById("total");
+const cold = document.getElementById("cold");
+const warm = document.getElementById("warm");
+const hot = document.getElementById("hot");
+
+/* FORMAT WA */
+function formatWA(raw){
+  let num = raw.replace(/\D/g,"");
+  if(num.startsWith("0")) num = "62" + num.slice(1);
+  if(!num.startsWith("62")) num = "62" + num;
+  return "+" + num;
+}
+
+/* LOAD */
+let leads = JSON.parse(localStorage.getItem("leads")) || [];
+leads = leads.filter(l=>l?.nama && l?.wa).map(l=>({...l, wa:formatWA(l.wa)}));
+save();
+
+function save(){
+  localStorage.setItem("leads", JSON.stringify(leads));
+}
+
+/* LOGIN */
+loginBtn.addEventListener("click", ()=>{
+  if(password.value === ADMIN_PASS){
     loginBox.style.display = "none";
     app.style.display = "flex";
-    showPage("home", document.querySelector(".nav button"));
     render();
+    drawChart();
   } else alert("Password salah!");
-};
-
-/* DATA */
-let leads = JSON.parse(localStorage.getItem("leads") || "[]");
-
-/* FILTER */
-let activeFilter = "all";
+});
 
 /* NAV */
 function showPage(page,btn){
@@ -302,124 +444,150 @@ function showPage(page,btn){
   btn.classList.add("active");
 }
 
-/* FORMAT WA */
-function formatWA(raw){
-  let num = raw.replace(/\D/g,"");
-  if(num.startsWith("0")) num = "62" + num.slice(1);
-  return "+" + num;
-}
-
-/* STATS */
-function updateStats(){
-  document.getElementById("total").textContent = leads.length;
-  document.getElementById("cold").textContent = leads.filter(l=>l.statusLead==="Cold").length;
-  document.getElementById("warm").textContent = leads.filter(l=>l.statusLead==="Warm").length;
-  document.getElementById("hot").textContent = leads.filter(l=>l.statusLead==="Hot").length;
-}
-
-/* CHART */
-let chart;
-
-function updateChart(){
-  const coldCount = leads.filter(l=>l.statusLead==="Cold").length;
-  const warmCount = leads.filter(l=>l.statusLead==="Warm").length;
-  const hotCount = leads.filter(l=>l.statusLead==="Hot").length;
-
-  const data = [coldCount, warmCount, hotCount];
-
-  if(chart) chart.destroy();
-
-  chart = new Chart(document.getElementById("leadChart"), {
-    type:"doughnut",
-    data:{
-      labels:["Cold","Warm","Hot"],
-      datasets:[{
-        data:data,
-        backgroundColor:["#3b82f6","#f59e0b","#ef4444"],
-        borderWidth:0
-      }]
-    },
-    options:{
-      plugins:{legend:{labels:{color:"white"}}}
-    }
-  });
-}
-
-/* RENDER */
-function render(){
-  const list = document.getElementById("list");
-  const search = document.getElementById("search");
-
-  list.innerHTML = "";
-  const keyword = (search.value||"").toLowerCase();
-
-  leads.filter(l=>{
-    const matchSearch = l.nama.toLowerCase().includes(keyword) || l.wa.includes(keyword);
-    const matchStatus = activeFilter==="all" || l.statusLead===activeFilter;
-    return matchSearch && matchStatus;
-  }).forEach((l,i)=>{
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <b>${l.nama}</b><br>
-      ${l.wa}<br>
-      <span class="badge ${l.statusLead.toLowerCase()}">${l.statusLead}</span><br>
-      <button onclick="deleteLead(${i})">Hapus</button>
-    `;
-    list.appendChild(div);
-  });
-
-  updateStats();
-  updateChart();
-}
-
-/* SUBMIT */
-document.getElementById("leadForm").onsubmit = e => {
-  e.preventDefault();
-
-  const nama = document.getElementById("nama").value.trim();
-  const wa = formatWA(document.getElementById("wa").value.trim());
-  const statusLead = document.getElementById("statusLead").value;
-  const statusProgress = document.getElementById("statusProgress").value;
-  const notes = document.getElementById("notes").value;
-
-  leads.unshift({nama,wa,statusLead,statusProgress,notes,date:new Date().toLocaleString()});
-  localStorage.setItem("leads", JSON.stringify(leads));
-  e.target.reset();
-  render();
-};
-
-/* FILTER BTN */
+/* FILTER */
+let activeFilter="all";
 function setFilter(status,btn){
-  activeFilter = status;
+  activeFilter=status;
   document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
   render();
 }
 
-/* DELETE */
-function deleteLead(i){
-  leads.splice(i,1);
-  localStorage.setItem("leads", JSON.stringify(leads));
+/* STATS */
+function updateStats(){
+  total.textContent = leads.length;
+  cold.textContent = leads.filter(l=>l.statusLead==="Cold").length;
+  warm.textContent = leads.filter(l=>l.statusLead==="Warm").length;
+  hot.textContent = leads.filter(l=>l.statusLead==="Hot").length;
+}
+
+/* RENDER */
+function render(){
+  list.innerHTML="";
+  const keyword=(search.value||"").toLowerCase();
+
+  leads.filter(l=>{
+    const searchMatch = l.nama.toLowerCase().includes(keyword) || l.wa.includes(keyword);
+    const statusMatch = activeFilter==="all" || l.statusLead===activeFilter;
+    return searchMatch && statusMatch;
+  }).forEach((l,i)=>{
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`
+      <div class="row">
+        <div>
+          <div class="name">${l.nama}</div>
+          <div>${l.wa}</div>
+        </div>
+        <div class="row">
+          <button onclick="editLead(${i})">Edit</button>
+          <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
+        </div>
+      </div>
+
+      <div class="details">
+        Lead: <span class="badge ${l.statusLead.toLowerCase()}">${l.statusLead}</span><br>
+        Progress: ${l.statusProgress}<br>
+        Catatan: ${l.notes||"-"}
+      </div>
+    `;
+    list.appendChild(div);
+  });
+
+  updateStats();
+  drawChart();
+}
+
+/* SUBMIT */
+leadForm.addEventListener("submit", e=>{
+  e.preventDefault();
+  leads.unshift({
+    nama:nama.value.trim(),
+    wa:formatWA(wa.value.trim()),
+    statusLead:statusLead.value,
+    statusProgress:statusProgress.value,
+    notes:notes.value.trim(),
+    date:new Date().toLocaleString()
+  });
+  save();
+  leadForm.reset();
+  render();
+});
+
+/* EDIT */
+function editLead(i){
+  const l=leads[i];
+  leads[i]={
+    ...l,
+    nama:prompt("Nama",l.nama)||l.nama,
+    wa:formatWA(prompt("WA",l.wa)||l.wa),
+    statusLead:prompt("Cold/Warm/Hot",l.statusLead)||l.statusLead,
+    statusProgress:prompt("Progress",l.statusProgress)||l.statusProgress,
+    notes:prompt("Catatan",l.notes)||l.notes,
+    date:new Date().toLocaleString()
+  };
+  save();
   render();
 }
 
+/* DELETE */
+function deleteLead(i){
+  if(confirm("Hapus lead?")){
+    leads.splice(i,1);
+    save();
+    render();
+  }
+}
+
 /* SEARCH */
-document.getElementById("search").addEventListener("input", render);
+search.addEventListener("input",render);
 
 /* EXPORT */
 function exportCSV(){
-  let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
+  let csv="Nama,WA,Lead,Progress,Notes,Update\n";
   leads.forEach(l=>{
-    csv += `"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes||""}","${l.date}"\n`;
+    csv+=`"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes||""}","${l.date}"\n`;
+  });
+  const blob=new Blob([csv],{type:"text/csv"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="crm-dhito-property.csv";
+  a.click();
+}
+
+/* CHART DRAW */
+function drawChart(){
+  const canvas=document.getElementById("chart");
+  const ctx=canvas.getContext("2d");
+
+  const coldCount=leads.filter(l=>l.statusLead==="Cold").length;
+  const warmCount=leads.filter(l=>l.statusLead==="Warm").length;
+  const hotCount=leads.filter(l=>l.statusLead==="Hot").length;
+
+  const data=[coldCount,warmCount,hotCount];
+  const colors=["#3b82f6","#f59e0b","#ef4444"];
+  const labels=["Cold","Warm","Hot"];
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  const total=data.reduce((a,b)=>a+b,0)||1;
+  let start=0;
+  data.forEach((val,i)=>{
+    const angle=(val/total)*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(150,150);
+    ctx.arc(150,150,120,start,start+angle);
+    ctx.fillStyle=colors[i];
+    ctx.fill();
+    start+=angle;
   });
 
-  const blob = new Blob([csv],{type:"text/csv"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "crm-dhito-property.csv";
-  a.click();
+  ctx.fillStyle="white";
+  ctx.font="14px Inter";
+  labels.forEach((label,i)=>{
+    ctx.fillText(`${label}: ${data[i]}`,20,20+(i*20));
+  });
 }
 </script>
 
