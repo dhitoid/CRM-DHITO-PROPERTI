@@ -3,49 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM Dhito Property</title>
+<title>Apple Internal CRM — Dhito</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#05070c;
-  --glass:rgba(255,255,255,.10);
-  --glass2:rgba(255,255,255,.18);
-  --text:#ffffff;
-  --muted:rgba(255,255,255,.6);
-  --accent:#4da3ff;
+  --bg:#05060a;
+  --glass:rgba(255,255,255,.06);
+  --glass-strong:rgba(255,255,255,.14);
+  --text:#fff;
+  --muted:rgba(255,255,255,.65);
+  --accent:#5da9ff;
   --green:#25D366;
-  --danger:#ff5c5c;
   --radius:22px;
-  --blur: blur(28px);
-  --glow: 0 12px 40px rgba(77,163,255,.22);
+  --blur:blur(40px);
 }
 
-*{ box-sizing:border-box; font-family:Inter,system-ui; }
+*{box-sizing:border-box;font-family:Inter,system-ui}
 
 body{
   margin:0;
-  background:radial-gradient(circle at top,#18213a,#04060b);
+  background:
+    radial-gradient(900px 600px at 20% -10%, #16213a 0%, transparent 60%),
+    radial-gradient(900px 600px at 120% 10%, #0c1b2e 0%, transparent 60%),
+    #04050a;
   color:var(--text);
   overflow-x:hidden;
 }
 
-/* PARALLAX BG */
-body::before{
-  content:"";
+/* PARALLAX BACKGROUND */
+.parallax{
   position:fixed;
-  inset:-20%;
-  background:radial-gradient(circle at top,#1e3a8a22,#000);
-  z-index:-1;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(120,180,255,.12), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,.08), transparent 40%);
+  filter:blur(90px);
   transform:translateZ(0);
+  z-index:-1;
 }
 
 /* LOGIN */
 #login{
-  position:fixed; inset:0;
-  display:flex; justify-content:center; align-items:center;
-  background:radial-gradient(circle,#18213a,#05070c);
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle,#16203a,#05060a);
   z-index:10;
 }
 
@@ -55,15 +61,15 @@ body::before{
   border-radius:26px;
   background:var(--glass);
   backdrop-filter:var(--blur);
-  box-shadow:0 40px 120px rgba(0,0,0,.6), var(--glow);
+  border:1px solid rgba(255,255,255,.16);
   text-align:center;
-  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 60px 160px rgba(0,0,0,.7);
 }
 
 .login-box input{
   width:100%;
   padding:14px;
-  border-radius:14px;
+  border-radius:16px;
   border:none;
   background:rgba(255,255,255,.14);
   color:white;
@@ -71,101 +77,107 @@ body::before{
   margin-bottom:12px;
 }
 
-/* LAYOUT */
-.layout{ display:none; min-height:100vh; }
-
-/* DYNAMIC ISLAND BAR */
-.dynamic-bar{
+/* DYNAMIC ISLAND */
+.island{
   position:sticky;
-  top:14px;
-  margin:14px auto 18px;
-  width:320px;
-  height:46px;
+  top:16px;
+  margin:16px auto 20px;
+  width:fit-content;
+  padding:10px 16px;
   border-radius:999px;
-  background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(20,20,30,.7));
-  backdrop-filter:blur(30px) saturate(180%);
-  box-shadow:0 10px 40px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.12), var(--glow);
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.06));
+  backdrop-filter: blur(50px);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 10px 60px rgba(0,0,0,.45);
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  padding:0 18px;
-  transition:.35s ease;
+  gap:14px;
+  transition:.35s cubic-bezier(.2,.8,.2,1);
+  z-index:9;
 }
 
-.dynamic-bar.expand{
-  width:520px;
-  height:86px;
-  border-radius:32px;
+.island.expanded{
+  padding:14px 26px;
+  border-radius:28px;
 }
 
-/* LEFT BRAND */
-.brand{
+/* BRAND */
+.island-brand{
   font-weight:900;
-  font-size:15px;
-  letter-spacing:.4px;
+  letter-spacing:.5px;
+  white-space:nowrap;
 }
 
 /* NAV */
-.nav{
+.island-nav{
   display:flex;
-  gap:10px;
+  gap:8px;
 }
 
-.nav button{
-  padding:6px 14px;
-  border-radius:999px;
+.island-nav button{
   border:none;
-  background:rgba(255,255,255,.12);
+  background:transparent;
   color:white;
+  padding:8px 18px;
+  border-radius:999px;
   font-weight:700;
   cursor:pointer;
-  transition:.2s;
+  transition:.18s ease;
 }
 
-.nav button.active{
-  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
+.island-nav button.active{
+  background:linear-gradient(135deg,#5da9ff,#8ff3ff);
   color:black;
+  box-shadow:0 8px 28px rgba(93,169,255,.6);
 }
 
 /* MAIN */
 .main{
-  max-width:1300px;
+  max-width:1200px;
   margin:auto;
-  padding:22px;
+  padding:20px;
 }
 
 /* HEADER */
 header{
-  margin-bottom:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+}
+
+header h1{
+  font-size:22px;
+  font-weight:800;
 }
 
 /* STATS */
 .stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:14px;
-  margin-bottom:18px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+  margin-bottom:20px;
 }
 
 .stat{
   padding:18px;
   border-radius:20px;
   background:var(--glass);
-  backdrop-filter:blur(22px);
+  backdrop-filter:blur(26px);
+  border:1px solid rgba(255,255,255,.14);
   font-weight:800;
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:var(--glow);
+  box-shadow:0 8px 34px rgba(0,0,0,.45);
 }
 
 /* PANEL */
 .panel{
   background:var(--glass);
-  padding:18px;
+  padding:20px;
   border-radius:22px;
-  margin-bottom:16px;
-  backdrop-filter:blur(22px);
-  box-shadow:0 10px 40px rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(30px);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 10px 50px rgba(0,0,0,.5);
+  margin-bottom:18px;
 }
 
 /* FORM */
@@ -179,7 +191,7 @@ input,select,textarea{
   padding:14px;
   border-radius:14px;
   border:none;
-  background:rgba(255,255,255,.14);
+  background:rgba(255,255,255,.16);
   color:white;
   outline:none;
 }
@@ -190,101 +202,91 @@ button{
   border-radius:999px;
   border:none;
   cursor:pointer;
-  font-weight:800;
-  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
-  transition:.15s;
+  font-weight:700;
+  background:linear-gradient(135deg,#5da9ff,#8ff3ff);
+  transition:.15s ease;
 }
 
-button:hover{ transform:scale(1.04); }
-button:active{ transform:scale(.96); }
-
-.btn-danger{ background:linear-gradient(135deg,#ff5c5c,#ff2c2c); }
-.btn-soft{ background:rgba(255,255,255,.16); }
+button:hover{ transform:scale(1.05); }
 
 /* CARD */
 .card{
-  margin-top:12px;
-  padding:16px 18px;
+  padding:16px;
   border-radius:20px;
   background:var(--glass);
-  backdrop-filter:blur(22px);
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  box-shadow:var(--glow);
+  backdrop-filter:blur(24px);
   border:1px solid rgba(255,255,255,.12);
-  transform:translateZ(0);
+  box-shadow:0 8px 30px rgba(0,0,0,.45);
+  margin-top:14px;
 }
 
-.row{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
 .name{ font-weight:800; }
 
-/* WA LINK */
+/* WA */
 .wa-link{
-  display:inline-flex;
+  display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
   color:#25D366;
-  font-weight:700;
   text-decoration:none;
-  font-size:14px;
+  font-weight:700;
 }
 
-.wa-link img{
-  width:20px;
-  filter:drop-shadow(0 0 6px rgba(37,211,102,.6));
-}
-
-/* DETAILS */
-.details{
-  display:none;
-  font-size:14px;
-  color:var(--muted);
-  margin-top:8px;
+/* MOTION BLUR SCROLL */
+.blur-scroll{
+  transition:.25s ease;
 }
 
 /* MOBILE */
-@media(max-width:800px){
-  .dynamic-bar{ width:92%; }
+@media(max-width:720px){
+  .island-brand{display:none}
 }
 </style>
 </head>
 <body>
 
+<div class="parallax"></div>
+
 <!-- LOGIN -->
 <div id="login">
   <div class="login-box">
-    <h2>🔒 CRM Dhito Property</h2>
+    <h2>🍏 Apple Internal CRM</h2>
     <input id="password" type="password" placeholder="Password Admin">
-    <button id="loginBtn">Masuk Dashboard</button>
+    <button onclick="login()">Unlock</button>
   </div>
 </div>
 
-<div class="layout" id="app">
+<!-- APP -->
+<div id="app" style="display:none">
 
 <!-- DYNAMIC ISLAND -->
-<div class="dynamic-bar" id="dynBar">
-  <div class="brand">Dhito CRM</div>
-  <div class="nav">
+<div class="island" id="island">
+  <div class="island-brand">Dhito CRM</div>
+  <div class="island-nav">
     <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
     <button onclick="showPage('leads',this)">Leads</button>
     <button onclick="showPage('export',this)">Export</button>
   </div>
 </div>
 
-<main class="main">
+<main class="main blur-scroll" id="main">
 
 <!-- DASHBOARD -->
 <section id="dashboard">
-<header><h1>Realtime Lead Analytics</h1></header>
-
+<header><h1>Realtime Analytics</h1></header>
 <div class="stats">
   <div class="stat">Total Lead<br><b id="total">0</b></div>
   <div class="stat">Cold<br><b id="cold">0</b></div>
   <div class="stat">Warm<br><b id="warm">0</b></div>
   <div class="stat">Hot<br><b id="hot">0</b></div>
 </div>
-
 <div class="panel">
   <canvas id="chart"></canvas>
 </div>
@@ -292,36 +294,17 @@ button:active{ transform:scale(.96); }
 
 <!-- LEADS -->
 <section id="leads" style="display:none">
-<header><h1>Leads Management</h1></header>
+<header><h1>Lead Management</h1></header>
 
 <div class="panel">
 <form id="leadForm">
   <input id="nama" placeholder="Nama Konsumen" required>
-  <input id="wa" placeholder="Nomor WhatsApp (08xxx)" required>
-
-  <select id="statusLead">
-    <option>Cold</option>
-    <option>Warm</option>
-    <option>Hot</option>
-  </select>
-
-  <select id="statusProgress">
-    <option>New</option>
-    <option>Contacted</option>
-    <option>Survey</option>
-    <option>Visit</option>
-    <option>Booking</option>
-    <option>Deal</option>
-  </select>
-
+  <input id="wa" placeholder="Nomor WhatsApp" required>
+  <select id="statusLead"><option>Cold</option><option>Warm</option><option>Hot</option></select>
+  <select id="statusProgress"><option>New</option><option>Contacted</option><option>Survey</option><option>Visit</option><option>Booking</option><option>Deal</option></select>
   <textarea id="notes" placeholder="Catatan Lead"></textarea>
-
   <button type="submit">Tambah Lead</button>
 </form>
-</div>
-
-<div class="panel">
-  <input id="search" placeholder="Cari Nama / WhatsApp">
 </div>
 
 <div id="list"></div>
@@ -329,7 +312,7 @@ button:active{ transform:scale(.96); }
 
 <!-- EXPORT -->
 <section id="export" style="display:none">
-<header><h1>Export Data</h1></header>
+<header><h1>Export</h1></header>
 <div class="panel">
   <button onclick="exportCSV()">Export Excel</button>
 </div>
@@ -339,184 +322,31 @@ button:active{ transform:scale(.96); }
 </div>
 
 <script>
-const ADMIN_PASS = "dhito123";
+function login(){
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="block";
+}
 
-const loginBox = document.getElementById("login");
-const app = document.getElementById("app");
-const loginBtn = document.getElementById("loginBtn");
+/* DYNAMIC ISLAND EXPAND */
+const island=document.getElementById("island");
+window.addEventListener("scroll",()=>{
+  island.classList.toggle("expanded",window.scrollY>10);
+  document.getElementById("main").style.filter = window.scrollY>20 ? "blur(3px)" : "none";
+});
 
-loginBtn.onclick = ()=>{
-  if(document.getElementById("password").value === ADMIN_PASS){
-    loginBox.style.display = "none";
-    app.style.display = "block";
-    render();
-  } else alert("Password salah!");
-};
-
-/* NAV */
-function showPage(page,btn){
+/* PAGE SWITCH */
+function showPage(id,btn){
   document.querySelectorAll("section").forEach(s=>s.style.display="none");
-  document.getElementById(page).style.display="block";
-  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).style.display="block";
+  document.querySelectorAll(".island-nav button").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
-
-  document.getElementById("dynBar").classList.toggle("expand", page==="dashboard");
 }
 
-/* FORMAT WA */
-function formatWA(raw){
-  let num = raw.replace(/\D/g,"");
-  if(num.startsWith("0")) num = "62" + num.slice(1);
-  if(!num.startsWith("62")) num = "62" + num;
-  return "+" + num;
-}
-
-/* DATA */
-let leads = JSON.parse(localStorage.getItem("leads")) || [];
-function save(){ localStorage.setItem("leads", JSON.stringify(leads)); }
-
-/* RENDER */
-function render(){
-  list.innerHTML = "";
-  leads.forEach((l,i)=>{
-    const div = document.createElement("div");
-    div.className = "card";
-
-div.innerHTML = `
-  <div class="row">
-    <div>
-      <div class="name">${l.nama}</div>
-      <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-        ${l.wa}
-      </a>
-      <div style="font-size:13px;color:var(--muted)">📅 ${l.date}</div>
-    </div>
-    <div class="row">
-      <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-      <button onclick="editLead(${i})">Edit</button>
-      <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
-    </div>
-  </div>
-
-  <div class="details">
-    <div>Status: ${l.statusLead}</div>
-    <div>Progress: ${l.statusProgress}</div>
-    <div>Catatan: ${l.notes || "-"}</div>
-  </div>
-`;
-    list.appendChild(div);
-  });
-  updateStats();
-  drawChart();
-}
-
-/* INFO */
-function toggleInfo(btn){
-  const details = btn.closest(".card").querySelector(".details");
-  details.style.display = details.style.display==="block" ? "none" : "block";
-}
-
-/* STATS */
-function updateStats(){
-  total.textContent = leads.length;
-  cold.textContent = leads.filter(l=>l.statusLead==="Cold").length;
-  warm.textContent = leads.filter(l=>l.statusLead==="Warm").length;
-  hot.textContent = leads.filter(l=>l.statusLead==="Hot").length;
-}
-
-/* CHART */
-const ctx = chart.getContext("2d");
-function drawChart(){
-  const counts = [
-    leads.filter(l=>l.statusLead==="Cold").length,
-    leads.filter(l=>l.statusLead==="Warm").length,
-    leads.filter(l=>l.statusLead==="Hot").length
-  ];
-  const labels = ["Cold","Warm","Hot"];
-  const colors = ["#3b82f6","#f59e0b","#ef4444"];
-
-  const w = chart.width = chart.offsetWidth;
-  const h = chart.height = 240;
-
-  ctx.clearRect(0,0,w,h);
-
-  const max = Math.max(...counts,1);
-  const barWidth = w / counts.length * 0.45;
-
-  counts.forEach((val,i)=>{
-    const x = (i+0.5)*(w/counts.length);
-    const barHeight = (val/max)*(h-60);
-
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = colors[i];
-    ctx.fillStyle = colors[i];
-    ctx.fillRect(x-barWidth/2, h-barHeight-30, barWidth, barHeight);
-
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "#fff";
-    ctx.textAlign = "center";
-    ctx.fillText(labels[i], x, h-8);
-    ctx.fillText(val, x, h-barHeight-38);
-  });
-}
-
-/* ADD */
-leadForm.onsubmit = e=>{
-  e.preventDefault();
-
-  const namaVal = nama.value.trim();
-  const waVal = formatWA(wa.value.trim());
-  if(!namaVal || !waVal) return alert("Lengkapi data!");
-
-  leads.unshift({
-    nama:namaVal,
-    wa:waVal,
-    statusLead:statusLead.value,
-    statusProgress:statusProgress.value,
-    notes:notes.value,
-    date:new Date().toLocaleString()
-  });
-
-  save();
-  leadForm.reset();
-  render();
-};
-
-/* EDIT */
-function editLead(i){
-  const l = leads[i];
-  leads[i] = {
-    ...l,
-    nama:prompt("Nama",l.nama)||l.nama,
-    wa:formatWA(prompt("WA",l.wa)||l.wa),
-    notes:prompt("Catatan",l.notes)||l.notes,
-    date:new Date().toLocaleString()
-  };
-  save(); render();
-}
-
-/* DELETE */
-function deleteLead(i){
-  if(confirm("Hapus lead?")){
-    leads.splice(i,1);
-    save(); render();
-  }
-}
-
-/* EXPORT */
-function exportCSV(){
-  let csv="Nama,WA,Lead,Progress,Notes,Update\n";
-  leads.forEach(l=>{
-    csv+=`"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes}","${l.date}"\n`;
-  });
-  const blob=new Blob([csv],{type:"text/csv"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download="crm-dhito.csv";
-  a.click();
-}
+/* PARALLAX */
+document.addEventListener("mousemove",e=>{
+  document.querySelector(".parallax").style.transform=
+    `translate(${e.clientX/80}px,${e.clientY/80}px)`;
+});
 </script>
 
 </body>
