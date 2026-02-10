@@ -24,10 +24,7 @@
   --ios-soft: 0 4px 18px rgba(0,0,0,.35);
 }
 
-*{
-  box-sizing:border-box;
-  font-family:Inter,system-ui;
-}
+*{ box-sizing:border-box; font-family:Inter,system-ui; }
 
 body{
   margin:0;
@@ -37,11 +34,8 @@ body{
 
 /* LOGIN */
 #login{
-  position:fixed;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  position:fixed; inset:0;
+  display:flex; justify-content:center; align-items:center;
   background:radial-gradient(circle,#18213a,#05070c);
   z-index:10;
 }
@@ -69,41 +63,51 @@ body{
 }
 
 /* LAYOUT */
-.layout{
-  display:none;
-  min-height:100vh;
-  display:flex;
-}
+.layout{ display:none; min-height:100vh; display:flex; }
 
-/* SIDEBAR */
+/* SIDEBAR — iOS 2026 */
 .sidebar{
   width:260px;
   background:linear-gradient(180deg,#0f1626,#070b13);
   border-right:1px solid rgba(255,255,255,.06);
-  padding:22px 18px;
+  padding:22px 16px;
   display:flex;
   flex-direction:column;
-  gap:18px;
+  gap:20px;
+  backdrop-filter: blur(24px);
+  box-shadow: var(--ios-soft);
 }
 
 .brand{
   font-weight:800;
-  font-size:18px;
+  font-size:19px;
   letter-spacing:.3px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 /* NAV */
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
 .nav button{
   width:100%;
-  padding:12px 14px;
-  border-radius:14px;
+  padding:14px 16px;
+  border-radius:16px;
   border:none;
   background:transparent;
   color:var(--text);
   text-align:left;
   cursor:pointer;
   font-weight:600;
-  transition:.15s;
+  transition:.18s;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .nav button:hover{
@@ -113,6 +117,7 @@ body{
 .nav button.active{
   background:linear-gradient(135deg,#4da3ff,#7cf1ff);
   color:black;
+  box-shadow: var(--ios-glow);
 }
 
 /* MAIN */
@@ -150,13 +155,8 @@ header h1{
   background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
   backdrop-filter:blur(18px);
   font-weight:700;
-  transition:.15s;
   border:1px solid rgba(255,255,255,.12);
   box-shadow: var(--ios-soft), var(--ios-glow);
-}
-
-.stat:hover{
-  transform:translateY(-4px);
 }
 
 /* PANEL */
@@ -198,21 +198,11 @@ button{
   backdrop-filter: blur(18px);
 }
 
-button:hover{
-  transform:scale(1.04);
-}
+button:hover{ transform:scale(1.04); }
+button:active{ transform:scale(.96); }
 
-button:active{
-  transform:scale(.96);
-}
-
-.btn-danger{
-  background:linear-gradient(135deg,#ff5c5c,#ff2c2c);
-}
-
-.btn-soft{
-  background:rgba(255,255,255,.14);
-}
+.btn-danger{ background:linear-gradient(135deg,#ff5c5c,#ff2c2c); }
+.btn-soft{ background:rgba(255,255,255,.14); }
 
 /* CARD */
 .card{
@@ -225,46 +215,11 @@ button:active{
   flex-direction:column;
   gap:10px;
   box-shadow:0 8px 30px rgba(0,0,0,.35), var(--ios-soft);
-  transition:.18s;
   border:1px solid rgba(255,255,255,.12);
 }
 
-.card:hover{
-  transform:translateY(-4px);
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
-
-.name{
-  font-weight:700;
-}
-
-/* WA */
-.wa-link{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  color:var(--green);
-  font-weight:600;
-  text-decoration:none;
-  font-size:14px;
-}
-
-.wa-link img{
-  width:18px;
-}
-
-/* DETAILS */
-.details{
-  display:none;
-  font-size:14px;
-  color:var(--muted);
-}
+.row{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.name{ font-weight:700; }
 
 /* BADGES */
 .badge{
@@ -280,7 +235,7 @@ button:active{
 .badge.warm{ background:#f59e0b; }
 .badge.hot{ background:#ef4444; }
 
-/* FILTER BAR */
+/* FILTER */
 .filter-bar{
   display:flex;
   gap:10px;
@@ -296,7 +251,6 @@ button:active{
   color:white;
   font-weight:700;
   cursor:pointer;
-  transition:.2s;
 }
 
 .filter-btn.active{
@@ -304,24 +258,16 @@ button:active{
   color:black;
 }
 
-/* FOOTER */
-footer{
-  text-align:center;
-  margin-top:22px;
-  color:var(--muted);
-  font-size:13px;
+/* CHART */
+canvas{
+  width:100%;
+  height:240px;
 }
 
 /* MOBILE */
 @media(max-width:900px){
-  .layout{
-    flex-direction:column;
-  }
-  .sidebar{
-    width:100%;
-    flex-direction:row;
-    overflow:auto;
-  }
+  .layout{ flex-direction:column; }
+  .sidebar{ width:100%; flex-direction:row; overflow:auto; }
 }
 </style>
 </head>
@@ -336,11 +282,12 @@ footer{
   </div>
 </div>
 
-<!-- APP -->
 <div class="layout" id="app">
 
+<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="brand">🍏 Dhito CRM</div>
+
   <div class="nav">
     <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
     <button onclick="showPage('leads',this)">👥 Leads</button>
@@ -353,7 +300,7 @@ footer{
 <!-- DASHBOARD -->
 <section id="dashboard">
 <header>
-  <h1>Dashboard Overview</h1>
+  <h1>Realtime Lead Analytics</h1>
 </header>
 
 <div class="stats">
@@ -362,13 +309,15 @@ footer{
   <div class="stat">Warm<br><b id="warm">0</b></div>
   <div class="stat">Hot<br><b id="hot">0</b></div>
 </div>
+
+<div class="panel">
+  <canvas id="chart"></canvas>
+</div>
 </section>
 
 <!-- LEADS -->
-<section id="leads">
-<header>
-  <h1>Leads Management</h1>
-</header>
+<section id="leads" style="display:none">
+<header><h1>Leads Management</h1></header>
 
 <div class="panel">
 <form id="leadForm">
@@ -412,18 +361,11 @@ footer{
 
 <!-- EXPORT -->
 <section id="export" style="display:none">
-<header>
-  <h1>Export Data</h1>
-</header>
-
+<header><h1>Export Data</h1></header>
 <div class="panel">
   <button onclick="exportCSV()">📥 Export Excel</button>
 </div>
 </section>
-
-<footer>
-CRM Dhito Property — Apple UI 2026
-</footer>
 
 </main>
 </div>
@@ -450,6 +392,9 @@ const cold = document.getElementById("cold");
 const warm = document.getElementById("warm");
 const hot = document.getElementById("hot");
 
+const chartCanvas = document.getElementById("chart");
+const ctx = chartCanvas.getContext("2d");
+
 /* FORMAT WA */
 function formatWA(raw){
   if(!raw) return "";
@@ -460,16 +405,9 @@ function formatWA(raw){
 }
 
 /* LOAD */
-let leads = [];
-try {
-  leads = JSON.parse(localStorage.getItem("leads")) || [];
-  if(!Array.isArray(leads)) leads = [];
-} catch { leads = []; }
-
-leads = leads.filter(l=>l && l.nama?.trim() && l.wa?.trim())
+let leads = JSON.parse(localStorage.getItem("leads")) || [];
+leads = leads.filter(l=>l?.nama && l?.wa)
 .map(l=>({ ...l, wa: formatWA(l.wa) }));
-
-save();
 
 function save(){
   localStorage.setItem("leads", JSON.stringify(leads));
@@ -477,15 +415,14 @@ function save(){
 
 /* LOGIN */
 loginBtn.addEventListener("click", ()=>{
-  const pass = document.getElementById("password").value;
-  if(pass === ADMIN_PASS){
+  if(document.getElementById("password").value === ADMIN_PASS){
     loginBox.style.display = "none";
     app.style.display = "flex";
     render();
   } else alert("Password salah!");
 });
 
-/* NAVIGATION */
+/* NAV */
 function showPage(page,btn){
   document.querySelectorAll("section").forEach(s=>s.style.display="none");
   document.getElementById(page).style.display="block";
@@ -495,11 +432,9 @@ function showPage(page,btn){
 
 /* FILTER */
 let activeFilter = "all";
-
 function setFilter(status,btn){
   activeFilter = status;
-  document.querySelectorAll(".filter-btn")
-    .forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
   render();
 }
@@ -512,20 +447,45 @@ function updateStats(){
   hot.textContent = leads.filter(l=>l.statusLead==="Hot").length;
 }
 
+/* CHART */
+function drawChart(){
+  const coldCount = leads.filter(l=>l.statusLead==="Cold").length;
+  const warmCount = leads.filter(l=>l.statusLead==="Warm").length;
+  const hotCount = leads.filter(l=>l.statusLead==="Hot").length;
+
+  const data = [coldCount, warmCount, hotCount];
+  const labels = ["Cold","Warm","Hot"];
+  const colors = ["#3b82f6","#f59e0b","#ef4444"];
+
+  const w = chartCanvas.width = chartCanvas.offsetWidth;
+  const h = chartCanvas.height = 240;
+  ctx.clearRect(0,0,w,h);
+
+  const max = Math.max(...data, 1);
+  const barWidth = w / data.length * 0.4;
+
+  data.forEach((val,i)=>{
+    const x = (i+0.5) * (w/data.length);
+    const barHeight = (val/max) * (h-40);
+
+    ctx.fillStyle = colors[i];
+    ctx.fillRect(x - barWidth/2, h - barHeight - 20, barWidth, barHeight);
+
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.fillText(labels[i], x, h - 4);
+    ctx.fillText(val, x, h - barHeight - 26);
+  });
+}
+
 /* RENDER */
 function render(){
   list.innerHTML = "";
   const keyword = (search.value||"").toLowerCase();
 
-  leads.filter(l => {
-    const matchSearch =
-      l.nama.toLowerCase().includes(keyword) ||
-      l.wa.toLowerCase().includes(keyword);
-
-    const matchStatus =
-      activeFilter === "all" ||
-      l.statusLead === activeFilter;
-
+  leads.filter(l=>{
+    const matchSearch = l.nama.toLowerCase().includes(keyword) || l.wa.toLowerCase().includes(keyword);
+    const matchStatus = activeFilter==="all" || l.statusLead===activeFilter;
     return matchSearch && matchStatus;
   }).forEach((l,i)=>{
     const div = document.createElement("div");
@@ -535,12 +495,8 @@ function render(){
       <div class="row">
         <div>
           <div class="name">${l.nama}</div>
-          <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-            ${l.wa}
-          </a>
+          <div>${l.wa}</div>
         </div>
-
         <div class="row">
           <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
           <button onclick="editLead(${i})">Edit</button>
@@ -560,6 +516,7 @@ function render(){
   });
 
   updateStats();
+  drawChart();
 }
 
 /* SUBMIT */
@@ -568,11 +525,7 @@ leadForm.addEventListener("submit", e=>{
 
   const namaVal = nama.value.trim();
   const waVal = formatWA(wa.value.trim());
-
-  if(!namaVal || !waVal){
-    alert("Nama & WhatsApp wajib diisi!");
-    return;
-  }
+  if(!namaVal || !waVal) return alert("Nama & WhatsApp wajib diisi!");
 
   leads.unshift({
     nama:namaVal,
@@ -588,7 +541,7 @@ leadForm.addEventListener("submit", e=>{
   render();
 });
 
-/* TOGGLE INFO */
+/* TOGGLE */
 function toggleInfo(btn){
   const details = btn.closest(".card").querySelector(".details");
   details.style.display = details.style.display==="block"?"none":"block";
@@ -599,18 +552,12 @@ function editLead(i){
   const l = leads[i];
   if(!l) return;
 
-  const newNama = prompt("Nama", l.nama) || l.nama;
-  const newWa = formatWA(prompt("WhatsApp", l.wa) || l.wa);
-  const newLead = prompt("Cold / Warm / Hot", l.statusLead) || l.statusLead;
-  const newProgress = prompt("Progress", l.statusProgress) || l.statusProgress;
-  const newNotes = prompt("Catatan", l.notes || "") || l.notes;
-
   leads[i] = {
-    nama:newNama,
-    wa:newWa,
-    statusLead:newLead,
-    statusProgress:newProgress,
-    notes:newNotes,
+    nama:prompt("Nama", l.nama) || l.nama,
+    wa:formatWA(prompt("WhatsApp", l.wa) || l.wa),
+    statusLead:prompt("Cold/Warm/Hot", l.statusLead) || l.statusLead,
+    statusProgress:prompt("Progress", l.statusProgress) || l.statusProgress,
+    notes:prompt("Catatan", l.notes || "") || l.notes,
     date:new Date().toLocaleString()
   };
 
