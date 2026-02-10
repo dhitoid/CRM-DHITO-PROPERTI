@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM Dhito Property — Modern 2026</title>
+<title>CRM Dhito Property — Apple 2026</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -28,7 +28,7 @@
 
 body{
   margin:0;
-  background:radial-gradient(circle at top,#1a2235,#07090f);
+  background:radial-gradient(circle at top,#1a2238,#05070c);
   color:var(--text);
 }
 
@@ -40,20 +40,17 @@ body{
   justify-content:center;
   align-items:center;
   background:radial-gradient(circle,#18213a,#05070c);
+  z-index:10;
 }
 
 .login-box{
   width:360px;
-  padding:34px;
+  padding:36px;
   border-radius:22px;
   background:var(--glass);
-  backdrop-filter:blur(26px);
+  backdrop-filter:blur(28px);
   box-shadow:0 40px 120px rgba(0,0,0,.6);
   text-align:center;
-}
-
-.login-box h2{
-  margin-bottom:16px;
 }
 
 .login-box input{
@@ -67,12 +64,57 @@ body{
   margin-bottom:12px;
 }
 
-/* APP */
-.app{
-  max-width:1280px;
-  margin:auto;
-  padding:24px;
+/* LAYOUT */
+.layout{
   display:none;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:260px;
+  background:linear-gradient(180deg,#0f1626,#070b13);
+  border-right:1px solid rgba(255,255,255,.06);
+  padding:22px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.brand{
+  font-weight:800;
+  font-size:18px;
+  letter-spacing:.3px;
+}
+
+.nav button{
+  width:100%;
+  padding:12px 14px;
+  border-radius:14px;
+  border:none;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  cursor:pointer;
+  font-weight:600;
+  transition:.15s;
+}
+
+.nav button:hover{
+  background:rgba(255,255,255,.08);
+}
+
+.nav button.active{
+  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
+  color:black;
+}
+
+/* MAIN */
+.main{
+  flex:1;
+  padding:26px;
+  max-width:1300px;
+  margin:auto;
 }
 
 /* HEADER */
@@ -80,7 +122,7 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:20px;
+  margin-bottom:22px;
 }
 
 header h1{
@@ -99,17 +141,17 @@ header h1{
 .stat{
   padding:18px;
   border-radius:18px;
-  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05));
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
   backdrop-filter:blur(18px);
-  font-weight:600;
-  transition:.2s;
+  font-weight:700;
+  transition:.15s;
 }
 
 .stat:hover{
   transform:translateY(-4px);
 }
 
-/* PANELS */
+/* PANEL */
 .panel{
   background:var(--glass);
   padding:20px;
@@ -135,7 +177,7 @@ input,select,textarea{
   outline:none;
 }
 
-/* BUTTONS */
+/* BUTTON */
 button{
   padding:10px 16px;
   border-radius:999px;
@@ -147,7 +189,7 @@ button{
 }
 
 button:hover{
-  transform:scale(1.03);
+  transform:scale(1.04);
 }
 
 .btn-danger{
@@ -176,7 +218,6 @@ button:hover{
   transform:translateY(-4px);
 }
 
-/* ROW */
 .row{
   display:flex;
   justify-content:space-between;
@@ -186,7 +227,6 @@ button:hover{
 
 .name{
   font-weight:700;
-  font-size:16px;
 }
 
 /* WA */
@@ -220,17 +260,24 @@ button:hover{
   font-weight:600;
 }
 
-/* SEARCH */
-.search-box input{
-  width:100%;
-}
-
 /* FOOTER */
 footer{
   text-align:center;
-  margin-top:20px;
+  margin-top:22px;
   color:var(--muted);
   font-size:13px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .layout{
+    flex-direction:column;
+  }
+  .sidebar{
+    width:100%;
+    flex-direction:row;
+    overflow:auto;
+  }
 }
 </style>
 </head>
@@ -246,11 +293,26 @@ footer{
 </div>
 
 <!-- APP -->
-<div class="app" id="app">
+<div class="layout" id="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="brand">🍏 Dhito CRM</div>
+  <div class="nav">
+    <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
+    <button onclick="showPage('leads',this)">👥 Leads</button>
+    <button onclick="showPage('export',this)">📥 Export</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- DASHBOARD -->
+<section id="dashboard">
 
 <header>
-  <h1>📊 CRM Dhito Property</h1>
-  <button onclick="exportCSV()">Export Excel</button>
+  <h1>Dashboard Overview</h1>
 </header>
 
 <div class="stats">
@@ -259,6 +321,15 @@ footer{
   <div class="stat">Warm<br><b id="warm">0</b></div>
   <div class="stat">Hot<br><b id="hot">0</b></div>
 </div>
+
+</section>
+
+<!-- LEADS -->
+<section id="leads">
+
+<header>
+  <h1>Leads Management</h1>
+</header>
 
 <div class="panel">
 <form id="leadForm">
@@ -286,16 +357,32 @@ footer{
 </form>
 </div>
 
-<div class="panel search-box">
+<div class="panel">
   <input id="search" placeholder="Cari Nama / WhatsApp">
 </div>
 
 <div id="list"></div>
 
+</section>
+
+<!-- EXPORT -->
+<section id="export" style="display:none">
+
+<header>
+  <h1>Export Data</h1>
+</header>
+
+<div class="panel">
+  <button onclick="exportCSV()">📥 Export Excel</button>
+</div>
+
+</section>
+
 <footer>
-CRM Dhito Property — Modern UI 2026
+CRM Dhito Property — Apple UI 2026
 </footer>
 
+</main>
 </div>
 
 <script>
@@ -329,14 +416,14 @@ function formatWA(raw){
   return "+" + num;
 }
 
-/* LOAD DATA */
+/* LOAD */
 let leads = [];
 try {
   leads = JSON.parse(localStorage.getItem("leads")) || [];
   if(!Array.isArray(leads)) leads = [];
 } catch { leads = []; }
 
-/* CLEAN */
+/* CLEAN NULL */
 leads = leads.filter(l=>l && l.nama?.trim() && l.wa?.trim())
 .map(l=>({ ...l, wa: formatWA(l.wa) }));
 
@@ -351,10 +438,18 @@ loginBtn.addEventListener("click", ()=>{
   const pass = document.getElementById("password").value;
   if(pass === ADMIN_PASS){
     loginBox.style.display = "none";
-    app.style.display = "block";
+    app.style.display = "flex";
     render();
   } else alert("Password salah!");
 });
+
+/* NAVIGATION */
+function showPage(page,btn){
+  document.querySelectorAll("section").forEach(s=>s.style.display="none");
+  document.getElementById(page).style.display="block";
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
 
 /* STATS */
 function updateStats(){
@@ -433,7 +528,7 @@ leadForm.addEventListener("submit", e=>{
   render();
 });
 
-/* TOGGLE */
+/* TOGGLE INFO */
 function toggleInfo(btn){
   const details = btn.closest(".card").querySelector(".details");
   details.style.display = details.style.display==="block"?"none":"block";
