@@ -97,37 +97,44 @@ input,textarea{
   outline:none;
 }
 
-/* APPLE DROPDOWN */
 .dropdown{
   position:relative;
-  background:rgba(255,255,255,.15);
+}
+
+.dropdown-btn{
   padding:14px;
   border-radius:14px;
+  background:rgba(255,255,255,.16);
   cursor:pointer;
+  font-weight:600;
 }
-
-.dropdown span{opacity:.9}
 
 .dropdown-menu{
-  display:none;
   position:absolute;
-  top:105%;
+  top:110%;
   left:0;
   right:0;
-  background:rgba(25,30,40,.98);
-  border-radius:14px;
+  background:var(--glass);
+  backdrop-filter:blur(26px);
+  border-radius:16px;
   overflow:hidden;
-  box-shadow:0 20px 50px rgba(0,0,0,.6);
-  z-index:5;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  display:none;
+  z-index:20;
 }
 
-.dropdown-menu div{
-  padding:12px 14px;
-  transition:.15s;
+.dropdown.active .dropdown-menu{
+  display:block;
 }
 
-.dropdown-menu div:hover{
-  background:rgba(255,255,255,.12);
+.dropdown-item{
+  padding:14px 16px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.dropdown-item:hover{
+  background:rgba(255,255,255,.18);
 }
 
 /* LIST */
@@ -216,28 +223,28 @@ button{
   <input id="nama" placeholder="Nama Konsumen" required>
   <input id="wa" placeholder="Nomor WhatsApp" required>
 
-  <!-- Lead Status -->
-  <div class="dropdown" onclick="toggleDropdown('leadMenu')">
-    <span id="leadValue">Cold</span>
-    <div id="leadMenu" class="dropdown-menu">
-      <div onclick="setLead('Cold')">Cold</div>
-      <div onclick="setLead('Warm')">Warm</div>
-      <div onclick="setLead('Hot')">Hot</div>
-    </div>
+<div class="dropdown" data-target="statusLead">
+  <input id="statusLead" hidden value="Cold">
+  <div class="dropdown-btn">Cold</div>
+  <div class="dropdown-menu">
+    <div class="dropdown-item">Cold</div>
+    <div class="dropdown-item">Warm</div>
+    <div class="dropdown-item">Hot</div>
   </div>
+</div>
 
-  <!-- Progress -->
-  <div class="dropdown" onclick="toggleDropdown('progressMenu')">
-    <span id="progressValue">New</span>
-    <div id="progressMenu" class="dropdown-menu">
-      <div onclick="setProgress('New')">New</div>
-      <div onclick="setProgress('Contacted')">Contacted</div>
-      <div onclick="setProgress('Survey')">Survey</div>
-      <div onclick="setProgress('Visit')">Visit</div>
-      <div onclick="setProgress('Booking')">Booking</div>
-      <div onclick="setProgress('Deal')">Deal</div>
-    </div>
+<div class="dropdown" data-target="statusProgress">
+  <input id="statusProgress" hidden value="New">
+  <div class="dropdown-btn">New</div>
+  <div class="dropdown-menu">
+    <div class="dropdown-item">New</div>
+    <div class="dropdown-item">Contacted</div>
+    <div class="dropdown-item">Survey</div>
+    <div class="dropdown-item">Visit</div>
+    <div class="dropdown-item">Booking</div>
+    <div class="dropdown-item">Deal</div>
   </div>
+</div>
 
   <textarea id="notes" placeholder="Catatan Lead"></textarea>
 
@@ -281,6 +288,32 @@ function toggleDropdown(id){
   document.querySelectorAll(".dropdown-menu").forEach(m=>m.style.display="none");
   document.getElementById(id).style.display="block";
 }
+
+document.querySelectorAll(".dropdown").forEach(drop => {
+  const btn = drop.querySelector(".dropdown-btn");
+  const menu = drop.querySelector(".dropdown-menu");
+  const hidden = drop.querySelector("input");
+
+  btn.onclick = () => {
+    document.querySelectorAll(".dropdown").forEach(d=>d.classList.remove("active"));
+    drop.classList.toggle("active");
+  };
+
+  menu.querySelectorAll(".dropdown-item").forEach(item=>{
+    item.onclick = () => {
+      hidden.value = item.textContent;
+      btn.textContent = item.textContent;
+      drop.classList.remove("active"); // ✅ AUTO CLOSE FIX
+    };
+  });
+});
+
+document.addEventListener("click", e=>{
+  if(!e.target.closest(".dropdown")){
+    document.querySelectorAll(".dropdown").forEach(d=>d.classList.remove("active"));
+  }
+});
+
 
 function setLead(val){
   statusLead = val;
