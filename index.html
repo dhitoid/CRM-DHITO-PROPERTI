@@ -10,16 +10,16 @@
 <style>
 :root{
   --bg:#05060a;
-  --glass:rgba(255,255,255,.06);
-  --glass-strong:rgba(255,255,255,.14);
+  --glass:rgba(255,255,255,.08);
+  --glass-soft:rgba(255,255,255,.06);
   --text:#fff;
   --muted:rgba(255,255,255,.65);
   --accent:#5da9ff;
   --green:#25D366;
   --danger:#ff5c5c;
   --radius:22px;
-  --blur-soft: blur(14px);
-  --blur-medium: blur(20px);
+  --blur-soft:blur(14px);
+  --blur-medium:blur(20px);
 }
 
 *{box-sizing:border-box;font-family:Inter,system-ui}
@@ -32,9 +32,10 @@ body{
     #04050a;
   color:var(--text);
   overflow-x:hidden;
+  padding-bottom:env(safe-area-inset-bottom);
 }
 
-/* PARALLAX BACKGROUND */
+/* PARALLAX */
 .parallax{
   position:fixed;
   inset:0;
@@ -62,7 +63,7 @@ body{
   padding:36px;
   border-radius:26px;
   background:var(--glass);
-  backdrop-filter:var(--blur);
+  backdrop-filter:var(--blur-medium);
   border:1px solid rgba(255,255,255,.16);
   text-align:center;
   box-shadow:0 60px 160px rgba(0,0,0,.7);
@@ -77,13 +78,15 @@ body{
   color:white;
   outline:none;
   margin-bottom:12px;
+  font-size:16px;
 }
 
-/* DYNAMIC ISLAND BAR */
+/* DYNAMIC ISLAND */
 .island{
   position:sticky;
   top:14px;
   margin:16px auto 20px;
+  width:fit-content;
   padding:10px 18px;
   border-radius:999px;
   background:rgba(255,255,255,.14);
@@ -94,11 +97,11 @@ body{
   align-items:center;
   gap:14px;
   transition:.25s ease;
+  z-index:9;
 }
 
 .island.expanded{
-  padding:14px 26px;
-  border-radius:28px;
+  padding:12px 22px;
 }
 
 .island-brand{
@@ -108,24 +111,23 @@ body{
 
 .island-nav{
   display:flex;
-  gap:8px;
+  gap:6px;
 }
 
 .island-nav button{
   border:none;
   background:transparent;
   color:white;
-  padding:8px 18px;
+  padding:8px 16px;
   border-radius:999px;
   font-weight:700;
   cursor:pointer;
-  transition:.18s ease;
 }
 
 .island-nav button.active{
   background:linear-gradient(135deg,#5da9ff,#8ff3ff);
   color:black;
-  box-shadow:0 8px 28px rgba(93,169,255,.6);
+  box-shadow:0 6px 24px rgba(93,169,255,.5);
 }
 
 /* MAIN */
@@ -133,7 +135,6 @@ body{
   max-width:1200px;
   margin:auto;
   padding:20px;
-  transition:.2s ease;
 }
 
 /* HEADER */
@@ -161,7 +162,7 @@ header h1{
   padding:18px;
   border-radius:20px;
   background:var(--glass);
-  backdrop-filter:blur(26px);
+  backdrop-filter:var(--blur-soft);
   border:1px solid rgba(255,255,255,.14);
   font-weight:800;
   box-shadow:0 8px 34px rgba(0,0,0,.45);
@@ -169,12 +170,13 @@ header h1{
 
 /* PANEL */
 .panel{
-  background:rgba(255,255,255,.08);
+  background:var(--glass-soft);
   padding:20px;
   border-radius:22px;
   backdrop-filter:var(--blur-medium);
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 12px 50px rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 10px 50px rgba(0,0,0,.5);
+  margin-bottom:18px;
 }
 
 /* FORM */
@@ -191,6 +193,7 @@ input,select,textarea{
   background:rgba(255,255,255,.16);
   color:white;
   outline:none;
+  font-size:16px;
 }
 
 /* BUTTON */
@@ -202,10 +205,9 @@ button{
   font-weight:700;
   background:linear-gradient(135deg,#5da9ff,#8ff3ff);
   box-shadow:0 6px 24px rgba(93,169,255,.35);
-  transition:.15s ease;
 }
 
-button:hover{ transform:scale(1.05); }
+button:hover{ transform:scale(1.04); }
 
 .btn-danger{ background:linear-gradient(135deg,#ff5c5c,#ff2c2c); }
 .btn-soft{ background:rgba(255,255,255,.14); }
@@ -215,10 +217,14 @@ button:hover{ transform:scale(1.05); }
   margin-top:14px;
   padding:16px 18px;
   border-radius:18px;
-  background:rgba(255,255,255,.07);
+  background:var(--glass-soft);
   backdrop-filter:var(--blur-soft);
-  border:1px solid rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.12);
   box-shadow:0 6px 26px rgba(0,0,0,.4);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  transition:.2s ease;
 }
 
 .card:hover{
@@ -278,11 +284,41 @@ button:hover{ transform:scale(1.05); }
 /* MOBILE */
 @media(max-width:720px){
   .island-brand{display:none}
+
+  .main{
+    padding:14px 12px 80px;
+  }
+
+  .stats{
+    display:flex;
+    overflow-x:auto;
+    gap:12px;
+    scroll-snap-type:x mandatory;
+  }
+
+  .stat{
+    min-width:160px;
+    flex-shrink:0;
+    scroll-snap-align:start;
+  }
+
+  .card .row{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .card .row:last-child{
+    flex-direction:row;
+    width:100%;
+    justify-content:space-between;
+  }
+
+  textarea{min-height:80px}
 }
 </style>
 </head>
-<body>
 
+<body>
 <div class="parallax"></div>
 
 <!-- LOGIN -->
@@ -296,7 +332,7 @@ button:hover{ transform:scale(1.05); }
 
 <div id="app" style="display:none">
 
-<!-- DYNAMIC ISLAND -->
+<!-- ISLAND -->
 <div class="island" id="island">
   <div class="island-brand">Dhito CRM</div>
   <div class="island-nav">
@@ -364,268 +400,180 @@ button:hover{ transform:scale(1.05); }
 </div>
 
 <script>
-const ADMIN_PASS = "dhito123";
+const ADMIN_PASS="dhito123";
+const loginBox=document.getElementById("login");
+const app=document.getElementById("app");
 
-const loginBox = document.getElementById("login");
-const app = document.getElementById("app");
-const loginBtn = document.getElementById("loginBtn");
-
-/* LOGIN */
-loginBtn.addEventListener("click", ()=>{
-  if(document.getElementById("password").value === ADMIN_PASS){
-    loginBox.style.display = "none";
-    app.style.display = "block";
+document.getElementById("loginBtn").onclick=()=>{
+  if(password.value===ADMIN_PASS){
+    loginBox.style.display="none";
+    app.style.display="block";
     render();
-  } else alert("Password salah!");
-});
+  }else alert("Password salah!");
+};
 
-/* DYNAMIC ISLAND EXPAND + MOTION BLUR */
-const island = document.getElementById("island");
-const main = document.getElementById("main");
-
+/* ISLAND AUTO HIDE */
+let lastScroll=0;
 window.addEventListener("scroll",()=>{
-  island.classList.toggle("expanded", window.scrollY > 12);
-
-  const blur = Math.min(window.scrollY / 200, 1.2);
-  main.style.filter = `blur(${blur}px)`;
+  const y=scrollY;
+  island.classList.toggle("expanded",y>12);
+  island.style.transform=(y>lastScroll&&y>80)?"translateY(-120%)":"translateY(0)";
+  lastScroll=y;
 });
 
-/* PARALLAX MOVE */
+/* PARALLAX */
 document.addEventListener("mousemove",e=>{
-  document.querySelector(".parallax").style.transform =
-    `translate(${e.clientX/80}px,${e.clientY/80}px)`;
+  document.querySelector(".parallax").style.transform=
+  `translate(${e.clientX/80}px,${e.clientY/80}px)`;
 });
 
-/* PAGE NAV */
-function showPage(page,btn){
+/* PAGE */
+function showPage(p,b){
   document.querySelectorAll("section").forEach(s=>s.style.display="none");
-  document.getElementById(page).style.display="block";
-  document.querySelectorAll(".island-nav button").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
+  document.getElementById(p).style.display="block";
+  document.querySelectorAll(".island-nav button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
 }
 
-/* ====== SEMUA SCRIPT CRM ASLI KAMU ====== */
+/* ===== CRM LOGIC (ASLI) ===== */
+const leadForm=leadFormEl=leadForm=document.getElementById("leadForm");
+const nama=document.getElementById("nama");
+const wa=document.getElementById("wa");
+const statusLead=document.getElementById("statusLead");
+const statusProgress=document.getElementById("statusProgress");
+const notes=document.getElementById("notes");
+const list=document.getElementById("list");
+const search=document.getElementById("search");
+const total=document.getElementById("total");
+const cold=document.getElementById("cold");
+const warm=document.getElementById("warm");
+const hot=document.getElementById("hot");
+const ctx=document.getElementById("chart").getContext("2d");
 
-const leadForm = document.getElementById("leadForm");
-const nama = document.getElementById("nama");
-const wa = document.getElementById("wa");
-const statusLead = document.getElementById("statusLead");
-const statusProgress = document.getElementById("statusProgress");
-const notes = document.getElementById("notes");
-
-const list = document.getElementById("list");
-const search = document.getElementById("search");
-
-const total = document.getElementById("total");
-const cold = document.getElementById("cold");
-const warm = document.getElementById("warm");
-const hot = document.getElementById("hot");
-
-const chartCanvas = document.getElementById("chart");
-const ctx = chartCanvas.getContext("2d");
-
-/* FORMAT WA */
-function formatWA(raw){
-  if(!raw) return "";
-  let num = raw.replace(/\D/g,"");
-  if(num.startsWith("0")) num = "62" + num.slice(1);
-  if(!num.startsWith("62")) num = "62" + num;
-  return "+" + num;
+function formatWA(r){
+  let n=r.replace(/\D/g,"");
+  if(n.startsWith("0")) n="62"+n.slice(1);
+  if(!n.startsWith("62")) n="62"+n;
+  return "+"+n;
 }
 
-/* LOAD */
-let leads = JSON.parse(localStorage.getItem("leads")) || [];
-leads = leads.filter(l=>l?.nama && l?.wa)
-.map(l=>({ ...l, wa: formatWA(l.wa) }));
+let leads=JSON.parse(localStorage.getItem("leads"))||[];
+function save(){localStorage.setItem("leads",JSON.stringify(leads));}
 
-function save(){
-  localStorage.setItem("leads", JSON.stringify(leads));
-}
-
-/* FILTER */
-let activeFilter = "all";
-function setFilter(status,btn){
-  activeFilter = status;
-  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
+let activeFilter="all";
+function setFilter(s,b){
+  activeFilter=s;
+  document.querySelectorAll(".filter-btn").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
   render();
 }
 
-/* STATS */
 function updateStats(){
-  total.textContent = leads.length;
-  cold.textContent = leads.filter(l=>l.statusLead==="Cold").length;
-  warm.textContent = leads.filter(l=>l.statusLead==="Warm").length;
-  hot.textContent = leads.filter(l=>l.statusLead==="Hot").length;
+  total.textContent=leads.length;
+  cold.textContent=leads.filter(l=>l.statusLead==="Cold").length;
+  warm.textContent=leads.filter(l=>l.statusLead==="Warm").length;
+  hot.textContent=leads.filter(l=>l.statusLead==="Hot").length;
 }
 
-/* CHART */
 function drawChart(){
-  const coldCount = leads.filter(l=>l.statusLead==="Cold").length;
-  const warmCount = leads.filter(l=>l.statusLead==="Warm").length;
-  const hotCount = leads.filter(l=>l.statusLead==="Hot").length;
-
-  const data = [coldCount, warmCount, hotCount];
-  const labels = ["Cold","Warm","Hot"];
-  const colors = ["#3b82f6","#f59e0b","#ef4444"];
-
-  const w = chartCanvas.width = chartCanvas.offsetWidth;
-  const h = chartCanvas.height = 260;
-
-  let anim = 0;
-
-  function animate(){
-    anim += 0.05;
-    ctx.clearRect(0,0,w,h);
-
-    const max = Math.max(...data, 1);
-    const barWidth = w / data.length * 0.42;
-
-    data.forEach((val,i)=>{
-      const x = (i+0.5) * (w/data.length);
-      const targetHeight = (val/max) * (h-60);
-      const barHeight = targetHeight * Math.min(anim,1);
-
-      ctx.shadowBlur = 24;
-      ctx.shadowColor = colors[i];
-
-      ctx.fillStyle = colors[i];
-      ctx.fillRect(x - barWidth/2, h - barHeight - 30, barWidth, barHeight);
-
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = "#fff";
-      ctx.textAlign = "center";
-      ctx.font = "14px Inter";
-      ctx.fillText(labels[i], x, h - 8);
-      ctx.fillText(val, x, h - barHeight - 38);
-    });
-
-    if(anim < 1) requestAnimationFrame(animate);
-  }
-
-  animate();
+  const data=[
+    leads.filter(l=>l.statusLead==="Cold").length,
+    leads.filter(l=>l.statusLead==="Warm").length,
+    leads.filter(l=>l.statusLead==="Hot").length
+  ];
+  const labels=["Cold","Warm","Hot"];
+  const colors=["#3b82f6","#f59e0b","#ef4444"];
+  const c=document.getElementById("chart");
+  const w=c.width=c.offsetWidth;
+  const h=c.height=260;
+  ctx.clearRect(0,0,w,h);
+  const max=Math.max(...data,1);
+  data.forEach((v,i)=>{
+    const bh=(v/max)*(h-60);
+    const x=(i+.5)*(w/data.length);
+    ctx.fillStyle=colors[i];
+    ctx.fillRect(x-30,h-bh-30,60,bh);
+    ctx.fillStyle="#fff";
+    ctx.textAlign="center";
+    ctx.fillText(labels[i],x,h-8);
+    ctx.fillText(v,x,h-bh-38);
+  });
 }
 
-/* RENDER */
 function render(){
-  list.innerHTML = "";
-  const keyword = (search.value||"").toLowerCase();
-
+  list.innerHTML="";
+  const k=(search.value||"").toLowerCase();
   leads.filter(l=>{
-    const matchSearch = l.nama.toLowerCase().includes(keyword) || l.wa.toLowerCase().includes(keyword);
-    const matchStatus = activeFilter==="all" || l.statusLead===activeFilter;
-    return matchSearch && matchStatus;
+    return (activeFilter==="all"||l.statusLead===activeFilter) &&
+    (l.nama.toLowerCase().includes(k)||l.wa.includes(k));
   }).forEach((l,i)=>{
-    const div = document.createElement("div");
-    div.className = "card";
-
-div.innerHTML = `
-  <div class="row">
-    <div>
-      <div class="name">${l.nama}</div>
-
-      <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
-        <img width="18" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-        ${l.wa}
-      </a>
-
-      <div style="font-size:13px;color:var(--muted)">📅 ${l.date}</div>
-    </div>
-
+    const d=document.createElement("div");
+    d.className="card";
+    d.innerHTML=`
     <div class="row">
-      <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-      <button onclick="editLead(${i})">Edit</button>
-      <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
+      <div>
+        <div class="name">${l.nama}</div>
+        <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
+          <img width="18" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">${l.wa}
+        </a>
+        <div style="font-size:13px;color:var(--muted)">📅 ${l.date}</div>
+      </div>
+      <div class="row">
+        <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
+        <button onclick="editLead(${i})">Edit</button>
+        <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
+      </div>
     </div>
-  </div>
-
-  <div class="details">
-    <div>Lead: ${l.statusLead}</div>
-    <div>Progress: ${l.statusProgress}</div>
-    <div>Catatan: ${l.notes || "-"}</div>
-  </div>
-`;
-
-    list.appendChild(div);
+    <div class="details">
+      <div>Lead: ${l.statusLead}</div>
+      <div>Progress: ${l.statusProgress}</div>
+      <div>Catatan: ${l.notes||"-"}</div>
+    </div>`;
+    list.appendChild(d);
   });
-
   updateStats();
   drawChart();
 }
 
-/* SUBMIT */
-leadForm.addEventListener("submit", e=>{
+leadForm.addEventListener("submit",e=>{
   e.preventDefault();
-
-  const namaVal = nama.value.trim();
-  const waVal = formatWA(wa.value.trim());
-  if(!namaVal || !waVal) return alert("Nama & WhatsApp wajib diisi!");
-
   leads.unshift({
-    nama:namaVal,
-    wa:waVal,
+    nama:nama.value,
+    wa:formatWA(wa.value),
     statusLead:statusLead.value,
     statusProgress:statusProgress.value,
-    notes:notes.value.trim(),
+    notes:notes.value,
     date:new Date().toLocaleString()
   });
-
-  save();
-  leadForm.reset();
-  render();
+  save(); leadForm.reset(); render();
 });
 
-/* TOGGLE INFO */
-function toggleInfo(btn){
-  const details = btn.closest(".card").querySelector(".details");
-  details.style.display = details.style.display === "block" ? "none" : "block";
+function toggleInfo(b){
+  const d=b.closest(".card").querySelector(".details");
+  d.style.display=d.style.display==="block"?"none":"block";
 }
-
-/* EDIT */
 function editLead(i){
-  const l = leads[i];
-  if(!l) return;
-
-  leads[i] = {
-    nama:prompt("Nama", l.nama) || l.nama,
-    wa:formatWA(prompt("WhatsApp", l.wa) || l.wa),
-    statusLead:prompt("Cold/Warm/Hot", l.statusLead) || l.statusLead,
-    statusProgress:prompt("Progress", l.statusProgress) || l.statusProgress,
-    notes:prompt("Catatan", l.notes || "") || l.notes,
+  const l=leads[i];
+  leads[i]={...l,
+    nama:prompt("Nama",l.nama)||l.nama,
+    wa:formatWA(prompt("WA",l.wa)||l.wa),
+    notes:prompt("Catatan",l.notes)||l.notes,
     date:new Date().toLocaleString()
   };
-
-  save();
-  render();
+  save(); render();
 }
-
-/* DELETE */
 function deleteLead(i){
-  if(confirm("Hapus lead ini?")){
-    leads.splice(i,1);
-    save();
-    render();
-  }
+  if(confirm("Hapus lead ini?")){leads.splice(i,1);save();render();}
 }
-
-/* SEARCH */
-search.addEventListener("input", render);
-
-/* EXPORT */
+search.oninput=render;
 function exportCSV(){
-  let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
-  leads.forEach(l=>{
-    csv += `"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes||""}","${l.date}"\n`;
-  });
-
-  const blob = new Blob([csv],{type:"text/csv"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "crm-dhito-property.csv";
+  let c="Nama,WA,Lead,Progress,Notes,Update\n";
+  leads.forEach(l=>c+=`"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes}","${l.date}"\n`);
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([c]));
+  a.download="crm-dhito-property.csv";
   a.click();
 }
 </script>
-
 </body>
 </html>
