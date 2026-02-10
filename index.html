@@ -112,7 +112,21 @@ input,select,textarea{
 }
 
 .name{font-weight:700;font-size:16px;}
-.wa{color:var(--muted);font-size:14px;}
+
+.wa-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:#25D366;
+  font-weight:600;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.wa-link img{
+  width:18px;
+  height:18px;
+}
 
 button{
   padding:8px 14px;
@@ -171,7 +185,7 @@ button{
 <div class="panel">
 <form id="leadForm">
   <input id="nama" placeholder="Nama Konsumen" required>
-  <input id="wa" placeholder="Nomor WhatsApp" required>
+  <input id="wa" placeholder="Nomor WhatsApp (08xxx)" required>
 
   <select id="statusLead">
     <option>Cold</option>
@@ -224,7 +238,16 @@ const cold = document.getElementById("cold");
 const warm = document.getElementById("warm");
 const hot = document.getElementById("hot");
 
-// LOAD SAFE STORAGE
+// FORMAT WA TO +62
+function formatWA(raw){
+  if(!raw) return "";
+  let num = raw.replace(/\D/g,"");
+  if(num.startsWith("0")) num = "62" + num.slice(1);
+  if(!num.startsWith("62")) num = "62" + num;
+  return "+" + num;
+}
+
+// LOAD STORAGE SAFE
 let leads = [];
 try {
   leads = JSON.parse(localStorage.getItem("leads")) || [];
@@ -233,16 +256,15 @@ try {
   leads = [];
 }
 
-// CLEAN NULL / BAD DATA
+// CLEAN NULL DATA
 leads = leads.filter(l => 
-  l && 
-  typeof l === "object" &&
-  l.nama && 
-  l.wa
-);
+  l && typeof l === "object" && l.nama?.trim() && l.wa?.trim()
+).map(l => ({
+  ...l,
+  wa: formatWA(l.wa)
+}));
 
 save();
-
 
 function save(){
   localStorage.setItem("leads", JSON.stringify(leads));
@@ -268,21 +290,17 @@ function updateStats(){
   hot.textContent = leads.filter(l=>l.statusLead === "Hot").length;
 }
 
-// RENDER
+// RENDER LIST
 function render(){
   list.innerHTML = "";
-
   const keyword = (search.value || "").toLowerCase();
 
-  const safeLeads = leads.filter(l => l && l.nama && l.wa);
-
-  safeLeads
+  leads
     .filter(l => 
       l.nama.toLowerCase().includes(keyword) || 
       l.wa.toLowerCase().includes(keyword)
     )
-    .forEach((l)=>{
-      const realIndex = leads.indexOf(l);
+    .forEach((l, i)=>{
       const div = document.createElement("div");
       div.className = "card";
 
@@ -290,13 +308,16 @@ function render(){
         <div class="row">
           <div>
             <div class="name">${l.nama}</div>
-            <div class="wa">${l.wa}</div>
+            <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+              ${l.wa}
+            </a>
           </div>
 
           <div class="row">
             <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-            <button onclick="editLead(${realIndex})">Edit</button>
-            <button class="btn-danger" onclick="deleteLead(${realIndex})">Hapus</button>
+            <button onclick="editLead(${i})">Edit</button>
+            <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
           </div>
         </div>
 
@@ -314,12 +335,12 @@ function render(){
   updateStats();
 }
 
-// SUBMIT
+// SUBMIT LEAD
 leadForm.addEventListener("submit", e=>{
   e.preventDefault();
 
   const namaVal = nama.value.trim();
-  const waVal = wa.value.trim();
+  const waVal = formatWA(wa.value.trim());
 
   if(!namaVal || !waVal){
     alert("Nama & WhatsApp wajib diisi!");
@@ -352,7 +373,7 @@ function editLead(i){
   if(!l) return;
 
   const newNama = prompt("Nama", l.nama) || l.nama;
-  const newWa = prompt("WhatsApp", l.wa) || l.wa;
+  const newWa = formatWA(prompt("WhatsApp", l.wa) || l.wa);
   const newLead = prompt("Cold / Warm / Hot", l.statusLead) || l.statusLead;
   const newProgress = prompt("Progress", l.statusProgress) || l.statusProgress;
   const newNotes = prompt("Catatan", l.notes || "") || l.notes;
@@ -382,7 +403,7 @@ function deleteLead(i){
 // SEARCH
 search.addEventListener("input", render);
 
-// EXPORT
+// EXPORT CSV
 function exportCSV(){
   let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
   leads.forEach(l=>{
