@@ -294,6 +294,17 @@ button{
 
   input,select,textarea{font-size:16px}
 }
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+}
+
 </style>
 </head>
 
@@ -303,7 +314,7 @@ button{
 <!-- LOGIN -->
 <div id="login">
   <div class="login-box">
-    <h2>🍏 CRM Dhito Property</h2>
+    <h2>CRM Dhito Property</h2>
     <input id="password" type="password" placeholder="Password Admin">
     <button id="loginBtn">Masuk Dashboard</button>
   </div>
@@ -374,6 +385,29 @@ button{
 </section>
 
 </main>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal" id="editModal" style="display:none">
+  <div class="login-box" style="width:380px">
+    <h3>Edit Lead</h3>
+
+    <input id="eNama" placeholder="Nama">
+    <input id="eWa" placeholder="WhatsApp">
+    <select id="eStatusLead">
+      <option>Cold</option><option>Warm</option><option>Hot</option>
+    </select>
+    <select id="eStatusProgress">
+      <option>New</option><option>Contacted</option><option>Survey</option>
+      <option>Visit</option><option>Booking</option><option>Deal</option>
+    </select>
+    <textarea id="eNotes" placeholder="Catatan"></textarea>
+
+    <div class="row" style="margin-top:12px">
+      <button class="btn-soft" onclick="closeEdit()">Batal</button>
+      <button onclick="saveEdit()">Simpan</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -584,8 +618,26 @@ function toggleInfo(btn){
   details.style.display = details.style.display === "block" ? "none" : "block";
 }
 
-/* EDIT */
+let editIndex = null;
+
 function editLead(i){
+  const l = leads[i];
+  if(!l) return;
+
+  editIndex = i;
+
+  // isi modal
+  eNama.value = l.nama;
+  eWa.value = l.wa;
+  eStatusLead.value = l.statusLead;
+  eStatusProgress.value = l.statusProgress;
+  eNotes.value = l.notes || "";
+
+  editModal.style.display = "flex";
+}
+
+/* fallback prompt (LOGIC ASLI) */
+function editViaPrompt(i){
   const l = leads[i];
   if(!l) return;
 
@@ -602,13 +654,27 @@ function editLead(i){
   render();
 }
 
-/* DELETE */
-function deleteLead(i){
-  if(confirm("Hapus lead ini?")){
-    leads.splice(i,1);
-    save();
-    render();
-  }
+function closeEdit(){
+  editModal.style.display = "none";
+  editIndex = null;
+}
+
+function saveEdit(){
+  if(editIndex === null) return;
+
+  leads[editIndex] = {
+    ...leads[editIndex],
+    nama: eNama.value.trim(),
+    wa: formatWA(eWa.value.trim()),
+    statusLead: eStatusLead.value,
+    statusProgress: eStatusProgress.value,
+    notes: eNotes.value.trim(),
+    date: new Date().toLocaleString()
+  };
+
+  save();
+  render();
+  closeEdit();
 }
 
 /* SEARCH */
@@ -631,4 +697,3 @@ function exportCSV(){
 
 </script>
 </body>
-</html>
