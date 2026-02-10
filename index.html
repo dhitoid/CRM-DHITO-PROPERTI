@@ -236,15 +236,54 @@ button{
 
 </div>
 
+<!-- EDIT MODAL -->
+<div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);align-items:center;justify-content:center;z-index:99;">
+  <div style="background:var(--glass);padding:22px;border-radius:22px;width:360px;box-shadow:0 25px 90px rgba(0,0,0,.6)">
+    <h3 style="margin-bottom:10px">✏ Edit Lead</h3>
+
+    <input id="editNama" placeholder="Nama">
+    <input id="editWa" placeholder="WhatsApp">
+
+    <select id="editStatusLead">
+      <option>Cold</option>
+      <option>Warm</option>
+      <option>Hot</option>
+    </select>
+
+    <select id="editStatusProgress">
+      <option>New</option>
+      <option>Contacted</option>
+      <option>Survey</option>
+      <option>Visit</option>
+      <option>Booking</option>
+      <option>Deal</option>
+    </select>
+
+    <textarea id="editNotes" placeholder="Catatan"></textarea>
+
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button onclick="saveEdit()">Simpan</button>
+      <button class="btn-danger" onclick="closeEdit()">Batal</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const ADMIN_PASS = "dhito123";
 
 const loginBox = document.getElementById("login");
 const app = document.getElementById("app");
 
+// Persistent Login
+if(localStorage.getItem("loggedIn") === "true"){
+  loginBox.style.display = "none";
+  app.style.display = "block";
+}
+
 function login(){
   const pass = document.getElementById("password").value;
   if(pass === ADMIN_PASS){
+    localStorage.setItem("loggedIn", "true");
     loginBox.style.display = "none";
     app.style.display = "block";
   } else {
@@ -253,6 +292,7 @@ function login(){
 }
 
 let leads = JSON.parse(localStorage.getItem("leads")) || [];
+let editIndex = null;
 
 function save(){ localStorage.setItem("leads", JSON.stringify(leads)); }
 
@@ -284,7 +324,7 @@ function render(){
 
         <div class="row">
           <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-          <button onclick="editLead(${i})">Edit</button>
+          <button onclick="openEdit(${i})">Edit</button>
           <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
         </div>
       </div>
@@ -325,19 +365,37 @@ function toggleInfo(btn){
   details.style.display = details.style.display === "block" ? "none" : "block";
 }
 
-function editLead(i){
-  let l = leads[i];
+/* EDIT MODAL */
+function openEdit(i){
+  editIndex = i;
+  const l = leads[i];
 
-  let nama = prompt("Nama", l.nama);
-  let wa = prompt("WhatsApp", l.wa);
-  let statusLead = prompt("Cold / Warm / Hot", l.statusLead);
-  let statusProgress = prompt("Progress", l.statusProgress);
-  let notes = prompt("Catatan", l.notes || "");
+  editNama.value = l.nama;
+  editWa.value = l.wa;
+  editStatusLead.value = l.statusLead;
+  editStatusProgress.value = l.statusProgress;
+  editNotes.value = l.notes || "";
 
-  leads[i] = { nama, wa, statusLead, statusProgress, notes, date: new Date().toLocaleString() };
+  editModal.style.display = "flex";
+}
+
+function closeEdit(){
+  editModal.style.display = "none";
+}
+
+function saveEdit(){
+  leads[editIndex] = {
+    nama: editNama.value.trim(),
+    wa: editWa.value.trim(),
+    statusLead: editStatusLead.value,
+    statusProgress: editStatusProgress.value,
+    notes: editNotes.value.trim(),
+    date: new Date().toLocaleString()
+  };
 
   save();
   render();
+  closeEdit();
 }
 
 function deleteLead(i){
