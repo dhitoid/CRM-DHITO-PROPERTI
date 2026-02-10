@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apple Internal CRM — Dhito</title>
+<title>CRM Dhito Property — Apple Internal</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -16,6 +16,7 @@
   --muted:rgba(255,255,255,.65);
   --accent:#5da9ff;
   --green:#25D366;
+  --danger:#ff5c5c;
   --radius:22px;
   --blur:blur(40px);
 }
@@ -40,8 +41,8 @@ body{
     radial-gradient(circle at 20% 30%, rgba(120,180,255,.12), transparent 40%),
     radial-gradient(circle at 80% 20%, rgba(255,255,255,.08), transparent 40%);
   filter:blur(90px);
-  transform:translateZ(0);
   z-index:-1;
+  transition:.2s ease;
 }
 
 /* LOGIN */
@@ -77,10 +78,10 @@ body{
   margin-bottom:12px;
 }
 
-/* DYNAMIC ISLAND */
+/* DYNAMIC ISLAND BAR */
 .island{
   position:sticky;
-  top:16px;
+  top:14px;
   margin:16px auto 20px;
   width:fit-content;
   padding:10px 16px;
@@ -101,14 +102,11 @@ body{
   border-radius:28px;
 }
 
-/* BRAND */
 .island-brand{
   font-weight:900;
   letter-spacing:.5px;
-  white-space:nowrap;
 }
 
-/* NAV */
 .island-nav{
   display:flex;
   gap:8px;
@@ -136,6 +134,7 @@ body{
   max-width:1200px;
   margin:auto;
   padding:20px;
+  transition:.2s ease;
 }
 
 /* HEADER */
@@ -209,15 +208,21 @@ button{
 
 button:hover{ transform:scale(1.05); }
 
+.btn-danger{ background:linear-gradient(135deg,#ff5c5c,#ff2c2c); }
+.btn-soft{ background:rgba(255,255,255,.14); }
+
 /* CARD */
 .card{
-  padding:16px;
+  margin-top:14px;
+  padding:16px 18px;
   border-radius:20px;
   background:var(--glass);
   backdrop-filter:blur(24px);
   border:1px solid rgba(255,255,255,.12);
   box-shadow:0 8px 30px rgba(0,0,0,.45);
-  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
 .row{
@@ -229,6 +234,28 @@ button:hover{ transform:scale(1.05); }
 
 .name{ font-weight:800; }
 
+/* FILTER */
+.filter-bar{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.filter-btn{
+  padding:8px 18px;
+  border-radius:999px;
+  border:none;
+  background:rgba(255,255,255,.12);
+  color:white;
+  font-weight:700;
+}
+
+.filter-btn.active{
+  background:linear-gradient(135deg,#5da9ff,#8ff3ff);
+  color:black;
+}
+
 /* WA */
 .wa-link{
   display:flex;
@@ -239,9 +266,12 @@ button:hover{ transform:scale(1.05); }
   font-weight:700;
 }
 
-/* MOTION BLUR SCROLL */
-.blur-scroll{
-  transition:.25s ease;
+/* DETAILS */
+.details{
+  display:none;
+  font-size:14px;
+  color:var(--muted);
+  margin-top:8px;
 }
 
 /* MOBILE */
@@ -257,13 +287,12 @@ button:hover{ transform:scale(1.05); }
 <!-- LOGIN -->
 <div id="login">
   <div class="login-box">
-    <h2>🍏 Apple Internal CRM</h2>
+    <h2>🍏 CRM Dhito Property</h2>
     <input id="password" type="password" placeholder="Password Admin">
-    <button onclick="login()">Unlock</button>
+    <button id="loginBtn">Masuk Dashboard</button>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app" style="display:none">
 
 <!-- DYNAMIC ISLAND -->
@@ -276,17 +305,19 @@ button:hover{ transform:scale(1.05); }
   </div>
 </div>
 
-<main class="main blur-scroll" id="main">
+<main class="main" id="main">
 
 <!-- DASHBOARD -->
 <section id="dashboard">
-<header><h1>Realtime Analytics</h1></header>
+<header><h1>Realtime Lead Analytics</h1></header>
+
 <div class="stats">
   <div class="stat">Total Lead<br><b id="total">0</b></div>
   <div class="stat">Cold<br><b id="cold">0</b></div>
   <div class="stat">Warm<br><b id="warm">0</b></div>
   <div class="stat">Hot<br><b id="hot">0</b></div>
 </div>
+
 <div class="panel">
   <canvas id="chart"></canvas>
 </div>
@@ -294,12 +325,12 @@ button:hover{ transform:scale(1.05); }
 
 <!-- LEADS -->
 <section id="leads" style="display:none">
-<header><h1>Lead Management</h1></header>
+<header><h1>Leads Management</h1></header>
 
 <div class="panel">
 <form id="leadForm">
   <input id="nama" placeholder="Nama Konsumen" required>
-  <input id="wa" placeholder="Nomor WhatsApp" required>
+  <input id="wa" placeholder="Nomor WhatsApp (08xxx)" required>
   <select id="statusLead"><option>Cold</option><option>Warm</option><option>Hot</option></select>
   <select id="statusProgress"><option>New</option><option>Contacted</option><option>Survey</option><option>Visit</option><option>Booking</option><option>Deal</option></select>
   <textarea id="notes" placeholder="Catatan Lead"></textarea>
@@ -307,12 +338,22 @@ button:hover{ transform:scale(1.05); }
 </form>
 </div>
 
+<div class="panel">
+  <input id="search" placeholder="Cari Nama / WhatsApp">
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Cold',this)">Cold</button>
+    <button class="filter-btn" onclick="setFilter('Warm',this)">Warm</button>
+    <button class="filter-btn" onclick="setFilter('Hot',this)">Hot</button>
+  </div>
+</div>
+
 <div id="list"></div>
 </section>
 
 <!-- EXPORT -->
 <section id="export" style="display:none">
-<header><h1>Export</h1></header>
+<header><h1>Export Data</h1></header>
 <div class="panel">
   <button onclick="exportCSV()">Export Excel</button>
 </div>
@@ -322,31 +363,265 @@ button:hover{ transform:scale(1.05); }
 </div>
 
 <script>
-function login(){
-  document.getElementById("login").style.display="none";
-  document.getElementById("app").style.display="block";
-}
+const ADMIN_PASS = "dhito123";
 
-/* DYNAMIC ISLAND EXPAND */
-const island=document.getElementById("island");
-window.addEventListener("scroll",()=>{
-  island.classList.toggle("expanded",window.scrollY>10);
-  document.getElementById("main").style.filter = window.scrollY>20 ? "blur(3px)" : "none";
+const loginBox = document.getElementById("login");
+const app = document.getElementById("app");
+const loginBtn = document.getElementById("loginBtn");
+
+/* LOGIN */
+loginBtn.addEventListener("click", ()=>{
+  if(document.getElementById("password").value === ADMIN_PASS){
+    loginBox.style.display = "none";
+    app.style.display = "block";
+    render();
+  } else alert("Password salah!");
 });
 
-/* PAGE SWITCH */
-function showPage(id,btn){
+/* DYNAMIC ISLAND EXPAND + MOTION BLUR */
+const island = document.getElementById("island");
+const main = document.getElementById("main");
+
+window.addEventListener("scroll",()=>{
+  island.classList.toggle("expanded",window.scrollY>10);
+  main.style.filter = window.scrollY>20 ? "blur(2.5px)" : "none";
+});
+
+/* PARALLAX MOVE */
+document.addEventListener("mousemove",e=>{
+  document.querySelector(".parallax").style.transform =
+    `translate(${e.clientX/80}px,${e.clientY/80}px)`;
+});
+
+/* PAGE NAV */
+function showPage(page,btn){
   document.querySelectorAll("section").forEach(s=>s.style.display="none");
-  document.getElementById(id).style.display="block";
+  document.getElementById(page).style.display="block";
   document.querySelectorAll(".island-nav button").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
 }
 
-/* PARALLAX */
-document.addEventListener("mousemove",e=>{
-  document.querySelector(".parallax").style.transform=
-    `translate(${e.clientX/80}px,${e.clientY/80}px)`;
+/* ====== SEMUA SCRIPT CRM ASLI KAMU ====== */
+
+const leadForm = document.getElementById("leadForm");
+const nama = document.getElementById("nama");
+const wa = document.getElementById("wa");
+const statusLead = document.getElementById("statusLead");
+const statusProgress = document.getElementById("statusProgress");
+const notes = document.getElementById("notes");
+
+const list = document.getElementById("list");
+const search = document.getElementById("search");
+
+const total = document.getElementById("total");
+const cold = document.getElementById("cold");
+const warm = document.getElementById("warm");
+const hot = document.getElementById("hot");
+
+const chartCanvas = document.getElementById("chart");
+const ctx = chartCanvas.getContext("2d");
+
+/* FORMAT WA */
+function formatWA(raw){
+  if(!raw) return "";
+  let num = raw.replace(/\D/g,"");
+  if(num.startsWith("0")) num = "62" + num.slice(1);
+  if(!num.startsWith("62")) num = "62" + num;
+  return "+" + num;
+}
+
+/* LOAD */
+let leads = JSON.parse(localStorage.getItem("leads")) || [];
+leads = leads.filter(l=>l?.nama && l?.wa)
+.map(l=>({ ...l, wa: formatWA(l.wa) }));
+
+function save(){
+  localStorage.setItem("leads", JSON.stringify(leads));
+}
+
+/* FILTER */
+let activeFilter = "all";
+function setFilter(status,btn){
+  activeFilter = status;
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
+
+/* STATS */
+function updateStats(){
+  total.textContent = leads.length;
+  cold.textContent = leads.filter(l=>l.statusLead==="Cold").length;
+  warm.textContent = leads.filter(l=>l.statusLead==="Warm").length;
+  hot.textContent = leads.filter(l=>l.statusLead==="Hot").length;
+}
+
+/* CHART */
+function drawChart(){
+  const coldCount = leads.filter(l=>l.statusLead==="Cold").length;
+  const warmCount = leads.filter(l=>l.statusLead==="Warm").length;
+  const hotCount = leads.filter(l=>l.statusLead==="Hot").length;
+
+  const data = [coldCount, warmCount, hotCount];
+  const labels = ["Cold","Warm","Hot"];
+  const colors = ["#3b82f6","#f59e0b","#ef4444"];
+
+  const w = chartCanvas.width = chartCanvas.offsetWidth;
+  const h = chartCanvas.height = 260;
+
+  let anim = 0;
+
+  function animate(){
+    anim += 0.05;
+    ctx.clearRect(0,0,w,h);
+
+    const max = Math.max(...data, 1);
+    const barWidth = w / data.length * 0.42;
+
+    data.forEach((val,i)=>{
+      const x = (i+0.5) * (w/data.length);
+      const targetHeight = (val/max) * (h-60);
+      const barHeight = targetHeight * Math.min(anim,1);
+
+      ctx.shadowBlur = 24;
+      ctx.shadowColor = colors[i];
+
+      ctx.fillStyle = colors[i];
+      ctx.fillRect(x - barWidth/2, h - barHeight - 30, barWidth, barHeight);
+
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "#fff";
+      ctx.textAlign = "center";
+      ctx.font = "14px Inter";
+      ctx.fillText(labels[i], x, h - 8);
+      ctx.fillText(val, x, h - barHeight - 38);
+    });
+
+    if(anim < 1) requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
+/* RENDER */
+function render(){
+  list.innerHTML = "";
+  const keyword = (search.value||"").toLowerCase();
+
+  leads.filter(l=>{
+    const matchSearch = l.nama.toLowerCase().includes(keyword) || l.wa.toLowerCase().includes(keyword);
+    const matchStatus = activeFilter==="all" || l.statusLead===activeFilter;
+    return matchSearch && matchStatus;
+  }).forEach((l,i)=>{
+    const div = document.createElement("div");
+    div.className = "card";
+
+div.innerHTML = `
+  <div class="row">
+    <div>
+      <div class="name">${l.nama}</div>
+
+      <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
+        <img width="18" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+        ${l.wa}
+      </a>
+
+      <div style="font-size:13px;color:var(--muted)">📅 ${l.date}</div>
+    </div>
+
+    <div class="row">
+      <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
+      <button onclick="editLead(${i})">Edit</button>
+      <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
+    </div>
+  </div>
+
+  <div class="details">
+    <div>Lead: ${l.statusLead}</div>
+    <div>Progress: ${l.statusProgress}</div>
+    <div>Catatan: ${l.notes || "-"}</div>
+  </div>
+`;
+
+    list.appendChild(div);
+  });
+
+  updateStats();
+  drawChart();
+}
+
+/* SUBMIT */
+leadForm.addEventListener("submit", e=>{
+  e.preventDefault();
+
+  const namaVal = nama.value.trim();
+  const waVal = formatWA(wa.value.trim());
+  if(!namaVal || !waVal) return alert("Nama & WhatsApp wajib diisi!");
+
+  leads.unshift({
+    nama:namaVal,
+    wa:waVal,
+    statusLead:statusLead.value,
+    statusProgress:statusProgress.value,
+    notes:notes.value.trim(),
+    date:new Date().toLocaleString()
+  });
+
+  save();
+  leadForm.reset();
+  render();
 });
+
+/* TOGGLE INFO */
+function toggleInfo(btn){
+  const details = btn.closest(".card").querySelector(".details");
+  details.style.display = details.style.display === "block" ? "none" : "block";
+}
+
+/* EDIT */
+function editLead(i){
+  const l = leads[i];
+  if(!l) return;
+
+  leads[i] = {
+    nama:prompt("Nama", l.nama) || l.nama,
+    wa:formatWA(prompt("WhatsApp", l.wa) || l.wa),
+    statusLead:prompt("Cold/Warm/Hot", l.statusLead) || l.statusLead,
+    statusProgress:prompt("Progress", l.statusProgress) || l.statusProgress,
+    notes:prompt("Catatan", l.notes || "") || l.notes,
+    date:new Date().toLocaleString()
+  };
+
+  save();
+  render();
+}
+
+/* DELETE */
+function deleteLead(i){
+  if(confirm("Hapus lead ini?")){
+    leads.splice(i,1);
+    save();
+    render();
+  }
+}
+
+/* SEARCH */
+search.addEventListener("input", render);
+
+/* EXPORT */
+function exportCSV(){
+  let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
+  leads.forEach(l=>{
+    csv += `"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes||""}","${l.date}"\n`;
+  });
+
+  const blob = new Blob([csv],{type:"text/csv"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "crm-dhito-property.csv";
+  a.click();
+}
 </script>
 
 </body>
