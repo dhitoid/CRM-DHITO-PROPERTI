@@ -3,52 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM Dhito Property</title>
+<title>CRM Dhito Property — Premium</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root{
-  --bg:#0a0d14;
-  --panel:#121826;
+  --bg:#05070c;
+  --panel:#0f1525;
   --glass:rgba(255,255,255,.08);
   --glass2:rgba(255,255,255,.14);
-  --text:#ffffff;
-  --muted:rgba(255,255,255,.6);
-  --accent:#4da3ff;
+  --text:#fff;
+  --muted:rgba(255,255,255,.55);
+  --accent:#66c2ff;
   --green:#25D366;
-  --danger:#ff5c5c;
-  --radius:18px;
-
-  --ios-glow: 0 12px 40px rgba(77,163,255,.18);
-  --ios-soft: 0 4px 18px rgba(0,0,0,.35);
+  --danger:#ff4d4d;
+  --radius:20px;
 }
 
-*{ box-sizing:border-box; font-family:Inter,system-ui; }
+*{
+  box-sizing:border-box;
+  font-family:Inter,system-ui;
+}
 
 body{
   margin:0;
-  background:radial-gradient(circle at top,#1a2238,#05070c);
+  background:radial-gradient(circle at top,#14203c,#04070f);
   color:var(--text);
 }
 
 /* LOGIN */
 #login{
-  position:fixed; inset:0;
-  display:flex; justify-content:center; align-items:center;
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   background:radial-gradient(circle,#18213a,#05070c);
-  z-index:10;
+  z-index:99;
 }
 
 .login-box{
   width:360px;
   padding:36px;
-  border-radius:22px;
+  border-radius:24px;
   background:var(--glass);
   backdrop-filter:blur(28px);
-  box-shadow:0 40px 120px rgba(0,0,0,.6), var(--ios-glow);
+  box-shadow:0 40px 120px rgba(0,0,0,.7);
   text-align:center;
-  border:1px solid rgba(255,255,255,.12);
 }
 
 .login-box input{
@@ -58,97 +61,115 @@ body{
   border:none;
   background:rgba(255,255,255,.14);
   color:white;
-  outline:none;
   margin-bottom:12px;
 }
 
-/* LAYOUT */
-.layout{ display:none; min-height:100vh; display:flex; }
-
-
-/* NAV */
-.nav{
-  margin-top:26px;
+/* TOPBAR */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:72px;
+  padding:0 16px;
   display:flex;
-  flex-direction:column;
-  gap:6px;
+  align-items:center;
+  justify-content:space-between;
+  background:linear-gradient(180deg, rgba(10,15,30,.96), rgba(6,10,20,.98));
+  backdrop-filter: blur(26px);
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-/* MENU BUTTON */
-.nav button{
-  width:100%;
-  padding:14px 18px;
-  border-radius:16px;
+.brand{
+  font-weight:900;
+  font-size:18px;
+  letter-spacing:.4px;
+}
+
+.hamburger{
+  width:42px;
+  height:42px;
+  border-radius:14px;
   border:none;
-  background:transparent;
-  color:rgba(255,255,255,.88);
-  text-align:left;
-  font-weight:700;
-  letter-spacing:.2px;
-  transition:.2s ease;
-  position:relative;
+  background:rgba(255,255,255,.10);
+  color:white;
+  font-size:20px;
+  cursor:pointer;
 }
 
-/* Hover effect */
-.nav button:hover{
+.top-nav{
+  display:flex;
+  gap:10px;
+}
+
+.top-nav button{
+  padding:10px 18px;
+  border-radius:999px;
+  border:none;
   background:rgba(255,255,255,.08);
+  color:white;
+  font-weight:700;
+  transition:.18s;
 }
 
-/* Active indicator (no icon) */
-.nav button.active{
-  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
+.top-nav button.active{
+  background:linear-gradient(135deg,#66c2ff,#7cf1ff);
   color:black;
-  box-shadow:0 10px 28px rgba(77,163,255,.35);
+  box-shadow:0 6px 20px rgba(102,194,255,.35);
+}
+
+.top-nav button:hover{
+  background:rgba(255,255,255,.16);
+}
+
+/* MOBILE NAV */
+@media(max-width:900px){
+  .top-nav{
+    position:fixed;
+    top:72px;
+    left:0;
+    right:0;
+    background:rgba(10,15,30,.98);
+    backdrop-filter: blur(22px);
+    padding:14px;
+    display:none;
+    flex-direction:column;
+    gap:10px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .top-nav.show{display:flex;}
 }
 
 /* MAIN */
 .main{
-  flex:1;
-  padding:26px;
-  max-width:1300px;
+  max-width:1200px;
   margin:auto;
-}
-
-/* HEADER */
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:22px;
-}
-
-header h1{
-  font-size:22px;
-  font-weight:800;
+  padding:22px;
 }
 
 /* STATS */
 .stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;
   margin-bottom:20px;
 }
 
 .stat{
   padding:18px;
   border-radius:18px;
-  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
-  backdrop-filter:blur(18px);
-  font-weight:700;
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow: var(--ios-soft), var(--ios-glow);
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));
+  backdrop-filter:blur(20px);
+  font-weight:800;
 }
 
 /* PANEL */
 .panel{
   background:var(--glass);
   padding:20px;
-  border-radius:20px;
+  border-radius:22px;
   margin-bottom:18px;
   backdrop-filter:blur(22px);
-  box-shadow:0 10px 40px rgba(0,0,0,.35), var(--ios-soft);
-  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
 }
 
 /* FORM */
@@ -164,198 +185,106 @@ input,select,textarea{
   border:none;
   background:rgba(255,255,255,.14);
   color:white;
-  outline:none;
 }
 
 /* BUTTON */
 button{
-  padding:10px 16px;
+  padding:12px 18px;
   border-radius:999px;
   border:none;
   cursor:pointer;
   font-weight:700;
-  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
+  background:linear-gradient(135deg,#66c2ff,#7cf1ff);
   transition:.15s;
-  backdrop-filter: blur(18px);
 }
 
-button:hover{ transform:scale(1.04); }
-button:active{ transform:scale(.96); }
+button:hover{transform:scale(1.04)}
 
-.btn-danger{ background:linear-gradient(135deg,#ff5c5c,#ff2c2c); }
-.btn-soft{ background:rgba(255,255,255,.14); }
+.btn-danger{background:linear-gradient(135deg,#ff5c5c,#ff2c2c)}
+.btn-soft{background:rgba(255,255,255,.14)}
+
+/* FILTER */
+.filters{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.filter-btn{
+  padding:8px 16px;
+  border-radius:999px;
+  border:none;
+  background:rgba(255,255,255,.12);
+  color:white;
+  font-weight:700;
+}
+
+.filter-btn.active{
+  background:linear-gradient(135deg,#66c2ff,#7cf1ff);
+  color:black;
+}
 
 /* CARD */
 .card{
   margin-top:12px;
   padding:16px 18px;
   border-radius:18px;
-  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04));
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
   backdrop-filter:blur(20px);
   display:flex;
   flex-direction:column;
   gap:10px;
-  box-shadow:0 8px 30px rgba(0,0,0,.35), var(--ios-soft);
-  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 8px 30px rgba(0,0,0,.35);
+  transition:.18s;
 }
 
-.row{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
-.name{ font-weight:700; }
+.card:hover{transform:translateY(-4px)}
 
-/* BADGES */
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.name{font-weight:800}
+
+.wa-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--green);
+  font-weight:700;
+  text-decoration:none;
+}
+
+.wa-link img{width:18px}
+
+.details{
+  display:none;
+  font-size:14px;
+  color:var(--muted);
+}
+
 .badge{
   display:inline-block;
   padding:6px 12px;
   border-radius:999px;
   font-size:12px;
   background:var(--glass2);
-  font-weight:600;
-}
-
-.badge.cold{ background:#3b82f6; }
-.badge.warm{ background:#f59e0b; }
-.badge.hot{ background:#ef4444; }
-
-/* FILTER */
-.filter-bar{
-  display:flex;
-  gap:10px;
-  margin-top:12px;
-  flex-wrap:wrap;
-}
-
-.filter-btn{
-  padding:8px 18px;
-  border-radius:999px;
-  border:none;
-  background:rgba(255,255,255,.12);
-  color:white;
   font-weight:700;
-  cursor:pointer;
 }
 
-.filter-btn.active{
-  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
-  color:black;
-}
-
-/* CHART */
-canvas{
-  width:100%;
-  height:240px;
-}
-
-.wa-link{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  color:#25D366;
-  font-weight:600;
-  text-decoration:none;
-  font-size:14px;
-  margin-top:4px;
-}
-
-.wa-link img{
-  width:20px;
-  filter:drop-shadow(0 0 6px rgba(37,211,102,.6));
-}
-
-.details{
-  display:none;
-  font-size:14px;
+/* FOOTER */
+footer{
+  text-align:center;
+  margin-top:20px;
   color:var(--muted);
-  margin-top:8px;
-  transition:.2s;
+  font-size:13px;
 }
-
-/* TOPBAR PREMIUM */
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:99;
-  height:72px;
-  padding:0 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:linear-gradient(180deg, rgba(10,15,30,.96), rgba(6,10,20,.98));
-  backdrop-filter: blur(24px);
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-/* BRAND */
-.brand{
-  font-weight:900;
-  font-size:18px;
-  letter-spacing:.4px;
-}
-
-/* HAMBURGER */
-.hamburger{
-  width:42px;
-  height:42px;
-  border-radius:14px;
-  border:none;
-  background:rgba(255,255,255,.10);
-  color:white;
-  font-size:20px;
-  cursor:pointer;
-}
-
-/* NAV CENTER */
-.top-nav{
-  display:flex;
-  gap:10px;
-}
-
-/* MENU BTN */
-.top-nav button{
-  padding:10px 18px;
-  border-radius:999px;
-  border:none;
-  background:rgba(255,255,255,.08);
-  color:rgba(255,255,255,.85);
-  font-weight:700;
-  font-size:14px;
-  transition:.18s ease;
-}
-
-/* ACTIVE */
-.top-nav button.active{
-  background:linear-gradient(135deg,#5cc8ff,#7cf1ff);
-  color:black;
-  box-shadow:0 6px 20px rgba(92,200,255,.35);
-}
-
-/* HOVER */
-.top-nav button:hover{
-  background:rgba(255,255,255,.16);
-}
-
-/* MOBILE */
-@media(max-width:900px){
-  .top-nav{
-    position:fixed;
-    top:72px;
-    left:0;
-    right:0;
-    background:rgba(10,15,30,.98);
-    backdrop-filter: blur(22px);
-    padding:14px;
-    display:none;
-    flex-direction:column;
-    gap:10px;
-    border-bottom:1px solid rgba(255,255,255,.08);
-  }
-
-  .top-nav.show{
-    display:flex;
-  }
-}
-
 </style>
 </head>
+
 <body>
 
 <!-- LOGIN -->
@@ -367,14 +296,10 @@ canvas{
   </div>
 </div>
 
-<div class="layout" id="app">
-
 <!-- TOPBAR -->
-<header class="topbar" id="topbar">
+<header class="topbar">
   <button class="hamburger" onclick="toggleMenu()">☰</button>
-
   <div class="brand">Dhito CRM</div>
-
   <nav class="top-nav" id="topNav">
     <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
     <button onclick="showPage('leads',this)">Leads</button>
@@ -382,44 +307,24 @@ canvas{
   </nav>
 </header>
 
-<div class="nav">
-  <button class="active" onclick="showPage('dashboard',this)">
-    <span class="text">Dashboard</span>
-  </button>
-
-  <button onclick="showPage('leads',this)">
-    <span class="text">Leads</span>
-  </button>
-
-  <button onclick="showPage('export',this)">
-    <span class="text">Export</span>
-  </button>
-</div>
-</aside>
-
-<main class="main">
+<main class="main" id="app" style="display:none">
 
 <!-- DASHBOARD -->
 <section id="dashboard">
-<header>
-  <h1>Realtime Lead Analytics</h1>
-</header>
+  <div class="stats">
+    <div class="stat">Total<br><b id="total">0</b></div>
+    <div class="stat">Cold<br><b id="cold">0</b></div>
+    <div class="stat">Warm<br><b id="warm">0</b></div>
+    <div class="stat">Hot<br><b id="hot">0</b></div>
+  </div>
 
-<div class="stats">
-  <div class="stat">Total Lead<br><b id="total">0</b></div>
-  <div class="stat">Cold<br><b id="cold">0</b></div>
-  <div class="stat">Warm<br><b id="warm">0</b></div>
-  <div class="stat">Hot<br><b id="hot">0</b></div>
-</div>
-
-<div class="panel">
-  <canvas id="chart"></canvas>
-</div>
+  <div class="panel">
+    <canvas id="chart"></canvas>
+  </div>
 </section>
 
 <!-- LEADS -->
 <section id="leads" style="display:none">
-<header><h1>Leads Management</h1></header>
 
 <div class="panel">
 <form id="leadForm">
@@ -443,14 +348,13 @@ canvas{
 
   <textarea id="notes" placeholder="Catatan / Keterangan Lead"></textarea>
 
-  <button type="submit">Tambah Lead</button>
+  <button type="submit">➕ Tambah Lead</button>
 </form>
 </div>
 
 <div class="panel">
   <input id="search" placeholder="Cari Nama / WhatsApp">
-
-  <div class="filter-bar">
+  <div class="filters">
     <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
     <button class="filter-btn" onclick="setFilter('Cold',this)">Cold</button>
     <button class="filter-btn" onclick="setFilter('Warm',this)">Warm</button>
@@ -463,247 +367,170 @@ canvas{
 
 <!-- EXPORT -->
 <section id="export" style="display:none">
-<header><h1>Export Data</h1></header>
-<div class="panel">
-  <button onclick="exportCSV()">Export Excel</button>
-</div>
+  <div class="panel">
+    <button onclick="exportCSV()">📥 Export Excel</button>
+  </div>
 </section>
 
+<footer>CRM Dhito Property — Premium</footer>
+
 </main>
-</div>
 
 <script>
 const ADMIN_PASS = "dhito123";
-
 const loginBox = document.getElementById("login");
 const app = document.getElementById("app");
-const loginBtn = document.getElementById("loginBtn");
 
-const leadForm = document.getElementById("leadForm");
-const nama = document.getElementById("nama");
-const wa = document.getElementById("wa");
-const statusLead = document.getElementById("statusLead");
-const statusProgress = document.getElementById("statusProgress");
-const notes = document.getElementById("notes");
+document.getElementById("loginBtn").onclick = ()=>{
+  const pass = document.getElementById("password").value;
+  if(pass === ADMIN_PASS){
+    loginBox.style.display="none";
+    app.style.display="block";
+    render();
+  } else alert("Password salah!");
+};
 
-const list = document.getElementById("list");
-const search = document.getElementById("search");
+function toggleMenu(){
+  document.getElementById("topNav").classList.toggle("show");
+}
 
-const total = document.getElementById("total");
-const cold = document.getElementById("cold");
-const warm = document.getElementById("warm");
-const hot = document.getElementById("hot");
+function showPage(page,btn){
+  document.querySelectorAll("section").forEach(s=>s.style.display="none");
+  document.getElementById(page).style.display="block";
+  document.querySelectorAll(".top-nav button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
 
-const chartCanvas = document.getElementById("chart");
-const ctx = chartCanvas.getContext("2d");
+let leads = JSON.parse(localStorage.getItem("leads")) || [];
+let currentFilter = "all";
 
-/* FORMAT WA */
+function save(){ localStorage.setItem("leads", JSON.stringify(leads)); }
+
 function formatWA(raw){
-  if(!raw) return "";
   let num = raw.replace(/\D/g,"");
   if(num.startsWith("0")) num = "62" + num.slice(1);
   if(!num.startsWith("62")) num = "62" + num;
   return "+" + num;
 }
 
-/* LOAD */
-let leads = JSON.parse(localStorage.getItem("leads")) || [];
-leads = leads.filter(l=>l?.nama && l?.wa)
-.map(l=>({ ...l, wa: formatWA(l.wa) }));
+const list = document.getElementById("list");
+const search = document.getElementById("search");
 
-function save(){
-  localStorage.setItem("leads", JSON.stringify(leads));
+function updateStats(){
+  document.getElementById("total").textContent = leads.length;
+  document.getElementById("cold").textContent = leads.filter(l=>l.statusLead==="Cold").length;
+  document.getElementById("warm").textContent = leads.filter(l=>l.statusLead==="Warm").length;
+  document.getElementById("hot").textContent = leads.filter(l=>l.statusLead==="Hot").length;
 }
 
-/* LOGIN */
-loginBtn.addEventListener("click", ()=>{
-  if(document.getElementById("password").value === ADMIN_PASS){
-    loginBox.style.display = "none";
-    app.style.display = "flex";
-    render();
-  } else alert("Password salah!");
-});
+let chart;
+function updateChart(){
+  const cold = leads.filter(l=>l.statusLead==="Cold").length;
+  const warm = leads.filter(l=>l.statusLead==="Warm").length;
+  const hot = leads.filter(l=>l.statusLead==="Hot").length;
 
-/* NAV */
-function showPage(page,btn){
-  document.querySelectorAll("section").forEach(s=>s.style.display="none");
-  document.getElementById(page).style.display="block";
-  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
+  if(chart) chart.destroy();
+
+  chart = new Chart(document.getElementById("chart"),{
+    type:"doughnut",
+    data:{
+      labels:["Cold","Warm","Hot"],
+      datasets:[{
+        data:[cold,warm,hot],
+        backgroundColor:["#6fa8ff","#ffd36f","#ff6f6f"]
+      }]
+    },
+    options:{plugins:{legend:{labels:{color:"#fff"}}}}
+  });
 }
 
-function toggleMenu(){
-  document.getElementById("topNav").classList.toggle("show");
-}
-
-/* FILTER */
-let activeFilter = "all";
-function setFilter(status,btn){
-  activeFilter = status;
+function setFilter(filter,btn){
+  currentFilter = filter;
   document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
   render();
 }
 
-/* STATS */
-function updateStats(){
-  total.textContent = leads.length;
-  cold.textContent = leads.filter(l=>l.statusLead==="Cold").length;
-  warm.textContent = leads.filter(l=>l.statusLead==="Warm").length;
-  hot.textContent = leads.filter(l=>l.statusLead==="Hot").length;
-}
-
-/* CHART */
-function drawChart(){
-  const coldCount = leads.filter(l=>l.statusLead==="Cold").length;
-  const warmCount = leads.filter(l=>l.statusLead==="Warm").length;
-  const hotCount = leads.filter(l=>l.statusLead==="Hot").length;
-
-  const data = [coldCount, warmCount, hotCount];
-  const labels = ["Cold","Warm","Hot"];
-  const colors = ["#3b82f6","#f59e0b","#ef4444"];
-
-  const w = chartCanvas.width = chartCanvas.offsetWidth;
-  const h = chartCanvas.height = 260;
-
-  let anim = 0;
-
-  function animate(){
-    anim += 0.05;
-    ctx.clearRect(0,0,w,h);
-
-    const max = Math.max(...data, 1);
-    const barWidth = w / data.length * 0.42;
-
-    data.forEach((val,i)=>{
-      const x = (i+0.5) * (w/data.length);
-      const targetHeight = (val/max) * (h-60);
-      const barHeight = targetHeight * Math.min(anim,1);
-
-      // glow
-      ctx.shadowBlur = 24;
-      ctx.shadowColor = colors[i];
-
-      ctx.fillStyle = colors[i];
-      ctx.fillRect(x - barWidth/2, h - barHeight - 30, barWidth, barHeight);
-
-      ctx.shadowBlur = 0;
-
-      ctx.fillStyle = "#fff";
-      ctx.textAlign = "center";
-      ctx.font = "14px Inter";
-      ctx.fillText(labels[i], x, h - 8);
-      ctx.fillText(val, x, h - barHeight - 38);
-    });
-
-    if(anim < 1) requestAnimationFrame(animate);
-  }
-
-  animate();
-}
-
-/* RENDER */
 function render(){
   list.innerHTML = "";
-  const keyword = (search.value||"").toLowerCase();
+  const keyword = search.value.toLowerCase();
 
   leads.filter(l=>{
-    const matchSearch = l.nama.toLowerCase().includes(keyword) || l.wa.toLowerCase().includes(keyword);
-    const matchStatus = activeFilter==="all" || l.statusLead===activeFilter;
-    return matchSearch && matchStatus;
+    if(currentFilter !== "all" && l.statusLead !== currentFilter) return false;
+    return l.nama.toLowerCase().includes(keyword) || l.wa.includes(keyword);
   }).forEach((l,i)=>{
     const div = document.createElement("div");
     div.className = "card";
 
-div.innerHTML = `
-  <div class="row">
-    <div>
-      <div class="name">${l.nama}</div>
+    div.innerHTML = `
+      <div class="row">
+        <div>
+          <div class="name">${l.nama}</div>
+          <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+            ${l.wa}
+          </a>
+          <div style="font-size:12px;color:var(--muted)">${l.date}</div>
+        </div>
 
-      <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-        ${l.wa}
-      </a>
+        <div class="row">
+          <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
+          <button onclick="editLead(${i})">Edit</button>
+          <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
+        </div>
+      </div>
 
-      <div style="font-size:13px;color:var(--muted)">📅 ${l.date}</div>
-    </div>
-
-    <div class="row">
-      <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-      <button onclick="editLead(${i})">Edit</button>
-      <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
-    </div>
-  </div>
-
-  <div class="details">
-    <div>Lead: <span class="badge ${l.statusLead.toLowerCase()}">${l.statusLead}</span></div>
-    <div>Progress: <span class="badge">${l.statusProgress}</span></div>
-    <div>Catatan: ${l.notes || "-"}</div>
-  </div>
-`;
+      <div class="details">
+        <div>Lead: <span class="badge">${l.statusLead}</span></div>
+        <div>Progress: <span class="badge">${l.statusProgress}</span></div>
+        <div>Catatan: ${l.notes || "-"}</div>
+      </div>
+    `;
 
     list.appendChild(div);
   });
 
   updateStats();
-  drawChart();
+  updateChart();
 }
 
-/* SUBMIT */
-leadForm.addEventListener("submit", e=>{
+document.getElementById("leadForm").onsubmit = e=>{
   e.preventDefault();
 
-  const namaVal = nama.value.trim();
-  const waVal = formatWA(wa.value.trim());
-  if(!namaVal || !waVal) return alert("Nama & WhatsApp wajib diisi!");
+  const nama = document.getElementById("nama").value.trim();
+  const wa = formatWA(document.getElementById("wa").value.trim());
 
   leads.unshift({
-    nama:namaVal,
-    wa:waVal,
-    statusLead:statusLead.value,
-    statusProgress:statusProgress.value,
-    notes:notes.value.trim(),
-    date:new Date().toLocaleString()
+    nama, wa,
+    statusLead: statusLead.value,
+    statusProgress: statusProgress.value,
+    notes: notes.value,
+    date: new Date().toLocaleString()
   });
 
   save();
-  leadForm.reset();
+  e.target.reset();
   render();
-});
+};
 
-/* TOGGLE */
 function toggleInfo(btn){
   const details = btn.closest(".card").querySelector(".details");
-
-  if(details.style.display === "block"){
-    details.style.opacity = 0;
-    setTimeout(()=> details.style.display = "none", 150);
-  } else {
-    details.style.display = "block";
-    details.style.opacity = 0;
-    setTimeout(()=> details.style.opacity = 1, 10);
-  }
+  details.style.display = details.style.display==="block"?"none":"block";
 }
 
-/* EDIT */
 function editLead(i){
   const l = leads[i];
-  if(!l) return;
+  const newNama = prompt("Nama", l.nama) || l.nama;
+  const newWa = formatWA(prompt("WhatsApp", l.wa) || l.wa);
+  const newLead = prompt("Cold / Warm / Hot", l.statusLead) || l.statusLead;
+  const newProgress = prompt("Progress", l.statusProgress) || l.statusProgress;
+  const newNotes = prompt("Catatan", l.notes || "") || l.notes;
 
-  leads[i] = {
-    nama:prompt("Nama", l.nama) || l.nama,
-    wa:formatWA(prompt("WhatsApp", l.wa) || l.wa),
-    statusLead:prompt("Cold/Warm/Hot", l.statusLead) || l.statusLead,
-    statusProgress:prompt("Progress", l.statusProgress) || l.statusProgress,
-    notes:prompt("Catatan", l.notes || "") || l.notes,
-    date:new Date().toLocaleString()
-  };
-
+  leads[i] = { nama:newNama, wa:newWa, statusLead:newLead, statusProgress:newProgress, notes:newNotes, date:new Date().toLocaleString() };
   save();
   render();
 }
 
-/* DELETE */
 function deleteLead(i){
   if(confirm("Hapus lead ini?")){
     leads.splice(i,1);
@@ -712,10 +539,8 @@ function deleteLead(i){
   }
 }
 
-/* SEARCH */
 search.addEventListener("input", render);
 
-/* EXPORT */
 function exportCSV(){
   let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
   leads.forEach(l=>{
