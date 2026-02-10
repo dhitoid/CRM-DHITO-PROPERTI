@@ -117,10 +117,19 @@ input,textarea{
   background:var(--glass);
   backdrop-filter:blur(26px);
   border-radius:16px;
-  overflow:hidden;
+  max-height:220px;   /* ✅ LIMIT HEIGHT */
+  overflow-y:auto;    /* ✅ SCROLL ENABLE */
   box-shadow:0 20px 60px rgba(0,0,0,.5);
   display:none;
-  z-index:20;
+  z-index:30;
+}
+
+.dropdown-menu::-webkit-scrollbar{
+  width:6px;
+}
+.dropdown-menu::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.25);
+  border-radius:8px;
 }
 
 .dropdown.active .dropdown-menu{
@@ -280,9 +289,6 @@ function login(){
 
 let leads = JSON.parse(localStorage.getItem("leads")) || [];
 
-let statusLead = "Cold";
-let statusProgress = "New";
-
 /* DROPDOWN */
 function toggleDropdown(id){
   document.querySelectorAll(".dropdown-menu").forEach(m=>m.style.display="none");
@@ -314,18 +320,6 @@ document.addEventListener("click", e=>{
   }
 });
 
-
-function setLead(val){
-  statusLead = val;
-  leadValue.textContent = val;
-  leadMenu.style.display="none";
-}
-
-function setProgress(val){
-  statusProgress = val;
-  progressValue.textContent = val;
-  progressMenu.style.display="none";
-}
 
 /* SAVE */
 function save(){ localStorage.setItem("leads", JSON.stringify(leads)); }
@@ -381,6 +375,9 @@ leadForm.addEventListener("submit", e=>{
   const wa = document.getElementById("wa").value.trim();
   const notes = document.getElementById("notes").value.trim();
 
+  const statusLeadVal = document.getElementById("statusLead").value || "Cold";
+  const statusProgressVal = document.getElementById("statusProgress").value || "New";
+
   if(!nama || !wa){
     alert("Nama & WhatsApp wajib diisi");
     return;
@@ -389,8 +386,8 @@ leadForm.addEventListener("submit", e=>{
   leads.unshift({
     nama,
     wa,
-    statusLead,
-    statusProgress,
+    statusLead: statusLeadVal,
+    statusProgress: statusProgressVal,
     notes,
     date: new Date().toLocaleString()
   });
@@ -398,10 +395,12 @@ leadForm.addEventListener("submit", e=>{
   save();
   leadForm.reset();
 
-  statusLead="Cold";
-  statusProgress="New";
-  leadValue.textContent="Cold";
-  progressValue.textContent="New";
+  // reset dropdown UI text
+  document.querySelector('[data-target="statusLead"] .dropdown-btn').textContent = "Cold";
+  document.querySelector('[data-target="statusProgress"] .dropdown-btn').textContent = "New";
+
+  document.getElementById("statusLead").value = "Cold";
+  document.getElementById("statusProgress").value = "New";
 
   render();
 });
