@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM Dhito Property — Apple 2026</title>
+<title>CRM Dhito Property</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -302,12 +302,12 @@ canvas{
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="brand">🍏 Dhito CRM</div>
+  <div class="brand">Dhito CRM</div>
 
   <div class="nav">
     <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
-    <button onclick="showPage('leads',this)">👥 Leads</button>
-    <button onclick="showPage('export',this)">📥 Export</button>
+    <button onclick="showPage('leads',this)">Leads</button>
+    <button onclick="showPage('export',this)">Export</button>
   </div>
 </aside>
 
@@ -357,7 +357,7 @@ canvas{
 
   <textarea id="notes" placeholder="Catatan / Keterangan Lead"></textarea>
 
-  <button type="submit">➕ Tambah Lead</button>
+  <button type="submit">Tambah Lead</button>
 </form>
 </div>
 
@@ -366,9 +366,9 @@ canvas{
 
   <div class="filter-bar">
     <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-    <button class="filter-btn" onclick="setFilter('Cold',this)">❄ Cold</button>
-    <button class="filter-btn" onclick="setFilter('Warm',this)">🔥 Warm</button>
-    <button class="filter-btn" onclick="setFilter('Hot',this)">🚨 Hot</button>
+    <button class="filter-btn" onclick="setFilter('Cold',this)">Cold</button>
+    <button class="filter-btn" onclick="setFilter('Warm',this)">Warm</button>
+    <button class="filter-btn" onclick="setFilter('Hot',this)">Hot</button>
   </div>
 </div>
 
@@ -379,7 +379,7 @@ canvas{
 <section id="export" style="display:none">
 <header><h1>Export Data</h1></header>
 <div class="panel">
-  <button onclick="exportCSV()">📥 Export Excel</button>
+  <button onclick="exportCSV()">Export Excel</button>
 </div>
 </section>
 
@@ -535,7 +535,7 @@ function render(){
         ${l.wa}
       </a>
 
-      <div style="font-size:13px;color:var(--muted)">📅 ${l.date}</div>
+      <div style="font-size:13px;color:var(--muted)">${l.date}</div>
     </div>
 
     <div class="row">
