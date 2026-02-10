@@ -8,8 +8,8 @@
 <style>
 :root{
   --bg:#0b0f17;
-  --glass:rgba(255,255,255,.08);
-  --glass2:rgba(255,255,255,.12);
+  --glass:rgba(255,255,255,.09);
+  --glass2:rgba(255,255,255,.14);
   --text:#fff;
   --muted:rgba(255,255,255,.6);
   --accent:#4da3ff;
@@ -37,18 +37,19 @@ body{
 
 .login-box{
   background:var(--glass);
-  padding:28px;
-  border-radius:20px;
-  backdrop-filter:blur(25px);
+  padding:32px;
+  border-radius:22px;
+  backdrop-filter:blur(30px);
   text-align:center;
-  width:320px;
+  width:340px;
+  box-shadow:0 20px 80px rgba(0,0,0,.5);
 }
 
 /* APP */
 .app{
-  max-width:1200px;
+  max-width:1250px;
   margin:auto;
-  padding:24px;
+  padding:26px;
   display:none;
 }
 
@@ -64,40 +65,44 @@ h1{font-size:22px;}
 /* DASHBOARD */
 .stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px;
-  margin-bottom:16px;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:14px;
+  margin-bottom:18px;
 }
 
 .stat{
-  padding:16px;
-  border-radius:16px;
+  padding:18px;
+  border-radius:18px;
   background:var(--glass);
+  backdrop-filter:blur(20px);
+  font-weight:600;
 }
 
 /* PIPELINE */
 .pipeline{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:10px;
+  gap:12px;
   margin-bottom:18px;
 }
 
 .pipe{
   background:var(--glass);
-  padding:12px;
-  border-radius:14px;
+  padding:14px;
+  border-radius:16px;
   text-align:center;
   font-size:14px;
+  backdrop-filter:blur(18px);
 }
 
 /* FORM */
 .panel{
   background:var(--glass);
-  padding:18px;
-  border-radius:18px;
+  padding:20px;
+  border-radius:20px;
   margin-bottom:18px;
-  backdrop-filter:blur(20px);
+  backdrop-filter:blur(24px);
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
 }
 
 form{
@@ -105,13 +110,14 @@ form{
   gap:12px;
 }
 
-input,select{
+input,select,textarea{
   padding:14px;
-  border-radius:12px;
+  border-radius:14px;
   border:none;
-  background:rgba(255,255,255,.12);
+  background:rgba(255,255,255,.14);
   color:white;
   outline:none;
+  resize:none;
 }
 
 /* TOOLBAR */
@@ -123,36 +129,57 @@ input,select{
 
 /* LIST */
 .card{
-  margin-top:12px;
-  padding:16px;
-  border-radius:16px;
+  margin-top:14px;
+  padding:18px;
+  border-radius:18px;
   background:var(--glass);
-  backdrop-filter:blur(18px);
+  backdrop-filter:blur(22px);
   display:grid;
-  gap:6px;
+  gap:8px;
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
+}
+
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 .badge{
-  display:inline-block;
-  padding:4px 10px;
+  padding:6px 12px;
   border-radius:999px;
   font-size:12px;
   background:var(--glass2);
+  font-weight:600;
 }
 
+/* STATUS COLOR */
+.badge.Cold{background:#3a3a3a;}
+.badge.Warm{background:#ffb347;}
+.badge.Hot{background:#ff5c5c;}
+
+.notes{
+  background:rgba(255,255,255,.12);
+  padding:10px;
+  border-radius:12px;
+  font-size:14px;
+  color:var(--muted);
+}
+
+/* ACTIONS */
 .actions{
   display:flex;
-  gap:8px;
-  margin-top:8px;
+  gap:10px;
+  margin-top:6px;
 }
 
 button{
-  padding:10px 14px;
-  border-radius:12px;
+  padding:10px 16px;
+  border-radius:14px;
   border:none;
   cursor:pointer;
   background:linear-gradient(135deg,#4da3ff,#7cf1ff);
-  font-weight:600;
+  font-weight:700;
 }
 
 .btn-danger{
@@ -211,6 +238,8 @@ button{
     <option>Deal</option>
   </select>
 
+  <textarea id="notes" placeholder="Catatan / Keterangan Lead (contoh: Minat rumah tipe 60, follow up minggu depan)"></textarea>
+
   <button type="submit">➕ Tambah Lead</button>
 </form>
 </div>
@@ -232,7 +261,7 @@ button{
 </div>
 
 <script>
-const ADMIN_PASS = "dhito123"; // ganti password di sini
+const ADMIN_PASS = "dhito123";
 
 const loginBox = document.getElementById("login");
 const app = document.getElementById("app");
@@ -281,9 +310,12 @@ function render(){
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      <b contenteditable="true" oninput="updateField(${i},'nama',this.innerText)">${l.nama}</b>
+      <div class="card-header">
+        <b contenteditable="true" oninput="updateField(${i},'nama',this.innerText)">${l.nama}</b>
+        <span class="badge ${l.statusLead}">${l.statusLead}</span>
+      </div>
+
       📱 <a href="https://wa.me/${l.wa}" target="_blank">${l.wa}</a>
-      <span class="badge">${l.statusLead}</span>
       <span class="badge">${l.statusProgress}</span>
 
       <select onchange="updateField(${i},'statusLead',this.value)">
@@ -301,8 +333,11 @@ function render(){
         <option ${l.statusProgress=="Deal"?"selected":""}>Deal</option>
       </select>
 
-      <small>📝 ${l.info}</small>
-      <small>🕒 ${l.date}</small>
+      <div class="notes" contenteditable="true" oninput="updateField(${i},'notes',this.innerText)">
+        ${l.notes || "Tambah catatan..."}
+      </div>
+
+      <small>🕒 Update: ${l.date}</small>
 
       <div class="actions">
         <button class="btn-danger" onclick="deleteLead(${i})">🗑 Hapus</button>
@@ -322,10 +357,10 @@ leadForm.addEventListener("submit", e=>{
   const wa = document.getElementById("wa").value.trim();
   const statusLead = document.getElementById("statusLead").value;
   const statusProgress = document.getElementById("statusProgress").value;
+  const notes = document.getElementById("notes").value.trim();
 
   leads.push({
-    nama, wa, statusLead, statusProgress,
-    info: `${nama} | ${wa} | ${statusLead} | ${statusProgress}`,
+    nama, wa, statusLead, statusProgress, notes,
     date: new Date().toLocaleString()
   });
 
@@ -336,7 +371,6 @@ leadForm.addEventListener("submit", e=>{
 
 function updateField(i, field, value){
   leads[i][field] = value;
-  leads[i].info = `${leads[i].nama} | ${leads[i].wa} | ${leads[i].statusLead} | ${leads[i].statusProgress}`;
   leads[i].date = new Date().toLocaleString();
   save();
   render();
@@ -354,9 +388,9 @@ search.addEventListener("input", render);
 filterLead.addEventListener("change", render);
 
 function exportCSV(){
-  let csv = "Nama,WA,Lead,Progress,Info,Update\n";
+  let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
   leads.forEach(l=>{
-    csv += `"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.info}","${l.date}"\n`;
+    csv += `"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes || ""}","${l.date}"\n`;
   });
 
   let blob = new Blob([csv],{type:"text/csv"});
