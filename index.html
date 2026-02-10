@@ -264,6 +264,22 @@ canvas{
   height:240px;
 }
 
+.wa-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:#25D366;
+  font-weight:600;
+  text-decoration:none;
+  font-size:14px;
+  margin-top:4px;
+}
+
+.wa-link img{
+  width:20px;
+  filter:drop-shadow(0 0 6px rgba(37,211,102,.6));
+}
+
 /* MOBILE */
 @media(max-width:900px){
   .layout{ flex-direction:column; }
@@ -458,24 +474,42 @@ function drawChart(){
   const colors = ["#3b82f6","#f59e0b","#ef4444"];
 
   const w = chartCanvas.width = chartCanvas.offsetWidth;
-  const h = chartCanvas.height = 240;
-  ctx.clearRect(0,0,w,h);
+  const h = chartCanvas.height = 260;
 
-  const max = Math.max(...data, 1);
-  const barWidth = w / data.length * 0.4;
+  let anim = 0;
 
-  data.forEach((val,i)=>{
-    const x = (i+0.5) * (w/data.length);
-    const barHeight = (val/max) * (h-40);
+  function animate(){
+    anim += 0.05;
+    ctx.clearRect(0,0,w,h);
 
-    ctx.fillStyle = colors[i];
-    ctx.fillRect(x - barWidth/2, h - barHeight - 20, barWidth, barHeight);
+    const max = Math.max(...data, 1);
+    const barWidth = w / data.length * 0.42;
 
-    ctx.fillStyle = "#fff";
-    ctx.textAlign = "center";
-    ctx.fillText(labels[i], x, h - 4);
-    ctx.fillText(val, x, h - barHeight - 26);
-  });
+    data.forEach((val,i)=>{
+      const x = (i+0.5) * (w/data.length);
+      const targetHeight = (val/max) * (h-60);
+      const barHeight = targetHeight * Math.min(anim,1);
+
+      // glow
+      ctx.shadowBlur = 24;
+      ctx.shadowColor = colors[i];
+
+      ctx.fillStyle = colors[i];
+      ctx.fillRect(x - barWidth/2, h - barHeight - 30, barWidth, barHeight);
+
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = "#fff";
+      ctx.textAlign = "center";
+      ctx.font = "14px Inter";
+      ctx.fillText(labels[i], x, h - 8);
+      ctx.fillText(val, x, h - barHeight - 38);
+    });
+
+    if(anim < 1) requestAnimationFrame(animate);
+  }
+
+  animate();
 }
 
 /* RENDER */
@@ -492,25 +526,31 @@ function render(){
     div.className = "card";
 
     div.innerHTML = `
-      <div class="row">
-        <div>
-          <div class="name">${l.nama}</div>
-          <div>${l.wa}</div>
-        </div>
-        <div class="row">
-          <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-          <button onclick="editLead(${i})">Edit</button>
-          <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
-        </div>
-      </div>
+  <div class="row">
+    <div>
+      <div class="name">${l.nama}</div>
 
-      <div class="details">
-        <div>Lead: <span class="badge ${l.statusLead.toLowerCase()}">${l.statusLead}</span></div>
-        <div>Progress: <span class="badge">${l.statusProgress}</span></div>
-        <div>Catatan: ${l.notes || "-"}</div>
-        <div>Update: ${l.date}</div>
-      </div>
-    `;
+      <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+        ${l.wa}
+      </a>
+
+      <div style="font-size:13px;color:var(--muted)">📅 ${l.date}</div>
+    </div>
+
+    <div class="row">
+      <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
+      <button onclick="editLead(${i})">Edit</button>
+      <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
+    </div>
+  </div>
+
+  <div class="details">
+    <div>Lead: <span class="badge ${l.statusLead.toLowerCase()}">${l.statusLead}</span></div>
+    <div>Progress: <span class="badge">${l.statusProgress}</span></div>
+    <div>Catatan: ${l.notes || "-"}</div>
+  </div>
+`;
 
     list.appendChild(div);
   });
@@ -544,7 +584,15 @@ leadForm.addEventListener("submit", e=>{
 /* TOGGLE */
 function toggleInfo(btn){
   const details = btn.closest(".card").querySelector(".details");
-  details.style.display = details.style.display==="block"?"none":"block";
+
+  if(details.style.display==="block"){
+    details.style.opacity = 0;
+    setTimeout(()=> details.style.display="none", 120);
+  } else {
+    details.style.display="block";
+    details.style.opacity = 0;
+    setTimeout(()=> details.style.opacity=1, 10);
+  }
 }
 
 /* EDIT */
