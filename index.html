@@ -238,6 +238,20 @@ button{
 
 <script>
 const ADMIN_PASS = "dhito123";
+const leadForm = document.getElementById("leadForm");
+const nama = document.getElementById("nama");
+const wa = document.getElementById("wa");
+const statusLead = document.getElementById("statusLead");
+const statusProgress = document.getElementById("statusProgress");
+const notes = document.getElementById("notes");
+
+const list = document.getElementById("list");
+const search = document.getElementById("search");
+
+const total = document.getElementById("total");
+const cold = document.getElementById("cold");
+const warm = document.getElementById("warm");
+const hot = document.getElementById("hot");
 
 const loginBox = document.getElementById("login");
 const app = document.getElementById("app");
@@ -271,7 +285,8 @@ function render(){
     return l.nama.toLowerCase().includes(s) || l.wa.includes(s);
   });
 
-  filtered.forEach((l,i)=>{
+  filtered.forEach((l)=>{
+  const realIndex = leads.indexOf(l);
     const div = document.createElement("div");
     div.className = "card";
 
@@ -284,8 +299,8 @@ function render(){
 
         <div class="row">
           <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-          <button onclick="editLead(${i})">Edit</button>
-          <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
+          <button onclick="editLead(${realIndex})">Edit</button>
+<button class="btn-danger" onclick="deleteLead(${realIndex})">Hapus</button>
         </div>
       </div>
 
@@ -306,9 +321,17 @@ function render(){
 leadForm.addEventListener("submit", e=>{
   e.preventDefault();
 
+  const namaVal = nama.value.trim();
+  const waVal = wa.value.trim();
+
+  if(!namaVal || !waVal){
+    alert("Nama & WhatsApp wajib diisi!");
+    return;
+  }
+
   leads.push({
-    nama: nama.value.trim(),
-    wa: wa.value.trim(),
+    nama: namaVal,
+    wa: waVal,
     statusLead: statusLead.value,
     statusProgress: statusProgress.value,
     notes: notes.value.trim(),
