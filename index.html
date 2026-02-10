@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM Dhito Property</title>
+<title>CRM Dhito Property — Apple 2026</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root{
   --bg:#0a0d14;
-  --panel:#121826;
   --glass:rgba(255,255,255,.08);
   --glass2:rgba(255,255,255,.14);
   --text:#ffffff;
@@ -18,7 +18,6 @@
   --accent:#4da3ff;
   --green:#25D366;
   --danger:#ff5c5c;
-  --radius:18px;
 
   --ios-glow: 0 12px 40px rgba(77,163,255,.18);
   --ios-soft: 0 4px 18px rgba(0,0,0,.35);
@@ -57,17 +56,6 @@ body{
   border:1px solid rgba(255,255,255,.12);
 }
 
-.login-box input{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:none;
-  background:rgba(255,255,255,.14);
-  color:white;
-  outline:none;
-  margin-bottom:12px;
-}
-
 /* LAYOUT */
 .layout{
   display:none;
@@ -89,7 +77,6 @@ body{
 .brand{
   font-weight:800;
   font-size:18px;
-  letter-spacing:.3px;
 }
 
 /* NAV */
@@ -103,11 +90,6 @@ body{
   text-align:left;
   cursor:pointer;
   font-weight:600;
-  transition:.15s;
-}
-
-.nav button:hover{
-  background:rgba(255,255,255,.08);
 }
 
 .nav button.active{
@@ -123,42 +105,6 @@ body{
   margin:auto;
 }
 
-/* HEADER */
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:22px;
-}
-
-header h1{
-  font-size:22px;
-  font-weight:800;
-}
-
-/* STATS */
-.stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:16px;
-  margin-bottom:20px;
-}
-
-.stat{
-  padding:18px;
-  border-radius:18px;
-  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
-  backdrop-filter:blur(18px);
-  font-weight:700;
-  transition:.15s;
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow: var(--ios-soft), var(--ios-glow);
-}
-
-.stat:hover{
-  transform:translateY(-4px);
-}
-
 /* PANEL */
 .panel{
   background:var(--glass);
@@ -166,8 +112,23 @@ header h1{
   border-radius:20px;
   margin-bottom:18px;
   backdrop-filter:blur(22px);
-  box-shadow:0 10px 40px rgba(0,0,0,.35), var(--ios-soft);
   border:1px solid rgba(255,255,255,.12);
+  box-shadow: var(--ios-soft), var(--ios-glow);
+}
+
+/* STATS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+}
+
+.stat{
+  padding:18px;
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+  font-weight:700;
+  box-shadow: var(--ios-soft);
 }
 
 /* FORM */
@@ -183,7 +144,6 @@ input,select,textarea{
   border:none;
   background:rgba(255,255,255,.14);
   color:white;
-  outline:none;
 }
 
 /* BUTTON */
@@ -194,24 +154,6 @@ button{
   cursor:pointer;
   font-weight:700;
   background:linear-gradient(135deg,#4da3ff,#7cf1ff);
-  transition:.15s;
-  backdrop-filter: blur(18px);
-}
-
-button:hover{
-  transform:scale(1.04);
-}
-
-button:active{
-  transform:scale(.96);
-}
-
-.btn-danger{
-  background:linear-gradient(135deg,#ff5c5c,#ff2c2c);
-}
-
-.btn-soft{
-  background:rgba(255,255,255,.14);
 }
 
 /* CARD */
@@ -220,109 +162,18 @@ button:active{
   padding:16px 18px;
   border-radius:18px;
   background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04));
-  backdrop-filter:blur(20px);
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  box-shadow:0 8px 30px rgba(0,0,0,.35), var(--ios-soft);
-  transition:.18s;
-  border:1px solid rgba(255,255,255,.12);
-}
-
-.card:hover{
-  transform:translateY(-4px);
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
-
-.name{
-  font-weight:700;
-}
-
-/* WA */
-.wa-link{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  color:var(--green);
-  font-weight:600;
-  text-decoration:none;
-  font-size:14px;
-}
-
-.wa-link img{
-  width:18px;
-}
-
-/* DETAILS */
-.details{
-  display:none;
-  font-size:14px;
-  color:var(--muted);
+  box-shadow: var(--ios-soft);
 }
 
 /* BADGES */
-.badge{
-  display:inline-block;
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:12px;
-  background:var(--glass2);
-  font-weight:600;
-}
+.badge.cold{ background:#3b82f6; padding:6px 12px; border-radius:999px;}
+.badge.warm{ background:#f59e0b; padding:6px 12px; border-radius:999px;}
+.badge.hot{ background:#ef4444; padding:6px 12px; border-radius:999px;}
 
-.badge.cold{ background:#3b82f6; }
-.badge.warm{ background:#f59e0b; }
-.badge.hot{ background:#ef4444; }
-
-/* FILTER BAR */
-.filter-bar{
-  display:flex;
-  gap:10px;
-  margin-top:12px;
-  flex-wrap:wrap;
-}
-
-.filter-btn{
-  padding:8px 18px;
-  border-radius:999px;
-  border:none;
-  background:rgba(255,255,255,.12);
-  color:white;
-  font-weight:700;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.filter-btn.active{
-  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
-  color:black;
-}
-
-/* FOOTER */
-footer{
-  text-align:center;
-  margin-top:22px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* MOBILE */
-@media(max-width:900px){
-  .layout{
-    flex-direction:column;
-  }
-  .sidebar{
-    width:100%;
-    flex-direction:row;
-    overflow:auto;
-  }
-}
+/* FILTER */
+.filter-bar{display:flex;gap:10px;margin-top:10px;}
+.filter-btn{padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.12);color:white;}
+.filter-btn.active{background:#4da3ff;color:black;}
 </style>
 </head>
 <body>
@@ -336,13 +187,13 @@ footer{
   </div>
 </div>
 
-<!-- APP -->
 <div class="layout" id="app">
 
+<!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="brand">Dhito CRM</div>
+  <div class="brand">🍏 Dhito CRM</div>
   <div class="nav">
-    <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
+    <button class="active" onclick="showPage('home',this)">🏠 Home</button>
     <button onclick="showPage('leads',this)">👥 Leads</button>
     <button onclick="showPage('export',this)">📥 Export</button>
   </div>
@@ -350,25 +201,25 @@ footer{
 
 <main class="main">
 
-<!-- DASHBOARD -->
-<section id="dashboard">
-<header>
-  <h1>Dashboard Overview</h1>
-</header>
+<!-- HOME DASHBOARD -->
+<section id="home">
+  <h1>📊 Insight Dashboard</h1>
 
-<div class="stats">
-  <div class="stat">Total Lead<br><b id="total">0</b></div>
-  <div class="stat">Cold<br><b id="cold">0</b></div>
-  <div class="stat">Warm<br><b id="warm">0</b></div>
-  <div class="stat">Hot<br><b id="hot">0</b></div>
-</div>
+  <div class="stats">
+    <div class="stat">Total Lead<br><b id="total">0</b></div>
+    <div class="stat">Cold<br><b id="cold">0</b></div>
+    <div class="stat">Warm<br><b id="warm">0</b></div>
+    <div class="stat">Hot<br><b id="hot">0</b></div>
+  </div>
+
+  <div class="panel">
+    <canvas id="leadChart" height="120"></canvas>
+  </div>
 </section>
 
 <!-- LEADS -->
-<section id="leads">
-<header>
-  <h1>Leads Management</h1>
-</header>
+<section id="leads" style="display:none">
+<h1>Leads Management</h1>
 
 <div class="panel">
 <form id="leadForm">
@@ -390,7 +241,7 @@ footer{
     <option>Deal</option>
   </select>
 
-  <textarea id="notes" placeholder="Catatan / Keterangan Lead"></textarea>
+  <textarea id="notes" placeholder="Catatan"></textarea>
 
   <button type="submit">➕ Tambah Lead</button>
 </form>
@@ -401,9 +252,9 @@ footer{
 
   <div class="filter-bar">
     <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-    <button class="filter-btn" onclick="setFilter('Cold',this)">❄ Cold</button>
-    <button class="filter-btn" onclick="setFilter('Warm',this)">🔥 Warm</button>
-    <button class="filter-btn" onclick="setFilter('Hot',this)">🚨 Hot</button>
+    <button class="filter-btn" onclick="setFilter('Cold',this)">Cold</button>
+    <button class="filter-btn" onclick="setFilter('Warm',this)">Warm</button>
+    <button class="filter-btn" onclick="setFilter('Hot',this)">Hot</button>
   </div>
 </div>
 
@@ -412,18 +263,11 @@ footer{
 
 <!-- EXPORT -->
 <section id="export" style="display:none">
-<header>
-  <h1>Export Data</h1>
-</header>
-
+<h1>Export Data</h1>
 <div class="panel">
   <button onclick="exportCSV()">📥 Export Excel</button>
 </div>
 </section>
-
-<footer>
-CRM Dhito Property — Apple UI 2026
-</footer>
 
 </main>
 </div>
@@ -433,59 +277,24 @@ const ADMIN_PASS = "dhito123";
 
 const loginBox = document.getElementById("login");
 const app = document.getElementById("app");
-const loginBtn = document.getElementById("loginBtn");
 
-const leadForm = document.getElementById("leadForm");
-const nama = document.getElementById("nama");
-const wa = document.getElementById("wa");
-const statusLead = document.getElementById("statusLead");
-const statusProgress = document.getElementById("statusProgress");
-const notes = document.getElementById("notes");
-
-const list = document.getElementById("list");
-const search = document.getElementById("search");
-
-const total = document.getElementById("total");
-const cold = document.getElementById("cold");
-const warm = document.getElementById("warm");
-const hot = document.getElementById("hot");
-
-/* FORMAT WA */
-function formatWA(raw){
-  if(!raw) return "";
-  let num = raw.replace(/\D/g,"");
-  if(num.startsWith("0")) num = "62" + num.slice(1);
-  if(!num.startsWith("62")) num = "62" + num;
-  return "+" + num;
-}
-
-/* LOAD */
-let leads = [];
-try {
-  leads = JSON.parse(localStorage.getItem("leads")) || [];
-  if(!Array.isArray(leads)) leads = [];
-} catch { leads = []; }
-
-leads = leads.filter(l=>l && l.nama?.trim() && l.wa?.trim())
-.map(l=>({ ...l, wa: formatWA(l.wa) }));
-
-save();
-
-function save(){
-  localStorage.setItem("leads", JSON.stringify(leads));
-}
-
-/* LOGIN */
-loginBtn.addEventListener("click", ()=>{
+document.getElementById("loginBtn").onclick = () => {
   const pass = document.getElementById("password").value;
   if(pass === ADMIN_PASS){
     loginBox.style.display = "none";
     app.style.display = "flex";
+    showPage("home", document.querySelector(".nav button"));
     render();
   } else alert("Password salah!");
-});
+};
 
-/* NAVIGATION */
+/* DATA */
+let leads = JSON.parse(localStorage.getItem("leads") || "[]");
+
+/* FILTER */
+let activeFilter = "all";
+
+/* NAV */
 function showPage(page,btn){
   document.querySelectorAll("section").forEach(s=>s.style.display="none");
   document.getElementById(page).style.display="block";
@@ -493,142 +302,110 @@ function showPage(page,btn){
   btn.classList.add("active");
 }
 
-/* FILTER */
-let activeFilter = "all";
-
-function setFilter(status,btn){
-  activeFilter = status;
-  document.querySelectorAll(".filter-btn")
-    .forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  render();
+/* FORMAT WA */
+function formatWA(raw){
+  let num = raw.replace(/\D/g,"");
+  if(num.startsWith("0")) num = "62" + num.slice(1);
+  return "+" + num;
 }
 
 /* STATS */
 function updateStats(){
-  total.textContent = leads.length;
-  cold.textContent = leads.filter(l=>l.statusLead==="Cold").length;
-  warm.textContent = leads.filter(l=>l.statusLead==="Warm").length;
-  hot.textContent = leads.filter(l=>l.statusLead==="Hot").length;
+  document.getElementById("total").textContent = leads.length;
+  document.getElementById("cold").textContent = leads.filter(l=>l.statusLead==="Cold").length;
+  document.getElementById("warm").textContent = leads.filter(l=>l.statusLead==="Warm").length;
+  document.getElementById("hot").textContent = leads.filter(l=>l.statusLead==="Hot").length;
+}
+
+/* CHART */
+let chart;
+
+function updateChart(){
+  const coldCount = leads.filter(l=>l.statusLead==="Cold").length;
+  const warmCount = leads.filter(l=>l.statusLead==="Warm").length;
+  const hotCount = leads.filter(l=>l.statusLead==="Hot").length;
+
+  const data = [coldCount, warmCount, hotCount];
+
+  if(chart) chart.destroy();
+
+  chart = new Chart(document.getElementById("leadChart"), {
+    type:"doughnut",
+    data:{
+      labels:["Cold","Warm","Hot"],
+      datasets:[{
+        data:data,
+        backgroundColor:["#3b82f6","#f59e0b","#ef4444"],
+        borderWidth:0
+      }]
+    },
+    options:{
+      plugins:{legend:{labels:{color:"white"}}}
+    }
+  });
 }
 
 /* RENDER */
 function render(){
+  const list = document.getElementById("list");
+  const search = document.getElementById("search");
+
   list.innerHTML = "";
   const keyword = (search.value||"").toLowerCase();
 
-  leads.filter(l => {
-    const matchSearch =
-      l.nama.toLowerCase().includes(keyword) ||
-      l.wa.toLowerCase().includes(keyword);
-
-    const matchStatus =
-      activeFilter === "all" ||
-      l.statusLead === activeFilter;
-
+  leads.filter(l=>{
+    const matchSearch = l.nama.toLowerCase().includes(keyword) || l.wa.includes(keyword);
+    const matchStatus = activeFilter==="all" || l.statusLead===activeFilter;
     return matchSearch && matchStatus;
   }).forEach((l,i)=>{
     const div = document.createElement("div");
     div.className = "card";
-
     div.innerHTML = `
-      <div class="row">
-        <div>
-          <div class="name">${l.nama}</div>
-          <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-            ${l.wa}
-          </a>
-        </div>
-
-        <div class="row">
-          <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-          <button onclick="editLead(${i})">Edit</button>
-          <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
-        </div>
-      </div>
-
-      <div class="details">
-        <div>Lead: <span class="badge ${l.statusLead.toLowerCase()}">${l.statusLead}</span></div>
-        <div>Progress: <span class="badge">${l.statusProgress}</span></div>
-        <div>Catatan: ${l.notes || "-"}</div>
-        <div>Update: ${l.date}</div>
-      </div>
+      <b>${l.nama}</b><br>
+      ${l.wa}<br>
+      <span class="badge ${l.statusLead.toLowerCase()}">${l.statusLead}</span><br>
+      <button onclick="deleteLead(${i})">Hapus</button>
     `;
-
     list.appendChild(div);
   });
 
   updateStats();
+  updateChart();
 }
 
 /* SUBMIT */
-leadForm.addEventListener("submit", e=>{
+document.getElementById("leadForm").onsubmit = e => {
   e.preventDefault();
 
-  const namaVal = nama.value.trim();
-  const waVal = formatWA(wa.value.trim());
+  const nama = document.getElementById("nama").value.trim();
+  const wa = formatWA(document.getElementById("wa").value.trim());
+  const statusLead = document.getElementById("statusLead").value;
+  const statusProgress = document.getElementById("statusProgress").value;
+  const notes = document.getElementById("notes").value;
 
-  if(!namaVal || !waVal){
-    alert("Nama & WhatsApp wajib diisi!");
-    return;
-  }
-
-  leads.unshift({
-    nama:namaVal,
-    wa:waVal,
-    statusLead:statusLead.value,
-    statusProgress:statusProgress.value,
-    notes:notes.value.trim(),
-    date:new Date().toLocaleString()
-  });
-
-  save();
-  leadForm.reset();
+  leads.unshift({nama,wa,statusLead,statusProgress,notes,date:new Date().toLocaleString()});
+  localStorage.setItem("leads", JSON.stringify(leads));
+  e.target.reset();
   render();
-});
+};
 
-/* TOGGLE INFO */
-function toggleInfo(btn){
-  const details = btn.closest(".card").querySelector(".details");
-  details.style.display = details.style.display==="block"?"none":"block";
-}
-
-/* EDIT */
-function editLead(i){
-  const l = leads[i];
-  if(!l) return;
-
-  const newNama = prompt("Nama", l.nama) || l.nama;
-  const newWa = formatWA(prompt("WhatsApp", l.wa) || l.wa);
-  const newLead = prompt("Cold / Warm / Hot", l.statusLead) || l.statusLead;
-  const newProgress = prompt("Progress", l.statusProgress) || l.statusProgress;
-  const newNotes = prompt("Catatan", l.notes || "") || l.notes;
-
-  leads[i] = {
-    nama:newNama,
-    wa:newWa,
-    statusLead:newLead,
-    statusProgress:newProgress,
-    notes:newNotes,
-    date:new Date().toLocaleString()
-  };
-
-  save();
+/* FILTER BTN */
+function setFilter(status,btn){
+  activeFilter = status;
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
   render();
 }
 
 /* DELETE */
 function deleteLead(i){
-  if(confirm("Hapus lead ini?")){
-    leads.splice(i,1);
-    save();
-    render();
-  }
+  leads.splice(i,1);
+  localStorage.setItem("leads", JSON.stringify(leads));
+  render();
 }
 
 /* SEARCH */
-search.addEventListener("input", render);
+document.getElementById("search").addEventListener("input", render);
 
 /* EXPORT */
 function exportCSV(){
