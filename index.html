@@ -59,10 +59,7 @@ header{
   margin-bottom:16px;
 }
 
-h1{
-  font-size:22px;
-  font-weight:700;
-}
+h1{font-size:22px;font-weight:700;}
 
 /* DASHBOARD */
 .stats{
@@ -90,10 +87,7 @@ h1{
   box-shadow:0 10px 40px rgba(0,0,0,.35);
 }
 
-form{
-  display:grid;
-  gap:12px;
-}
+form{display:grid;gap:12px;}
 
 input,select,textarea{
   padding:14px;
@@ -125,15 +119,8 @@ input,select,textarea{
   gap:12px;
 }
 
-.name{
-  font-weight:700;
-  font-size:16px;
-}
-
-.wa{
-  color:var(--muted);
-  font-size:14px;
-}
+.name{font-weight:700;font-size:16px;}
+.wa{color:var(--muted);font-size:14px;}
 
 /* BUTTON */
 button{
@@ -146,13 +133,8 @@ button{
   font-size:13px;
 }
 
-.btn-danger{
-  background:linear-gradient(135deg,#ff5c5c,#ff2c2c);
-}
-
-.btn-soft{
-  background:rgba(255,255,255,.12);
-}
+.btn-danger{background:linear-gradient(135deg,#ff5c5c,#ff2c2c);}
+.btn-soft{background:rgba(255,255,255,.12);}
 
 /* EXPAND */
 .details{
@@ -274,6 +256,22 @@ const ADMIN_PASS = "dhito123";
 const loginBox = document.getElementById("login");
 const app = document.getElementById("app");
 
+const leadForm = document.getElementById("leadForm");
+const list = document.getElementById("list");
+const search = document.getElementById("search");
+
+const total = document.getElementById("total");
+const cold = document.getElementById("cold");
+const warm = document.getElementById("warm");
+const hot = document.getElementById("hot");
+
+const editModal = document.getElementById("editModal");
+const editNama = document.getElementById("editNama");
+const editWa = document.getElementById("editWa");
+const editStatusLead = document.getElementById("editStatusLead");
+const editStatusProgress = document.getElementById("editStatusProgress");
+const editNotes = document.getElementById("editNotes");
+
 // Persistent Login
 if(localStorage.getItem("loggedIn") === "true"){
   loginBox.style.display = "none";
@@ -343,15 +341,26 @@ function render(){
   updateStats();
 }
 
-leadForm.addEventListener("submit", e=>{
+leadForm.addEventListener("submit", function(e){
   e.preventDefault();
 
+  const namaVal = document.getElementById("nama").value.trim();
+  const waVal = document.getElementById("wa").value.trim();
+  const statusLeadVal = document.getElementById("statusLead").value;
+  const statusProgressVal = document.getElementById("statusProgress").value;
+  const notesVal = document.getElementById("notes").value.trim();
+
+  if(!namaVal || !waVal){
+    alert("Nama & WhatsApp wajib diisi");
+    return;
+  }
+
   leads.push({
-    nama: nama.value.trim(),
-    wa: wa.value.trim(),
-    statusLead: statusLead.value,
-    statusProgress: statusProgress.value,
-    notes: notes.value.trim(),
+    nama: namaVal,
+    wa: waVal,
+    statusLead: statusLeadVal,
+    statusProgress: statusProgressVal,
+    notes: notesVal,
     date: new Date().toLocaleString()
   });
 
@@ -365,7 +374,6 @@ function toggleInfo(btn){
   details.style.display = details.style.display === "block" ? "none" : "block";
 }
 
-/* EDIT MODAL */
 function openEdit(i){
   editIndex = i;
   const l = leads[i];
