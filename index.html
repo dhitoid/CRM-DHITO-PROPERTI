@@ -3,23 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM Dhito Property — Elite 2026</title>
+<title>CRM Dhito Property — Apple UI 2026</title>
 
 <style>
 :root{
-  --glass:rgba(255,255,255,.12);
-  --glass2:rgba(255,255,255,.18);
-  --text:#fff;
-  --muted:rgba(255,255,255,.6);
+  --bg:#0b0f17;
+  --glass:rgba(255,255,255,.10);
+  --glass2:rgba(255,255,255,.16);
+  --text:#ffffff;
+  --muted:rgba(255,255,255,.55);
   --accent:#4da3ff;
-  --danger:#ff4d4d;
+  --danger:#ff5c5c;
 }
 
 *{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,Inter,system-ui;}
 
 body{
   margin:0;
-  background:radial-gradient(circle at top,#1c2230,#070a12);
+  background:radial-gradient(circle at top,#1c2230,#090b12);
   color:var(--text);
 }
 
@@ -30,7 +31,7 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:radial-gradient(circle,#1a2233,#04060a);
+  background:radial-gradient(circle,#1a2233,#05080d);
 }
 
 .login-box{
@@ -38,20 +39,19 @@ body{
   padding:34px;
   border-radius:26px;
   background:var(--glass);
-  backdrop-filter:blur(28px);
-  box-shadow:0 25px 90px rgba(0,0,0,.55);
+  backdrop-filter:blur(30px);
+  box-shadow:0 25px 90px rgba(0,0,0,.5);
   text-align:center;
 }
 
 /* APP */
 .app{
-  max-width:1200px;
+  max-width:1250px;
   margin:auto;
-  padding:22px;
+  padding:26px;
   display:none;
 }
 
-/* HEADER */
 header{
   display:flex;
   justify-content:space-between;
@@ -59,18 +59,21 @@ header{
   margin-bottom:16px;
 }
 
-h1{font-size:22px;font-weight:700;}
+h1{
+  font-size:22px;
+  font-weight:700;
+}
 
-/* STATS */
+/* DASHBOARD */
 .stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:14px;
   margin-bottom:18px;
 }
 
 .stat{
-  padding:16px;
+  padding:18px;
   border-radius:20px;
   background:var(--glass);
   backdrop-filter:blur(22px);
@@ -80,80 +83,41 @@ h1{font-size:22px;font-weight:700;}
 /* PANEL */
 .panel{
   background:var(--glass);
-  padding:18px;
+  padding:20px;
   border-radius:22px;
   margin-bottom:18px;
   backdrop-filter:blur(24px);
   box-shadow:0 10px 40px rgba(0,0,0,.35);
 }
 
-form{display:grid;gap:12px;}
+form{
+  display:grid;
+  gap:12px;
+}
 
-input,textarea{
+input,select,textarea{
   padding:14px;
   border-radius:14px;
   border:none;
-  background:rgba(255,255,255,.16);
+  background:rgba(255,255,255,.15);
   color:white;
   outline:none;
-}
-
-/* DROPDOWN PREMIUM */
-.dropdown{position:relative;}
-
-.dropdown-btn{
-  padding:14px;
-  border-radius:14px;
-  background:rgba(255,255,255,.16);
-  cursor:pointer;
-  font-weight:600;
-}
-
-.dropdown-menu{
-  position:absolute;
-  top:110%;
-  left:0;
-  right:0;
-  background:var(--glass);
-  backdrop-filter:blur(26px);
-  border-radius:16px;
-  max-height:200px;
-  overflow-y:auto;
-  box-shadow:0 20px 60px rgba(0,0,0,.55);
-  display:none;
-  z-index:50;
-}
-
-.dropdown.active .dropdown-menu{display:block;}
-
-.dropdown-item{
-  padding:14px 16px;
-  cursor:pointer;
-}
-
-.dropdown-item:hover{
-  background:rgba(255,255,255,.18);
-}
-
-.dropdown-menu::-webkit-scrollbar{width:6px;}
-.dropdown-menu::-webkit-scrollbar-thumb{
-  background:rgba(255,255,255,.25);
-  border-radius:8px;
 }
 
 /* LIST */
 .card{
   margin-top:12px;
-  padding:16px;
+  padding:16px 18px;
   border-radius:18px;
   background:var(--glass);
-  backdrop-filter:blur(22px);
+  backdrop-filter:blur(20px);
   display:flex;
   flex-direction:column;
   gap:10px;
   box-shadow:0 8px 30px rgba(0,0,0,.35);
 }
 
+/* ROW */
 .row{
   display:flex;
   justify-content:space-between;
@@ -161,20 +125,14 @@ input,textarea{
   gap:12px;
 }
 
-.name{font-weight:700;}
-.wa{color:var(--muted);font-size:14px;}
-
-.details{
-  display:none;
-  font-size:14px;
-  color:var(--muted);
+.name{
+  font-weight:700;
+  font-size:16px;
 }
 
-.badge{
-  padding:5px 12px;
-  border-radius:999px;
-  background:var(--glass2);
-  font-size:12px;
+.wa{
+  color:var(--muted);
+  font-size:14px;
 }
 
 /* BUTTON */
@@ -188,28 +146,29 @@ button{
   font-size:13px;
 }
 
-.btn-soft{background:rgba(255,255,255,.14);}
-.btn-danger{background:linear-gradient(135deg,#ff5c5c,#ff2c2c);}
-
-/* MODAL EDIT */
-#editModal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  backdrop-filter:blur(8px);
-  align-items:center;
-  justify-content:center;
-  z-index:99;
+.btn-danger{
+  background:linear-gradient(135deg,#ff5c5c,#ff2c2c);
 }
-.modal-box{
-  width:360px;
-  background:var(--glass);
-  padding:22px;
-  border-radius:22px;
-  box-shadow:0 25px 90px rgba(0,0,0,.6);
-  display:grid;
-  gap:10px;
+
+.btn-soft{
+  background:rgba(255,255,255,.12);
+}
+
+/* EXPAND */
+.details{
+  display:none;
+  padding-top:6px;
+  font-size:14px;
+  color:var(--muted);
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  background:var(--glass2);
+  font-weight:600;
 }
 </style>
 </head>
@@ -232,6 +191,7 @@ button{
   <button onclick="exportCSV()">Export Excel</button>
 </header>
 
+<!-- DASHBOARD -->
 <div class="stats">
   <div class="stat">Total Lead: <b id="total">0</b></div>
   <div class="stat">Cold: <b id="cold">0</b></div>
@@ -245,227 +205,139 @@ button{
   <input id="nama" placeholder="Nama Konsumen" required>
   <input id="wa" placeholder="Nomor WhatsApp" required>
 
-  <div class="dropdown" data-target="statusLead">
-    <input id="statusLead" hidden value="Cold">
-    <div class="dropdown-btn">Cold</div>
-    <div class="dropdown-menu">
-      <div class="dropdown-item">Cold</div>
-      <div class="dropdown-item">Warm</div>
-      <div class="dropdown-item">Hot</div>
-    </div>
-  </div>
+  <select id="statusLead">
+    <option>Cold</option>
+    <option>Warm</option>
+    <option>Hot</option>
+  </select>
 
-  <div class="dropdown" data-target="statusProgress">
-    <input id="statusProgress" hidden value="New">
-    <div class="dropdown-btn">New</div>
-    <div class="dropdown-menu">
-      <div class="dropdown-item">New</div>
-      <div class="dropdown-item">Contacted</div>
-      <div class="dropdown-item">Survey</div>
-      <div class="dropdown-item">Visit</div>
-      <div class="dropdown-item">Booking</div>
-      <div class="dropdown-item">Deal</div>
-    </div>
-  </div>
+  <select id="statusProgress">
+    <option>New</option>
+    <option>Contacted</option>
+    <option>Survey</option>
+    <option>Visit</option>
+    <option>Booking</option>
+    <option>Deal</option>
+  </select>
 
-  <textarea id="notes" placeholder="Catatan Lead"></textarea>
+  <textarea id="notes" placeholder="Catatan / Keterangan Lead"></textarea>
 
   <button type="submit">➕ Tambah Lead</button>
 </form>
 </div>
 
+<!-- SEARCH -->
 <div class="panel">
   <input id="search" placeholder="Cari Nama / WA">
 </div>
 
+<!-- LIST -->
 <div id="list"></div>
-</div>
 
-<!-- EDIT MODAL -->
-<div id="editModal">
-  <div class="modal-box">
-    <h3>Edit Lead</h3>
-    <input id="editNama">
-    <input id="editWa">
-
-    <div class="dropdown" data-target="editStatusLead">
-      <input id="editStatusLead" hidden>
-      <div class="dropdown-btn">Cold</div>
-      <div class="dropdown-menu">
-        <div class="dropdown-item">Cold</div>
-        <div class="dropdown-item">Warm</div>
-        <div class="dropdown-item">Hot</div>
-      </div>
-    </div>
-
-    <div class="dropdown" data-target="editStatusProgress">
-      <input id="editStatusProgress" hidden>
-      <div class="dropdown-btn">New</div>
-      <div class="dropdown-menu">
-        <div class="dropdown-item">New</div>
-        <div class="dropdown-item">Contacted</div>
-        <div class="dropdown-item">Survey</div>
-        <div class="dropdown-item">Visit</div>
-        <div class="dropdown-item">Booking</div>
-        <div class="dropdown-item">Deal</div>
-      </div>
-    </div>
-
-    <textarea id="editNotes"></textarea>
-
-    <button onclick="saveEdit()">Simpan</button>
-    <button class="btn-danger" onclick="closeEdit()">Batal</button>
-  </div>
 </div>
 
 <script>
-const ADMIN_PASS="dhito123";
+const ADMIN_PASS = "dhito123";
 
-const loginBox=document.getElementById("login");
-const app=document.getElementById("app");
-const password=document.getElementById("password");
-
-const leadForm=document.getElementById("leadForm");
-const list=document.getElementById("list");
-const search=document.getElementById("search");
-
-const total=document.getElementById("total");
-const cold=document.getElementById("cold");
-const warm=document.getElementById("warm");
-const hot=document.getElementById("hot");
-
-let leads=JSON.parse(localStorage.getItem("leads"))||[];
-let editIndex=null;
-
-/* LOGIN */
-if(localStorage.getItem("loggedIn")==="true"){
-  loginBox.style.display="none";
-  app.style.display="block";
-  render();
-}
+const loginBox = document.getElementById("login");
+const app = document.getElementById("app");
 
 function login(){
-  if(password.value===ADMIN_PASS){
-    localStorage.setItem("loggedIn","true");
-    loginBox.style.display="none";
-    app.style.display="block";
-    render();
-  } else alert("Password salah!");
-}
-
-/* DROPDOWN ENGINE */
-document.querySelectorAll(".dropdown").forEach(drop=>{
-  const btn=drop.querySelector(".dropdown-btn");
-  const menu=drop.querySelector(".dropdown-menu");
-  const hidden=drop.querySelector("input");
-
-  btn.onclick=()=>{
-    document.querySelectorAll(".dropdown").forEach(d=>d.classList.remove("active"));
-    drop.classList.toggle("active");
-  };
-
-  menu.querySelectorAll(".dropdown-item").forEach(item=>{
-    item.onclick=()=>{
-      hidden.value=item.textContent.trim();
-      btn.textContent=item.textContent.trim();
-      drop.classList.remove("active");
-    };
-  });
-});
-
-document.addEventListener("click",e=>{
-  if(!e.target.closest(".dropdown")){
-    document.querySelectorAll(".dropdown").forEach(d=>d.classList.remove("active"));
+  const pass = document.getElementById("password").value;
+  if(pass === ADMIN_PASS){
+    loginBox.style.display = "none";
+    app.style.display = "block";
+  } else {
+    alert("Password salah!");
   }
-});
-
-/* SAVE */
-function save(){localStorage.setItem("leads",JSON.stringify(leads));}
-
-/* STATS */
-function updateStats(){
-  total.textContent=leads.length;
-  cold.textContent=leads.filter(l=>l.statusLead=="Cold").length;
-  warm.textContent=leads.filter(l=>l.statusLead=="Warm").length;
-  hot.textContent=leads.filter(l=>l.statusLead=="Hot").length;
 }
 
-/* RENDER */
+let leads = JSON.parse(localStorage.getItem("leads")) || [];
+
+function save(){ localStorage.setItem("leads", JSON.stringify(leads)); }
+
+function updateStats(){
+  total.textContent = leads.length;
+  cold.textContent = leads.filter(l=>l.statusLead=="Cold").length;
+  warm.textContent = leads.filter(l=>l.statusLead=="Warm").length;
+  hot.textContent = leads.filter(l=>l.statusLead=="Hot").length;
+}
+
 function render(){
-  list.innerHTML="";
-  let s=search.value.toLowerCase();
+  list.innerHTML = "";
 
-  leads.filter(l=>l.nama.toLowerCase().includes(s)||l.wa.includes(s))
-  .forEach((l,i)=>{
-    const div=document.createElement("div");
-    div.className="card";
+  let filtered = leads.filter(l=>{
+    let s = search.value.toLowerCase();
+    return l.nama.toLowerCase().includes(s) || l.wa.includes(s);
+  });
 
-    div.innerHTML=`
+  filtered.forEach((l,i)=>{
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
       <div class="row">
         <div>
           <div class="name">${l.nama}</div>
           <div class="wa">${l.wa}</div>
         </div>
+
         <div class="row">
           <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-          <button onclick="openEdit(${i})">Edit</button>
+          <button onclick="editLead(${i})">Edit</button>
           <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
         </div>
       </div>
 
       <div class="details">
-        Lead: <span class="badge">${l.statusLead}</span><br>
-        Progress: <span class="badge">${l.statusProgress}</span><br>
-        Catatan: ${l.notes||"-"}<br>
-        Update: ${l.date}
+        <div>Lead: <span class="badge">${l.statusLead}</span></div>
+        <div>Progress: <span class="badge">${l.statusProgress}</span></div>
+        <div>Catatan: ${l.notes || "-"}</div>
+        <div>Update: ${l.date}</div>
       </div>
     `;
+
     list.appendChild(div);
   });
 
   updateStats();
 }
 
-/* SUBMIT */
-leadForm.addEventListener("submit",e=>{
+leadForm.addEventListener("submit", e=>{
   e.preventDefault();
 
-  const nama=document.getElementById("nama").value.trim();
-  const wa=document.getElementById("wa").value.trim();
-  const notes=document.getElementById("notes").value.trim();
-
-  const statusLead=document.getElementById("statusLead").value||"Cold";
-  const statusProgress=document.getElementById("statusProgress").value||"New";
-
-  if(!nama||!wa){
-    alert("Nama & WhatsApp wajib diisi");
-    return;
-  }
-
-  leads.unshift({
-    nama,wa,
-    statusLead,
-    statusProgress,
-    notes,
-    date:new Date().toLocaleString()
+  leads.push({
+    nama: nama.value.trim(),
+    wa: wa.value.trim(),
+    statusLead: statusLead.value,
+    statusProgress: statusProgress.value,
+    notes: notes.value.trim(),
+    date: new Date().toLocaleString()
   });
 
   save();
-  leadForm.reset();
-
-  document.querySelector('[data-target="statusLead"] .dropdown-btn').textContent="Cold";
-  document.querySelector('[data-target="statusProgress"] .dropdown-btn').textContent="New";
-
-  document.getElementById("statusLead").value="Cold";
-  document.getElementById("statusProgress").value="New";
-
   render();
+  leadForm.reset();
 });
 
-/* UI */
 function toggleInfo(btn){
-  const details=btn.closest(".card").querySelector(".details");
-  details.style.display=details.style.display==="block"?"none":"block";
+  const details = btn.closest(".card").querySelector(".details");
+  details.style.display = details.style.display === "block" ? "none" : "block";
+}
+
+function editLead(i){
+  let l = leads[i];
+
+  let nama = prompt("Nama", l.nama);
+  let wa = prompt("WhatsApp", l.wa);
+  let statusLead = prompt("Cold / Warm / Hot", l.statusLead);
+  let statusProgress = prompt("Progress", l.statusProgress);
+  let notes = prompt("Catatan", l.notes || "");
+
+  leads[i] = { nama, wa, statusLead, statusProgress, notes, date: new Date().toLocaleString() };
+
+  save();
+  render();
 }
 
 function deleteLead(i){
@@ -476,58 +348,24 @@ function deleteLead(i){
   }
 }
 
-/* EDIT */
-function openEdit(i){
-  editIndex=i;
-  const l=leads[i];
+search.addEventListener("input", render);
 
-  editNama.value=l.nama;
-  editWa.value=l.wa;
-  editNotes.value=l.notes||"";
-
-  editStatusLead.value=l.statusLead;
-  editStatusProgress.value=l.statusProgress;
-
-  document.querySelector('[data-target="editStatusLead"] .dropdown-btn').textContent=l.statusLead;
-  document.querySelector('[data-target="editStatusProgress"] .dropdown-btn').textContent=l.statusProgress;
-
-  editModal.style.display="flex";
-}
-
-function closeEdit(){editModal.style.display="none";}
-
-function saveEdit(){
-  leads[editIndex]={
-    nama:editNama.value.trim(),
-    wa:editWa.value.trim(),
-    statusLead:editStatusLead.value,
-    statusProgress:editStatusProgress.value,
-    notes:editNotes.value.trim(),
-    date:new Date().toLocaleString()
-  };
-  save();
-  render();
-  closeEdit();
-}
-
-search.addEventListener("input",render);
-
-/* EXPORT */
 function exportCSV(){
-  let csv="Nama,WA,Lead,Progress,Notes,Update\n";
+  let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
   leads.forEach(l=>{
-    csv+=`"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes||""}","${l.date}"\n`;
+    csv += `"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes || ""}","${l.date}"\n`;
   });
 
-  let blob=new Blob([csv],{type:"text/csv"});
-  let url=URL.createObjectURL(blob);
-  let a=document.createElement("a");
-  a.href=url;
-  a.download="crm-dhito-property.csv";
+  let blob = new Blob([csv],{type:"text/csv"});
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement("a");
+  a.href = url;
+  a.download = "crm-dhito-property.csv";
   a.click();
 }
 
 render();
 </script>
+
 </body>
 </html>
