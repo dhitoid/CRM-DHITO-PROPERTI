@@ -3,21 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM Dhito Property — Elite</title>
+<title>CRM Dhito Property — Apple UI 2026</title>
 
 <style>
 :root{
   --bg:#0b0f17;
-  --glass:rgba(255,255,255,.09);
-  --glass2:rgba(255,255,255,.14);
-  --text:#fff;
-  --muted:rgba(255,255,255,.6);
+  --glass:rgba(255,255,255,.10);
+  --glass2:rgba(255,255,255,.16);
+  --text:#ffffff;
+  --muted:rgba(255,255,255,.55);
   --accent:#4da3ff;
-  --success:#3cffb0;
   --danger:#ff5c5c;
 }
 
-*{box-sizing:border-box;font-family:Inter,system-ui;}
+*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,Inter,system-ui;}
 
 body{
   margin:0;
@@ -30,19 +29,19 @@ body{
   position:fixed;
   inset:0;
   display:flex;
-  align-items:center;
   justify-content:center;
-  background:radial-gradient(circle at center,#1a2233,#05080d);
+  align-items:center;
+  background:radial-gradient(circle,#1a2233,#05080d);
 }
 
 .login-box{
-  background:var(--glass);
-  padding:32px;
-  border-radius:22px;
-  backdrop-filter:blur(30px);
-  text-align:center;
   width:340px;
-  box-shadow:0 20px 80px rgba(0,0,0,.5);
+  padding:34px;
+  border-radius:26px;
+  background:var(--glass);
+  backdrop-filter:blur(30px);
+  box-shadow:0 25px 90px rgba(0,0,0,.5);
+  text-align:center;
 }
 
 /* APP */
@@ -57,10 +56,13 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:18px;
+  margin-bottom:16px;
 }
 
-h1{font-size:22px;}
+h1{
+  font-size:22px;
+  font-weight:700;
+}
 
 /* DASHBOARD */
 .stats{
@@ -72,34 +74,17 @@ h1{font-size:22px;}
 
 .stat{
   padding:18px;
-  border-radius:18px;
+  border-radius:20px;
   background:var(--glass);
-  backdrop-filter:blur(20px);
+  backdrop-filter:blur(22px);
   font-weight:600;
 }
 
-/* PIPELINE */
-.pipeline{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.pipe{
-  background:var(--glass);
-  padding:14px;
-  border-radius:16px;
-  text-align:center;
-  font-size:14px;
-  backdrop-filter:blur(18px);
-}
-
-/* FORM */
+/* PANEL */
 .panel{
   background:var(--glass);
   padding:20px;
-  border-radius:20px;
+  border-radius:22px;
   margin-bottom:18px;
   backdrop-filter:blur(24px);
   box-shadow:0 10px 40px rgba(0,0,0,.35);
@@ -114,76 +99,76 @@ input,select,textarea{
   padding:14px;
   border-radius:14px;
   border:none;
-  background:rgba(255,255,255,.14);
+  background:rgba(255,255,255,.15);
   color:white;
   outline:none;
-  resize:none;
-}
-
-/* TOOLBAR */
-.toolbar{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
 }
 
 /* LIST */
 .card{
-  margin-top:14px;
-  padding:18px;
+  margin-top:12px;
+  padding:16px 18px;
   border-radius:18px;
   background:var(--glass);
-  backdrop-filter:blur(22px);
-  display:grid;
-  gap:8px;
-  box-shadow:0 10px 40px rgba(0,0,0,.35);
+  backdrop-filter:blur(20px);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  box-shadow:0 8px 30px rgba(0,0,0,.35);
 }
 
-.card-header{
+/* ROW */
+.row{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:12px;
+}
+
+.name{
+  font-weight:700;
+  font-size:16px;
+}
+
+.wa{
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* BUTTON */
+button{
+  padding:8px 14px;
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
+  font-weight:700;
+  font-size:13px;
+}
+
+.btn-danger{
+  background:linear-gradient(135deg,#ff5c5c,#ff2c2c);
+}
+
+.btn-soft{
+  background:rgba(255,255,255,.12);
+}
+
+/* EXPAND */
+.details{
+  display:none;
+  padding-top:6px;
+  font-size:14px;
+  color:var(--muted);
 }
 
 .badge{
+  display:inline-block;
   padding:6px 12px;
   border-radius:999px;
   font-size:12px;
   background:var(--glass2);
   font-weight:600;
-}
-
-/* STATUS COLOR */
-.badge.Cold{background:#3a3a3a;}
-.badge.Warm{background:#ffb347;}
-.badge.Hot{background:#ff5c5c;}
-
-.notes{
-  background:rgba(255,255,255,.12);
-  padding:10px;
-  border-radius:12px;
-  font-size:14px;
-  color:var(--muted);
-}
-
-/* ACTIONS */
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:6px;
-}
-
-button{
-  padding:10px 16px;
-  border-radius:14px;
-  border:none;
-  cursor:pointer;
-  background:linear-gradient(135deg,#4da3ff,#7cf1ff);
-  font-weight:700;
-}
-
-.btn-danger{
-  background:linear-gradient(135deg,#ff5c5c,#ff2c2c);
 }
 </style>
 </head>
@@ -202,8 +187,8 @@ button{
 <div class="app" id="app">
 
 <header>
-  <h1>📊 CRM Dhito Property — Elite</h1>
-  <button onclick="exportCSV()">⬇ Export Excel</button>
+  <h1>📊 CRM Dhito Property</h1>
+  <button onclick="exportCSV()">Export Excel</button>
 </header>
 
 <!-- DASHBOARD -->
@@ -213,9 +198,6 @@ button{
   <div class="stat">Warm: <b id="warm">0</b></div>
   <div class="stat">Hot: <b id="hot">0</b></div>
 </div>
-
-<!-- PIPELINE -->
-<div class="pipeline" id="pipeline"></div>
 
 <!-- FORM -->
 <div class="panel">
@@ -238,21 +220,15 @@ button{
     <option>Deal</option>
   </select>
 
-  <textarea id="notes" placeholder="Catatan / Keterangan Lead (contoh: Minat rumah tipe 60, follow up minggu depan)"></textarea>
+  <textarea id="notes" placeholder="Catatan / Keterangan Lead"></textarea>
 
   <button type="submit">➕ Tambah Lead</button>
 </form>
 </div>
 
-<!-- TOOLBAR -->
-<div class="panel toolbar">
+<!-- SEARCH -->
+<div class="panel">
   <input id="search" placeholder="Cari Nama / WA">
-  <select id="filterLead">
-    <option value="">Filter Lead</option>
-    <option>Cold</option>
-    <option>Warm</option>
-    <option>Hot</option>
-  </select>
 </div>
 
 <!-- LIST -->
@@ -287,80 +263,55 @@ function updateStats(){
   hot.textContent = leads.filter(l=>l.statusLead=="Hot").length;
 }
 
-function renderPipeline(){
-  const stages = ["New","Contacted","Survey","Visit","Booking","Deal"];
-  pipeline.innerHTML = "";
-  stages.forEach(stage=>{
-    const count = leads.filter(l=>l.statusProgress==stage).length;
-    pipeline.innerHTML += `<div class="pipe">${stage}<br><b>${count}</b></div>`;
-  });
-}
-
 function render(){
   list.innerHTML = "";
 
   let filtered = leads.filter(l=>{
     let s = search.value.toLowerCase();
-    let matchSearch = l.nama.toLowerCase().includes(s) || l.wa.includes(s);
-    let matchFilter = filterLead.value ? l.statusLead == filterLead.value : true;
-    return matchSearch && matchFilter;
+    return l.nama.toLowerCase().includes(s) || l.wa.includes(s);
   });
 
   filtered.forEach((l,i)=>{
     const div = document.createElement("div");
     div.className = "card";
+
     div.innerHTML = `
-      <div class="card-header">
-        <b contenteditable="true" oninput="updateField(${i},'nama',this.innerText)">${l.nama}</b>
-        <span class="badge ${l.statusLead}">${l.statusLead}</span>
+      <div class="row">
+        <div>
+          <div class="name">${l.nama}</div>
+          <div class="wa">${l.wa}</div>
+        </div>
+
+        <div class="row">
+          <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
+          <button onclick="editLead(${i})">Edit</button>
+          <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
+        </div>
       </div>
 
-      📱 <a href="https://wa.me/${l.wa}" target="_blank">${l.wa}</a>
-      <span class="badge">${l.statusProgress}</span>
-
-      <select onchange="updateField(${i},'statusLead',this.value)">
-        <option ${l.statusLead=="Cold"?"selected":""}>Cold</option>
-        <option ${l.statusLead=="Warm"?"selected":""}>Warm</option>
-        <option ${l.statusLead=="Hot"?"selected":""}>Hot</option>
-      </select>
-
-      <select onchange="updateField(${i},'statusProgress',this.value)">
-        <option ${l.statusProgress=="New"?"selected":""}>New</option>
-        <option ${l.statusProgress=="Contacted"?"selected":""}>Contacted</option>
-        <option ${l.statusProgress=="Survey"?"selected":""}>Survey</option>
-        <option ${l.statusProgress=="Visit"?"selected":""}>Visit</option>
-        <option ${l.statusProgress=="Booking"?"selected":""}>Booking</option>
-        <option ${l.statusProgress=="Deal"?"selected":""}>Deal</option>
-      </select>
-
-      <div class="notes" contenteditable="true" oninput="updateField(${i},'notes',this.innerText)">
-        ${l.notes || "Tambah catatan..."}
-      </div>
-
-      <small>🕒 Update: ${l.date}</small>
-
-      <div class="actions">
-        <button class="btn-danger" onclick="deleteLead(${i})">🗑 Hapus</button>
+      <div class="details">
+        <div>Lead: <span class="badge">${l.statusLead}</span></div>
+        <div>Progress: <span class="badge">${l.statusProgress}</span></div>
+        <div>Catatan: ${l.notes || "-"}</div>
+        <div>Update: ${l.date}</div>
       </div>
     `;
+
     list.appendChild(div);
   });
 
   updateStats();
-  renderPipeline();
 }
 
 leadForm.addEventListener("submit", e=>{
   e.preventDefault();
 
-  const nama = document.getElementById("nama").value.trim();
-  const wa = document.getElementById("wa").value.trim();
-  const statusLead = document.getElementById("statusLead").value;
-  const statusProgress = document.getElementById("statusProgress").value;
-  const notes = document.getElementById("notes").value.trim();
-
   leads.push({
-    nama, wa, statusLead, statusProgress, notes,
+    nama: nama.value.trim(),
+    wa: wa.value.trim(),
+    statusLead: statusLead.value,
+    statusProgress: statusProgress.value,
+    notes: notes.value.trim(),
     date: new Date().toLocaleString()
   });
 
@@ -369,9 +320,22 @@ leadForm.addEventListener("submit", e=>{
   leadForm.reset();
 });
 
-function updateField(i, field, value){
-  leads[i][field] = value;
-  leads[i].date = new Date().toLocaleString();
+function toggleInfo(btn){
+  const details = btn.closest(".card").querySelector(".details");
+  details.style.display = details.style.display === "block" ? "none" : "block";
+}
+
+function editLead(i){
+  let l = leads[i];
+
+  let nama = prompt("Nama", l.nama);
+  let wa = prompt("WhatsApp", l.wa);
+  let statusLead = prompt("Cold / Warm / Hot", l.statusLead);
+  let statusProgress = prompt("Progress", l.statusProgress);
+  let notes = prompt("Catatan", l.notes || "");
+
+  leads[i] = { nama, wa, statusLead, statusProgress, notes, date: new Date().toLocaleString() };
+
   save();
   render();
 }
@@ -385,7 +349,6 @@ function deleteLead(i){
 }
 
 search.addEventListener("input", render);
-filterLead.addEventListener("change", render);
 
 function exportCSV(){
   let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
