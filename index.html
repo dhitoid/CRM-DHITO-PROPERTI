@@ -400,6 +400,14 @@ document.addEventListener("mousemove",e=>{
   `translate(${e.clientX/80}px,${e.clientY/80}px)`;
 });
 
+/* PAGE NAV */
+function showPage(page,btn){
+  document.querySelectorAll("section").forEach(s=>s.style.display="none");
+  document.getElementById(page).style.display="block";
+  document.querySelectorAll(".island-nav button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
 /* ===== SCRIPT CRM ASLI (TIDAK DIUBAH) ===== */
 const leadForm = document.getElementById("leadForm");
 const nama = document.getElementById("nama");
