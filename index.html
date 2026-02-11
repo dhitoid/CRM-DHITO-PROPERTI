@@ -392,7 +392,8 @@ button{
 <div id="login">
   <div class="login-box">
     <h2>CRM Dhito Property</h2>
-    <input id="password" type="password" placeholder="Password Admin">
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
     <button id="loginBtn">Masuk Dashboard</button>
   </div>
 </div>
@@ -502,13 +503,89 @@ button{
 </div>
 
 <script>
-const ADMIN_PASS="dhito123";
-const loginBox=document.getElementById("login");
-const app=document.getElementById("app");
-document.getElementById("loginBtn").onclick=()=>{
-  if(password.value===ADMIN_PASS){loginBox.style.display="none";app.style.display="block";render()}
-  else alert("Password salah!");
+/* ================= LOGIN SYSTEM ================= */
+
+// daftar akun
+const ACCOUNTS = {
+  "dhito.crm.id": "dhito123",
+  "marketing.crm.id": "marketing123",
+  "admin.crm.id": "admin123"
 };
+
+const SESSION_DURATION = 15 * 60 * 1000; // 15 menit
+
+const loginBox = document.getElementById("login");
+const app = document.getElementById("app");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+
+let currentUser = null;
+
+/* cek session saat load */
+window.addEventListener("load", () => {
+  const session = JSON.parse(localStorage.getItem("crm_session"));
+
+  if(session){
+    const now = Date.now();
+    if(now < session.expiry){
+      currentUser = session.username;
+      loginBox.style.display = "none";
+      app.style.display = "block";
+      loadUserLeads();
+      startSessionWatcher();
+      render();
+      return;
+    }
+  }
+
+  logout();
+});
+
+/* login */
+document.getElementById("loginBtn").onclick = () => {
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if(ACCOUNTS[username] && ACCOUNTS[username] === password){
+
+    currentUser = username;
+
+    const expiry = Date.now() + SESSION_DURATION;
+
+    localStorage.setItem("crm_session", JSON.stringify({
+      username,
+      expiry
+    }));
+
+    loginBox.style.display = "none";
+    app.style.display = "block";
+
+    loadUserLeads();
+    startSessionWatcher();
+    render();
+
+  } else {
+    alert("Username atau Password salah!");
+  }
+};
+
+/* logout */
+function logout(){
+  localStorage.removeItem("crm_session");
+  loginBox.style.display = "flex";
+  app.style.display = "none";
+}
+
+/* auto logout watcher */
+function startSessionWatcher(){
+  setInterval(() => {
+    const session = JSON.parse(localStorage.getItem("crm_session"));
+    if(!session || Date.now() > session.expiry){
+      alert("Session habis. Silakan login kembali.");
+      logout();
+    }
+  }, 5000);
+}
 
 /* ISLAND AUTO HIDE */
 let lastScroll=0;
@@ -562,12 +639,18 @@ function formatWA(raw){
 }
 
 /* LOAD */
-let leads = JSON.parse(localStorage.getItem("leads")) || [];
-leads = leads.filter(l=>l?.nama && l?.wa)
-.map(l=>({ ...l, wa: formatWA(l.wa) }));
+let leads = [];
+
+function loadUserLeads(){
+  if(!currentUser) return;
+  leads = JSON.parse(localStorage.getItem("leads_" + currentUser)) || [];
+  leads = leads.filter(l=>l?.nama && l?.wa)
+  .map(l=>({ ...l, wa: formatWA(l.wa) }));
+}
 
 function save(){
-  localStorage.setItem("leads", JSON.stringify(leads));
+  if(!currentUser) return;
+  localStorage.setItem("leads_" + currentUser, JSON.stringify(leads));
 }
 
 /* FILTER */
