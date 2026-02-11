@@ -564,6 +564,16 @@ button{
 </form>
 </div>
 
+<select id="filterSumber">
+  <option value="all">All Sources</option>
+  <option value="TikTok">TikTok</option>
+  <option value="Facebook">Facebook</option>
+  <option value="Instagram">Instagram</option>
+  <option value="Meta Ads">Meta Ads</option>
+  <option value="Canvassing">Canvassing</option>
+  <option value="Pameran">Pameran</option>
+</select>
+
 <div class="panel">
   <input id="search" placeholder="Cari Nama / WhatsApp">
   <div class="filter-bar">
@@ -639,29 +649,59 @@ button{
 </div>
 
 <script>
-/* ================= LOGIN SYSTEM (PERSISTENT) ================= */
+
+/* ================= CONFIG ================= */
 const MAINTENANCE_MODE = false;
 let currentPage = 1;
 const rowsPerPage = 5;
 
+/* ================= ACCOUNTS ================= */
 const ACCOUNTS = {
   "dhito@crm.id": "dhito123",
   "marketing@crm.id": "marketing123",
   "admin@crm.id": "admin123"
 };
 
+/* ================= DOM ================= */
 const loginBox = document.getElementById("login");
 const app = document.getElementById("app");
 const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 
-let currentUser = null;
+const island = document.getElementById("island");
+const leadForm = document.getElementById("leadForm");
+const nama = document.getElementById("nama");
+const wa = document.getElementById("wa");
+const sumber = document.getElementById("sumber");
+const eSumber = document.getElementById("eSumber");
+const statusLead = document.getElementById("statusLead");
+const statusProgress = document.getElementById("statusProgress");
+const notes = document.getElementById("notes");
 
-/* ================= CEK SESSION SAAT LOAD ================= */
+const list = document.getElementById("list");
+const search = document.getElementById("search");
+const filterSumber = document.getElementById("filterSumber");
+
+const total = document.getElementById("total");
+const cold = document.getElementById("cold");
+const warm = document.getElementById("warm");
+const hot = document.getElementById("hot");
+
+const chartCanvas = document.getElementById("chart");
+const ctx = chartCanvas.getContext("2d");
+
+/* ================= STATE ================= */
+let currentUser = null;
+let leads = [];
+let activeFilter = "all";
+let activeSource = "all";
+let editIndex = null;
+
+/* ================= LOGIN SYSTEM ================= */
 window.addEventListener("load", () => {
 
   const savedUser = localStorage.getItem("crm_active_user");
-  
+
   if(MAINTENANCE_MODE){
     alert("Sistem sedang maintenance.");
     logout(false);
@@ -677,10 +717,8 @@ window.addEventListener("load", () => {
   } else {
     logout(false);
   }
-
 });
 
-/* ================= LOGIN ================= */
 document.getElementById("loginBtn").onclick = () => {
 
   const username = usernameInput.value.trim();
@@ -689,23 +727,22 @@ document.getElementById("loginBtn").onclick = () => {
   if(ACCOUNTS[username] && ACCOUNTS[username] === password){
 
     currentUser = username;
-
     localStorage.setItem("crm_active_user", username);
 
-loginBox.style.opacity = "0";
-loginBox.style.visibility = "hidden";
+    loginBox.style.opacity = "0";
+    loginBox.style.visibility = "hidden";
 
-setTimeout(() => {
-  loginBox.style.display = "none";
-  app.style.display = "block";
-  app.style.opacity = "0";
+    setTimeout(() => {
+      loginBox.style.display = "none";
+      app.style.display = "block";
+      app.style.opacity = "0";
 
-  setTimeout(()=>{
-    app.style.transition = "opacity .6s ease";
-    app.style.opacity = "1";
-  },50);
+      setTimeout(()=>{
+        app.style.transition = "opacity .6s ease";
+        app.style.opacity = "1";
+      },50);
 
-},600);
+    },600);
 
     loadUserLeads();
     render();
@@ -715,7 +752,6 @@ setTimeout(() => {
   }
 };
 
-/* ================= LOGOUT ================= */
 function logout(showAlert=true){
 
   localStorage.removeItem("crm_active_user");
@@ -735,13 +771,11 @@ function logout(showAlert=true){
   },400);
 
   if(showAlert){
-    setTimeout(()=>{
-      alert("Anda berhasil logout.");
-    },500);
+    setTimeout(()=>alert("Anda berhasil logout."),500);
   }
 }
 
-/* ISLAND AUTO HIDE */
+/* ================= EFFECTS ================= */
 let lastScroll=0;
 window.addEventListener("scroll",()=>{
   const cur=scrollY;
@@ -750,13 +784,12 @@ window.addEventListener("scroll",()=>{
   lastScroll=cur;
 });
 
-/* PARALLAX */
 document.addEventListener("mousemove",e=>{
   document.querySelector(".parallax").style.transform=
   `translate(${e.clientX/80}px,${e.clientY/80}px)`;
 });
 
-/* PAGE NAV */
+/* ================= NAV ================= */
 function showPage(page,btn){
   document.querySelectorAll("section").forEach(s=>s.style.display="none");
   document.getElementById(page).style.display="block";
@@ -764,28 +797,7 @@ function showPage(page,btn){
   btn.classList.add("active");
 }
 
-/* ===== SCRIPT CRM ASLI (TIDAK DIUBAH) ===== */
-const leadForm = document.getElementById("leadForm");
-const nama = document.getElementById("nama");
-const wa = document.getElementById("wa");
-const sumber = document.getElementById("sumber");
-const eSumber = document.getElementById("eSumber");
-const statusLead = document.getElementById("statusLead");
-const statusProgress = document.getElementById("statusProgress");
-const notes = document.getElementById("notes");
-
-const list = document.getElementById("list");
-const search = document.getElementById("search");
-
-const total = document.getElementById("total");
-const cold = document.getElementById("cold");
-const warm = document.getElementById("warm");
-const hot = document.getElementById("hot");
-
-const chartCanvas = document.getElementById("chart");
-const ctx = chartCanvas.getContext("2d");
-
-/* FORMAT WA */
+/* ================= UTIL ================= */
 function formatWA(raw){
   if(!raw) return "";
   let num = raw.replace(/\D/g,"");
@@ -793,9 +805,6 @@ function formatWA(raw){
   if(!num.startsWith("62")) num = "62" + num;
   return "+" + num;
 }
-
-/* LOAD */
-let leads = [];
 
 function loadUserLeads(){
   if(!currentUser) return;
@@ -809,16 +818,29 @@ function save(){
   localStorage.setItem("leads_" + currentUser, JSON.stringify(leads));
 }
 
-/* FILTER */
-let activeFilter = "all";
+/* ================= FILTER EVENTS ================= */
+if(filterSumber){
+  filterSumber.addEventListener("change", () => {
+    activeSource = filterSumber.value;
+    currentPage = 1;
+    render();
+  });
+}
+
+search.addEventListener("input", ()=>{
+  currentPage = 1;
+  render();
+});
+
 function setFilter(status,btn){
   activeFilter = status;
   document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
+  currentPage = 1;
   render();
 }
 
-/* STATS */
+/* ================= STATS ================= */
 function updateStats(){
   total.textContent = leads.length;
   cold.textContent = leads.filter(l=>l.statusLead==="Cold").length;
@@ -826,8 +848,9 @@ function updateStats(){
   hot.textContent = leads.filter(l=>l.statusLead==="Hot").length;
 }
 
-/* CHART */
+/* ================= CHART ================= */
 function drawChart(){
+
   const coldCount = leads.filter(l=>l.statusLead==="Cold").length;
   const warmCount = leads.filter(l=>l.statusLead==="Warm").length;
   const hotCount = leads.filter(l=>l.statusLead==="Hot").length;
@@ -845,7 +868,7 @@ function drawChart(){
     anim += 0.05;
     ctx.clearRect(0,0,w,h);
 
-    const max = Math.max(...data, 1);
+    const max = Math.max(...data,1);
     const barWidth = w / data.length * 0.42;
 
     data.forEach((val,i)=>{
@@ -855,7 +878,6 @@ function drawChart(){
 
       ctx.shadowBlur = 24;
       ctx.shadowColor = colors[i];
-
       ctx.fillStyle = colors[i];
       ctx.fillRect(x - barWidth/2, h - barHeight - 30, barWidth, barHeight);
 
@@ -873,19 +895,30 @@ function drawChart(){
   animate();
 }
 
-/* RENDER */
+/* ================= RENDER ================= */
 function render(){
 
   const keyword = (search?.value || "").toLowerCase();
 
   const filteredLeads = leads.filter(l=>{
-    const matchSearch = l.nama.toLowerCase().includes(keyword) || l.wa.toLowerCase().includes(keyword);
-    const matchStatus = activeFilter === "all" || l.statusLead === activeFilter;
-    return matchSearch && matchStatus;
+
+    const matchSearch =
+      l.nama.toLowerCase().includes(keyword) ||
+      l.wa.toLowerCase().includes(keyword);
+
+    const matchStatus =
+      activeFilter === "all" ||
+      l.statusLead === activeFilter;
+
+    const matchSource =
+      activeSource === "all" ||
+      l.sumber === activeSource;
+
+    return matchSearch && matchStatus && matchSource;
   });
 
   const totalEntries = filteredLeads.length;
-  const totalPages = Math.ceil(totalEntries / rowsPerPage);
+  const totalPages = Math.ceil(totalEntries / rowsPerPage) || 1;
 
   if(currentPage > totalPages) currentPage = 1;
 
@@ -900,7 +933,7 @@ function render(){
 
     list.innerHTML = "";
 
-    paginatedLeads.forEach((l,i)=>{
+    paginatedLeads.forEach(l=>{
       const realIndex = leads.indexOf(l);
 
       const div = document.createElement("div");
@@ -910,12 +943,10 @@ function render(){
         <div class="row">
           <div>
             <div class="name">${l.nama}</div>
-
             <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
               <img width="18" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
               ${l.wa}
             </a>
-
             <div style="font-size:13px;color:var(--muted)"> ${l.date}</div>
           </div>
 
@@ -927,22 +958,21 @@ function render(){
         </div>
 
         <div class="details">
-  <div>Sumber: ${l.sumber || "-"}</div>
-  <div>Lead: ${l.statusLead}</div>
-  <div>Progress: ${l.statusProgress}</div>
-  <div>Catatan: ${l.notes || "-"}</div>
+          <div>Sumber: ${l.sumber || "-"}</div>
+          <div>Lead: ${l.statusLead}</div>
+          <div>Progress: ${l.statusProgress}</div>
+          <div>Catatan: ${l.notes || "-"}</div>
         </div>
       `;
 
       list.appendChild(div);
     });
 
-    updateEntryInfo(start, end, totalEntries);
+    updateEntryInfo(start,end,totalEntries);
     renderPagination(totalPages);
 
     list.classList.remove("fade-out");
     list.classList.add("fade-in");
-
     setTimeout(()=>list.classList.remove("fade-in"),300);
 
   },150);
@@ -951,7 +981,8 @@ function render(){
   drawChart();
 }
 
-function updateEntryInfo(start, end, total){
+/* ================= PAGINATION ================= */
+function updateEntryInfo(start,end,total){
   const entryInfo = document.getElementById("entryInfo");
   if(!entryInfo) return;
 
@@ -960,7 +991,8 @@ function updateEntryInfo(start, end, total){
     return;
   }
 
-  entryInfo.textContent = `Showing ${start+1}-${Math.min(end,total)} of ${total} entries`;
+  entryInfo.textContent =
+    `Showing ${start+1}-${Math.min(end,total)} of ${total} entries`;
 }
 
 function renderPagination(totalPages){
@@ -974,23 +1006,17 @@ function renderPagination(totalPages){
 
   let buttons = "";
 
-  if(currentPage > 1){
+  if(currentPage > 1)
     buttons += `<button onclick="changePage(${currentPage - 1})">Prev</button>`;
-  }
 
   for(let i=1;i<=totalPages;i++){
     buttons += `
-      <button 
-        class="${i === currentPage ? 'active-page' : ''}" 
-        onclick="changePage(${i})">
-        ${i}
-      </button>
-    `;
+      <button class="${i===currentPage?'active-page':''}"
+        onclick="changePage(${i})">${i}</button>`;
   }
 
-  if(currentPage < totalPages){
+  if(currentPage < totalPages)
     buttons += `<button onclick="changePage(${currentPage + 1})">Next</button>`;
-  }
 
   pagination.innerHTML = buttons;
 }
@@ -1000,22 +1026,23 @@ function changePage(page){
   render();
 }
 
-/* SUBMIT */
+/* ================= CRUD ================= */
 leadForm.addEventListener("submit", e=>{
   e.preventDefault();
 
   const namaVal = nama.value.trim();
   const waVal = formatWA(wa.value.trim());
-  if(!namaVal || !waVal) return alert("Nama & WhatsApp wajib diisi!");
+  if(!namaVal || !waVal)
+    return alert("Nama & WhatsApp wajib diisi!");
 
   leads.unshift({
-  nama:namaVal,
-  wa:waVal,
-  sumber:sumber.value,
-  statusLead:statusLead.value,
-  statusProgress:statusProgress.value,
-  notes:notes.value.trim(),
-  date:new Date().toLocaleString()
+    nama:namaVal,
+    wa:waVal,
+    sumber:sumber.value,
+    statusLead:statusLead.value,
+    statusProgress:statusProgress.value,
+    notes:notes.value.trim(),
+    date:new Date().toLocaleString()
   });
 
   save();
@@ -1023,13 +1050,19 @@ leadForm.addEventListener("submit", e=>{
   render();
 });
 
-/* TOGGLE INFO */
-function toggleInfo(btn){
-  const details = btn.closest(".card").querySelector(".details");
-  details.style.display = details.style.display === "block" ? "none" : "block";
+function deleteLead(i){
+  if(confirm("Yakin hapus lead ini?")){
+    leads.splice(i,1);
+    save();
+    render();
+  }
 }
 
-let editIndex = null;
+function toggleInfo(btn){
+  const details = btn.closest(".card").querySelector(".details");
+  details.style.display =
+    details.style.display==="block"?"none":"block";
+}
 
 function editLead(i){
   const l = leads[i];
@@ -1047,12 +1080,30 @@ function editLead(i){
   editModal.classList.add("show");
 }
 
+function saveEdit(){
+  if(editIndex === null) return;
+
+  leads[editIndex] = {
+    ...leads[editIndex],
+    nama: eNama.value.trim(),
+    wa: formatWA(eWa.value.trim()),
+    sumber: eSumber.value,
+    statusLead: eStatusLead.value,
+    statusProgress: eStatusProgress.value,
+    notes: eNotes.value.trim(),
+    date: new Date().toLocaleString()
+  };
+
+  save();
+  render();
+  closeEdit();
+}
+
 function closeEdit(){
   editModal.classList.remove("show");
   setTimeout(()=>{ editIndex=null },200);
 }
 
-/* fallback prompt (LOGIC ASLI) */
 function editViaPrompt(i){
   const l = leads[i];
   if(!l) return;
@@ -1070,33 +1121,13 @@ function editViaPrompt(i){
   render();
 }
 
-function saveEdit(){
-  if(editIndex === null) return;
-
-leads[editIndex] = {
-  ...leads[editIndex],
-  nama: eNama.value.trim(),
-  wa: formatWA(eWa.value.trim()),
-  sumber: eSumber.value,
-  statusLead: eStatusLead.value,
-  statusProgress: eStatusProgress.value,
-  notes: eNotes.value.trim(),
-  date: new Date().toLocaleString()
-};
-
-  save();
-  render();
-  closeEdit();
-}
-
-/* SEARCH */
-search.addEventListener("input", render);
-
-/* EXPORT */
+/* ================= EXPORT ================= */
 function exportCSV(){
   let csv = "Nama,WA,Sumber,Lead,Progress,Notes,Update\n";
   leads.forEach(l=>{
-    csv += `"${l.nama}","${l.wa}","${l.sumber||""}","${l.statusLead}","${l.statusProgress}","${l.notes||""}","${l.date}"\n`;
+    csv += `"${l.nama}","${l.wa}","${l.sumber||""}",
+"${l.statusLead}","${l.statusProgress}",
+"${l.notes||""}","${l.date}"\n`;
   });
 
   const blob = new Blob([csv],{type:"text/csv"});
