@@ -407,6 +407,7 @@ button{
     <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
     <button onclick="showPage('leads',this)">Leads</button>
     <button onclick="showPage('export',this)">Export</button>
+    <button class="btn-soft" onclick="logout()">Logout</button>
   </div>
 </div>
 
@@ -503,16 +504,14 @@ button{
 </div>
 
 <script>
-/* ================= LOGIN SYSTEM ================= */
+/* ================= LOGIN SYSTEM (PERSISTENT) ================= */
+const MAINTENANCE_MODE = false;
 
-// daftar akun
 const ACCOUNTS = {
-  "dhito.crm.id": "dhito123",
-  "marketing.crm.id": "marketing123",
-  "admin.crm.id": "admin123"
+  "dhito@crm.id": "dhito123",
+  "marketing@crm.id": "marketing123",
+  "admin@crm.id": "admin123"
 };
-
-const SESSION_DURATION = 15 * 60 * 1000; // 15 menit
 
 const loginBox = document.getElementById("login");
 const app = document.getElementById("app");
@@ -521,28 +520,32 @@ const passwordInput = document.getElementById("password");
 
 let currentUser = null;
 
-/* cek session saat load */
+/* ================= CEK SESSION SAAT LOAD ================= */
 window.addEventListener("load", () => {
-  const session = JSON.parse(localStorage.getItem("crm_session"));
 
-  if(session){
-    const now = Date.now();
-    if(now < session.expiry){
-      currentUser = session.username;
-      loginBox.style.display = "none";
-      app.style.display = "block";
-      loadUserLeads();
-      startSessionWatcher();
-      render();
-      return;
-    }
+  const savedUser = localStorage.getItem("crm_active_user");
+  
+  if(MAINTENANCE_MODE){
+    alert("Sistem sedang maintenance.");
+    logout(false);
+    return;
   }
 
-  logout();
+  if(savedUser && ACCOUNTS[savedUser]){
+    currentUser = savedUser;
+    loginBox.style.display = "none";
+    app.style.display = "block";
+    loadUserLeads();
+    render();
+  } else {
+    logout(false);
+  }
+
 });
 
-/* login */
+/* ================= LOGIN ================= */
 document.getElementById("loginBtn").onclick = () => {
+
   const username = usernameInput.value.trim();
   const password = passwordInput.value.trim();
 
@@ -550,18 +553,12 @@ document.getElementById("loginBtn").onclick = () => {
 
     currentUser = username;
 
-    const expiry = Date.now() + SESSION_DURATION;
-
-    localStorage.setItem("crm_session", JSON.stringify({
-      username,
-      expiry
-    }));
+    localStorage.setItem("crm_active_user", username);
 
     loginBox.style.display = "none";
     app.style.display = "block";
 
     loadUserLeads();
-    startSessionWatcher();
     render();
 
   } else {
@@ -569,22 +566,19 @@ document.getElementById("loginBtn").onclick = () => {
   }
 };
 
-/* logout */
-function logout(){
-  localStorage.removeItem("crm_session");
+/* ================= LOGOUT ================= */
+function logout(showAlert=true){
+
+  localStorage.removeItem("crm_active_user");
+
+  currentUser = null;
+
   loginBox.style.display = "flex";
   app.style.display = "none";
-}
 
-/* auto logout watcher */
-function startSessionWatcher(){
-  setInterval(() => {
-    const session = JSON.parse(localStorage.getItem("crm_session"));
-    if(!session || Date.now() > session.expiry){
-      alert("Session habis. Silakan login kembali.");
-      logout();
-    }
-  }, 5000);
+  if(showAlert){
+    alert("Anda berhasil logout.");
+  }
 }
 
 /* ISLAND AUTO HIDE */
