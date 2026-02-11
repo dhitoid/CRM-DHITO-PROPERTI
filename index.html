@@ -46,26 +46,57 @@ body{
   transition:transform .4s ease;
 }
 
-/* LOGIN */
+/* ================= PREMIUM LOGIN ================= */
+
 #login{
   position:fixed;
   inset:0;
   display:flex;
   justify-content:center;
   align-items:center;
-  background:radial-gradient(circle,#16203a,#05060a);
-  z-index:10;
+  background:linear-gradient(-45deg,#0f172a,#1e293b,#0f2027,#111827);
+  background-size:400% 400%;
+  animation:bgMove 12s ease infinite;
+  z-index:999;
+  transition:opacity .6s ease, visibility .6s ease;
+}
+
+/* animated gradient */
+@keyframes bgMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
 }
 
 .login-box{
-  width:360px;
-  padding:36px;
-  border-radius:26px;
-  background:var(--glass);
-  backdrop-filter:var(--blur-medium);
-  border:1px solid rgba(255,255,255,.16);
+  width:380px;
+  padding:42px;
+  border-radius:28px;
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(25px);
+  border:1px solid rgba(255,255,255,.15);
   text-align:center;
-  box-shadow:0 40px 120px rgba(0,0,0,.7);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.6),
+    inset 0 0 40px rgba(255,255,255,.05);
+  animation:fadeInUp .8s cubic-bezier(.16,1,.3,1);
+}
+
+@keyframes fadeInUp{
+  from{
+    opacity:0;
+    transform:translateY(40px) scale(.95);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.login-box h2{
+  margin-bottom:22px;
+  font-weight:600;
+  letter-spacing:.5px;
 }
 
 .login-box input{
@@ -73,10 +104,40 @@ body{
   padding:14px;
   border-radius:16px;
   border:none;
-  background:rgba(255,255,255,.14);
+  background:rgba(255,255,255,.12);
   color:white;
   outline:none;
-  margin-bottom:12px;
+  margin-bottom:14px;
+  transition:.3s;
+}
+
+.login-box input:focus{
+  background:rgba(255,255,255,.18);
+  box-shadow:0 0 0 2px rgba(255,255,255,.2);
+}
+
+/* PREMIUM BUTTON */
+.login-box button{
+  width:100%;
+  padding:14px;
+  border-radius:16px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  color:white;
+  transition:.3s;
+  position:relative;
+  overflow:hidden;
+}
+
+.login-box button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(37,99,235,.4);
+}
+
+.login-box button:active{
+  transform:scale(.98);
 }
 
 /* DYNAMIC ISLAND */
@@ -555,8 +616,20 @@ document.getElementById("loginBtn").onclick = () => {
 
     localStorage.setItem("crm_active_user", username);
 
-    loginBox.style.display = "none";
-    app.style.display = "block";
+loginBox.style.opacity = "0";
+loginBox.style.visibility = "hidden";
+
+setTimeout(() => {
+  loginBox.style.display = "none";
+  app.style.display = "block";
+  app.style.opacity = "0";
+
+  setTimeout(()=>{
+    app.style.transition = "opacity .6s ease";
+    app.style.opacity = "1";
+  },50);
+
+},600);
 
     loadUserLeads();
     render();
@@ -570,14 +643,25 @@ document.getElementById("loginBtn").onclick = () => {
 function logout(showAlert=true){
 
   localStorage.removeItem("crm_active_user");
-
   currentUser = null;
 
-  loginBox.style.display = "flex";
-  app.style.display = "none";
+  app.style.opacity = "0";
+
+  setTimeout(()=>{
+    app.style.display = "none";
+    loginBox.style.display = "flex";
+
+    setTimeout(()=>{
+      loginBox.style.visibility = "visible";
+      loginBox.style.opacity = "1";
+    },50);
+
+  },400);
 
   if(showAlert){
-    alert("Anda berhasil logout.");
+    setTimeout(()=>{
+      alert("Anda berhasil logout.");
+    },500);
   }
 }
 
