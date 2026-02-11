@@ -549,6 +549,14 @@ button{
 <form id="leadForm">
   <input id="nama" placeholder="Nama Konsumen" required>
   <input id="wa" placeholder="Nomor WhatsApp (08xxx)" required>
+  <select id="sumber">
+  <option value="TikTok">TikTok</option>
+  <option value="Facebook">Facebook</option>
+  <option value="Instagram">Instagram</option>
+  <option value="Meta Ads">Meta Ads</option>
+  <option value="Canvassing">Canvassing</option>
+  <option value="Pameran">Pameran</option>
+  </select>
   <select id="statusLead"><option>Cold</option><option>Warm</option><option>Hot</option></select>
   <select id="statusProgress"><option>New</option><option>Contacted</option><option>Survey</option><option>Visit</option><option>Booking</option><option>Deal</option></select>
   <textarea id="notes" placeholder="Catatan Lead"></textarea>
@@ -596,7 +604,15 @@ button{
 
     <input id="eNama" placeholder="Nama Konsumen">
     <input id="eWa" placeholder="Nomor WhatsApp">
-    
+  <select id="eSumber">
+  <option value="TikTok">TikTok</option>
+  <option value="Facebook">Facebook</option>
+  <option value="Instagram">Instagram</option>
+  <option value="Meta Ads">Meta Ads</option>
+  <option value="Canvassing">Canvassing</option>
+  <option value="Pameran">Pameran</option>
+  </select>
+     
     <select id="eStatusLead">
       <option>Cold</option>
       <option>Warm</option>
@@ -752,6 +768,8 @@ function showPage(page,btn){
 const leadForm = document.getElementById("leadForm");
 const nama = document.getElementById("nama");
 const wa = document.getElementById("wa");
+const sumber = document.getElementById("sumber");
+const eSumber = document.getElementById("eSumber");
 const statusLead = document.getElementById("statusLead");
 const statusProgress = document.getElementById("statusProgress");
 const notes = document.getElementById("notes");
@@ -909,9 +927,10 @@ function render(){
         </div>
 
         <div class="details">
-          <div>Lead: ${l.statusLead}</div>
-          <div>Progress: ${l.statusProgress}</div>
-          <div>Catatan: ${l.notes || "-"}</div>
+  <div>Sumber: ${l.sumber || "-"}</div>
+  <div>Lead: ${l.statusLead}</div>
+  <div>Progress: ${l.statusProgress}</div>
+  <div>Catatan: ${l.notes || "-"}</div>
         </div>
       `;
 
@@ -990,12 +1009,13 @@ leadForm.addEventListener("submit", e=>{
   if(!namaVal || !waVal) return alert("Nama & WhatsApp wajib diisi!");
 
   leads.unshift({
-    nama:namaVal,
-    wa:waVal,
-    statusLead:statusLead.value,
-    statusProgress:statusProgress.value,
-    notes:notes.value.trim(),
-    date:new Date().toLocaleString()
+  nama:namaVal,
+  wa:waVal,
+  sumber:sumber.value,
+  statusLead:statusLead.value,
+  statusProgress:statusProgress.value,
+  notes:notes.value.trim(),
+  date:new Date().toLocaleString()
   });
 
   save();
@@ -1019,6 +1039,7 @@ function editLead(i){
 
   eNama.value = l.nama;
   eWa.value = l.wa;
+  eSumber.value = l.sumber || "Meta Ads";
   eStatusLead.value = l.statusLead;
   eStatusProgress.value = l.statusProgress;
   eNotes.value = l.notes || "";
@@ -1052,15 +1073,16 @@ function editViaPrompt(i){
 function saveEdit(){
   if(editIndex === null) return;
 
-  leads[editIndex] = {
-    ...leads[editIndex],
-    nama: eNama.value.trim(),
-    wa: formatWA(eWa.value.trim()),
-    statusLead: eStatusLead.value,
-    statusProgress: eStatusProgress.value,
-    notes: eNotes.value.trim(),
-    date: new Date().toLocaleString()
-  };
+leads[editIndex] = {
+  ...leads[editIndex],
+  nama: eNama.value.trim(),
+  wa: formatWA(eWa.value.trim()),
+  sumber: eSumber.value,
+  statusLead: eStatusLead.value,
+  statusProgress: eStatusProgress.value,
+  notes: eNotes.value.trim(),
+  date: new Date().toLocaleString()
+};
 
   save();
   render();
@@ -1072,9 +1094,9 @@ search.addEventListener("input", render);
 
 /* EXPORT */
 function exportCSV(){
-  let csv = "Nama,WA,Lead,Progress,Notes,Update\n";
+  let csv = "Nama,WA,Sumber,Lead,Progress,Notes,Update\n";
   leads.forEach(l=>{
-    csv += `"${l.nama}","${l.wa}","${l.statusLead}","${l.statusProgress}","${l.notes||""}","${l.date}"\n`;
+    csv += `"${l.nama}","${l.wa}","${l.sumber||""}","${l.statusLead}","${l.statusProgress}","${l.notes||""}","${l.date}"\n`;
   });
 
   const blob = new Blob([csv],{type:"text/csv"});
