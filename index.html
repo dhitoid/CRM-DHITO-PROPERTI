@@ -295,14 +295,91 @@ button{
   input,select,textarea{font-size:16px}
 }
 
+/* ================= MODAL UPGRADE ================= */
+
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.6);
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(8px);
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:20;
+  z-index:50;
+  opacity:0;
+  pointer-events:none;
+  transition:all .25s ease;
+}
+
+.modal.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.modal-box{
+  width:420px;
+  max-width:95%;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(30px);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:28px;
+  padding:28px;
+  box-shadow:0 40px 120px rgba(0,0,0,.7);
+  transform:translateY(40px) scale(.96);
+  transition:all .25s ease;
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.modal.show .modal-box{
+  transform:translateY(0) scale(1);
+}
+
+/* Header modal */
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.modal-title{
+  font-size:18px;
+  font-weight:800;
+}
+
+.modal-close{
+  background:rgba(255,255,255,.12);
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-weight:800;
+}
+
+/* Footer */
+.modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:18px;
+}
+
+/* MOBILE FULLSCREEN */
+@media(max-width:720px){
+  .modal{
+    align-items:flex-end;
+  }
+
+  .modal-box{
+    width:100%;
+    border-radius:28px 28px 0 0;
+    padding:22px;
+    max-height:95vh;
+  }
 }
 
 </style>
@@ -388,25 +465,39 @@ button{
 </div>
 
 <!-- EDIT MODAL -->
-<div class="modal" id="editModal" style="display:none">
-  <div class="login-box" style="width:380px">
-    <h3>Edit Lead</h3>
+<div class="modal" id="editModal">
+  <div class="modal-box">
 
-    <input id="eNama" placeholder="Nama">
-    <input id="eWa" placeholder="WhatsApp">
-    <select id="eStatusLead">
-      <option>Cold</option><option>Warm</option><option>Hot</option>
-    </select>
-    <select id="eStatusProgress">
-      <option>New</option><option>Contacted</option><option>Survey</option>
-      <option>Visit</option><option>Booking</option><option>Deal</option>
-    </select>
-    <textarea id="eNotes" placeholder="Catatan"></textarea>
-
-    <div class="row" style="margin-top:12px">
-      <button class="btn-soft" onclick="closeEdit()">Batal</button>
-      <button onclick="saveEdit()">Simpan</button>
+    <div class="modal-header">
+      <div class="modal-title">Edit Lead</div>
+      <div class="modal-close" onclick="closeEdit()">✕</div>
     </div>
+
+    <input id="eNama" placeholder="Nama Konsumen">
+    <input id="eWa" placeholder="Nomor WhatsApp">
+    
+    <select id="eStatusLead">
+      <option>Cold</option>
+      <option>Warm</option>
+      <option>Hot</option>
+    </select>
+
+    <select id="eStatusProgress">
+      <option>New</option>
+      <option>Contacted</option>
+      <option>Survey</option>
+      <option>Visit</option>
+      <option>Booking</option>
+      <option>Deal</option>
+    </select>
+
+    <textarea id="eNotes" placeholder="Catatan Lead"></textarea>
+
+    <div class="modal-footer">
+      <button class="btn-soft" onclick="closeEdit()">Batal</button>
+      <button onclick="saveEdit()">Simpan Perubahan</button>
+    </div>
+
   </div>
 </div>
 
@@ -626,14 +717,18 @@ function editLead(i){
 
   editIndex = i;
 
-  // isi modal
   eNama.value = l.nama;
   eWa.value = l.wa;
   eStatusLead.value = l.statusLead;
   eStatusProgress.value = l.statusProgress;
   eNotes.value = l.notes || "";
 
-  editModal.style.display = "flex";
+  editModal.classList.add("show");
+}
+
+function closeEdit(){
+  editModal.classList.remove("show");
+  setTimeout(()=>{ editIndex=null },200);
 }
 
 /* fallback prompt (LOGIC ASLI) */
@@ -652,11 +747,6 @@ function editViaPrompt(i){
 
   save();
   render();
-}
-
-function closeEdit(){
-  editModal.style.display = "none";
-  editIndex = null;
 }
 
 function saveEdit(){
