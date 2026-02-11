@@ -443,6 +443,59 @@ button{
   }
 }
 
+.pagination-wrapper{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:20px;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.entry-info{
+  font-size:14px;
+  color:var(--muted);
+  font-weight:500;
+}
+
+.pagination{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.pagination button{
+  padding:8px 14px;
+  border-radius:10px;
+  border:none;
+  background:rgba(255,255,255,.1);
+  color:white;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.pagination button:hover{
+  background:rgba(255,255,255,.2);
+}
+
+.pagination .active-page{
+  background:linear-gradient(135deg,#5da9ff,#8ff3ff);
+  color:black;
+}
+
+/* Animation */
+.fade-out{
+  opacity:0;
+  transform:translateY(6px);
+  transition:.15s ease;
+}
+
+.fade-in{
+  opacity:1;
+  transform:translateY(0);
+  transition:.25s ease;
+}
+
 </style>
 </head>
 
@@ -516,6 +569,11 @@ button{
 <div id="list"></div>
 </section>
 
+<div class="pagination-wrapper">
+  <div id="entryInfo" class="entry-info"></div>
+  <div id="pagination" class="pagination"></div>
+</div>
+
 <!-- EXPORT -->
 <section id="export" style="display:none">
 <header><h1>Export Data</h1></header>
@@ -567,6 +625,8 @@ button{
 <script>
 /* ================= LOGIN SYSTEM (PERSISTENT) ================= */
 const MAINTENANCE_MODE = false;
+let currentPage = 1;
+const rowsPerPage = 5;
 
 const ACCOUNTS = {
   "dhito@crm.id": "dhito123",
@@ -797,49 +857,128 @@ function drawChart(){
 
 /* RENDER */
 function render(){
-  list.innerHTML = "";
-  const keyword = (search.value||"").toLowerCase();
 
-  leads.filter(l=>{
+  const keyword = (search?.value || "").toLowerCase();
+
+  const filteredLeads = leads.filter(l=>{
     const matchSearch = l.nama.toLowerCase().includes(keyword) || l.wa.toLowerCase().includes(keyword);
-    const matchStatus = activeFilter==="all" || l.statusLead===activeFilter;
+    const matchStatus = activeFilter === "all" || l.statusLead === activeFilter;
     return matchSearch && matchStatus;
-  }).forEach((l,i)=>{
-    const div = document.createElement("div");
-    div.className = "card";
-
-div.innerHTML = `
-  <div class="row">
-    <div>
-      <div class="name">${l.nama}</div>
-
-      <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
-        <img width="18" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-        ${l.wa}
-      </a>
-
-      <div style="font-size:13px;color:var(--muted)"> ${l.date}</div>
-    </div>
-
-    <div class="row">
-      <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
-      <button onclick="editLead(${i})">Edit</button>
-      <button class="btn-danger" onclick="deleteLead(${i})">Hapus</button>
-    </div>
-  </div>
-
-  <div class="details">
-    <div>Lead: ${l.statusLead}</div>
-    <div>Progress: ${l.statusProgress}</div>
-    <div>Catatan: ${l.notes || "-"}</div>
-  </div>
-`;
-
-    list.appendChild(div);
   });
+
+  const totalEntries = filteredLeads.length;
+  const totalPages = Math.ceil(totalEntries / rowsPerPage);
+
+  if(currentPage > totalPages) currentPage = 1;
+
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+
+  const paginatedLeads = filteredLeads.slice(start, end);
+
+  list.classList.add("fade-out");
+
+  setTimeout(()=>{
+
+    list.innerHTML = "";
+
+    paginatedLeads.forEach((l,i)=>{
+      const realIndex = leads.indexOf(l);
+
+      const div = document.createElement("div");
+      div.className = "card";
+
+      div.innerHTML = `
+        <div class="row">
+          <div>
+            <div class="name">${l.nama}</div>
+
+            <a class="wa-link" href="https://wa.me/${l.wa.replace('+','')}" target="_blank">
+              <img width="18" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+              ${l.wa}
+            </a>
+
+            <div style="font-size:13px;color:var(--muted)">📅 ${l.date}</div>
+          </div>
+
+          <div class="row">
+            <button class="btn-soft" onclick="toggleInfo(this)">Info</button>
+            <button onclick="editLead(${realIndex})">Edit</button>
+            <button class="btn-danger" onclick="deleteLead(${realIndex})">Hapus</button>
+          </div>
+        </div>
+
+        <div class="details">
+          <div>Lead: ${l.statusLead}</div>
+          <div>Progress: ${l.statusProgress}</div>
+          <div>Catatan: ${l.notes || "-"}</div>
+        </div>
+      `;
+
+      list.appendChild(div);
+    });
+
+    updateEntryInfo(start, end, totalEntries);
+    renderPagination(totalPages);
+
+    list.classList.remove("fade-out");
+    list.classList.add("fade-in");
+
+    setTimeout(()=>list.classList.remove("fade-in"),300);
+
+  },150);
 
   updateStats();
   drawChart();
+}
+
+function updateEntryInfo(start, end, total){
+  const entryInfo = document.getElementById("entryInfo");
+  if(!entryInfo) return;
+
+  if(total === 0){
+    entryInfo.textContent = "No entries";
+    return;
+  }
+
+  entryInfo.textContent = `Showing ${start+1}-${Math.min(end,total)} of ${total} entries`;
+}
+
+function renderPagination(totalPages){
+
+  const pagination = document.getElementById("pagination");
+
+  if(totalPages <= 1){
+    pagination.innerHTML = "";
+    return;
+  }
+
+  let buttons = "";
+
+  if(currentPage > 1){
+    buttons += `<button onclick="changePage(${currentPage - 1})">Prev</button>`;
+  }
+
+  for(let i=1;i<=totalPages;i++){
+    buttons += `
+      <button 
+        class="${i === currentPage ? 'active-page' : ''}" 
+        onclick="changePage(${i})">
+        ${i}
+      </button>
+    `;
+  }
+
+  if(currentPage < totalPages){
+    buttons += `<button onclick="changePage(${currentPage + 1})">Next</button>`;
+  }
+
+  pagination.innerHTML = buttons;
+}
+
+function changePage(page){
+  currentPage = page;
+  render();
 }
 
 /* SUBMIT */
